@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estado de Cuenta</title>
+</head>
+<body>
+
+    <h1>Estado de Cuenta</h1>
+    <p>Usuario: {{ nombre }}</p>
+
+    <hr>
+
+    <p><strong>Monto base:</strong> S/ {{ estado.MontoBase }}</p>
+    <p><strong>Total pagado:</strong> S/ {{ estado.TotalPagado }}</p>
+    <p><strong>Saldo pendiente:</strong> S/ {{ estado.SaldoPendiente }}</p>
+
+    <br>
+    <a href="/dashboard">Volver al dashboard</a>
+
+</body>
+</html>

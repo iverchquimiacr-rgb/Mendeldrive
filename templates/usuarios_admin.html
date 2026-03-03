@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuarios</title>
+</head>
+<body>
+
+<h1>Usuarios registrados</h1>
+<p>Administrador: {{ nombre }}</p>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Estado</th>
+        <th>Tipo de pago</th>
+        <th>Carpetas</th>
+        <th>Saldo pendiente</th>
+        <th>Perfil</th>
+    </tr>
+
+    {% for u in usuarios %}
+    <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.nombre }}</td>
+        <td>{{ u.estado }}</td>
+        <td>{{ u.tipo_pago }}</td>
+        <td>{{ u.carpetas }}</td>
+        <td>S/ {{ u.saldo }}</td>
+        <td>
+            <a href="/admin/usuario/{{ u.id }}">👤 Ver perfil</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<a href="/dashboard">Volver</a>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Admin</title>
+</head>
+<body>
+
+<h1>Panel Administrador</h1>
+<p>Bienvenido, {{ nombre }}</p>
+
+<ul>
+    <li><a href="/crear_usuario">Crear usuario</a></li>
+    <li><a href="/registrar_pago">Registrar pago</a></li>
+    <li><a href="/subir_comprobante">Subir comprobante</a></li>
+
+    <!-- 🆕 PANEL DE USUARIOS -->
+    <li><a href="/admin/usuarios">Gestionar usuarios</a></li>
+
+    <li><a href="/admin/pagos">Listar pagos</a></li>
+    <li><a href="/estado_cuenta">Ver estado de cuenta</a></li>
+    <li><a href="/catalogo">📂 Ver catálogo</a></li>
+</ul>
+
+<br>
+<a href="/logout">Cerrar sesión</a>
+
+</body>
+</html>

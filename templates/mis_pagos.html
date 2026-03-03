@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis pagos</title>
+</head>
+<body>
+
+<h1>Mis pagos</h1>
+<p>Usuario: {{ nombre }}</p>
+
+{% if pagos %}
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Monto (S/)</th>
+            <th>Estado</th>
+            <th>Comprobante</th>
+        </tr>
+        {% for p in pagos %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.fecha }}</td>
+            <td>{{ p.monto }}</td>
+            <td>{{ p.estado }}</td>
+            <td>
+                {% if p.comprobante %}
+                    <a href="{{ p.comprobante }}" target="_blank">Ver</a>
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>No tienes pagos registrados.</p>
+{% endif %}
+
+<br>
+<a href="/dashboard">Volver</a>
+
+</body>
+</html>

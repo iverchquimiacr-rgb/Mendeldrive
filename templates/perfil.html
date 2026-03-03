@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de usuario</title>
+</head>
+<body>
+
+<h1>Perfil del usuario</h1>
+
+<h2>Datos generales</h2>
+<ul>
+    <li><strong>ID:</strong> {{ perfil.id }}</li>
+    <li><strong>Nombre:</strong> {{ perfil.nombre }}</li>
+    <li><strong>Rol:</strong> {{ perfil.rol }}</li>
+    <li><strong>Estado:</strong> {{ perfil.estado }}</li>
+    <li><strong>Tipo de pago:</strong> {{ perfil.tipo_pago }}</li>
+</ul>
+
+<hr>
+
+<h2>Carpetas</h2>
+<p><strong>Carpetas asignadas:</strong> {{ perfil.carpetas_asignadas }}</p>
+<p><strong>Carpetas compradas:</strong> {{ perfil.carpetas_compradas }}</p>
+
+<hr>
+
+<h2>Estado financiero</h2>
+<ul>
+    <li>Monto base: S/ {{ perfil.monto_base }}</li>
+    <li>Total pagado: S/ {{ perfil.total_pagado }}</li>
+    <li><strong>Saldo pendiente: S/ {{ perfil.saldo_pendiente }}</strong></li>
+</ul>
+<h2>Resumen</h2>
+<ul>
+    <li>🟢 Total aprobado: S/ {{ resumen.aprobado }}</li>
+    <li>🟡 Total pendiente: S/ {{ resumen.pendiente }}</li>
+    <li>🔴 Total rechazado: S/ {{ resumen.rechazado }}</li>
+    <li><strong>💰 Saldo neto: S/ {{ resumen.neto }}</strong></li>
+</ul>
+<hr>
+<hr>
+<a href="/catalogo">📂 Ir al catálogo</a>
+<br>
+<a href="/dashboard">Volver</a>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprobantes</title>
+</head>
+<body>
+
+<h2>Comprobantes del usuario ID {{ user_id }}</h2>
+
+{% if archivos %}
+    <ul>
+        {% for archivo in archivos %}
+            <li>
+                <a href="/uploads/comprobantes/{{ archivo }}" target="_blank">
+                    {{ archivo }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay comprobantes subidos por este usuario.</p>
+{% endif %}
+
+<br>
+<a href="/admin/pagos">Volver</a>
+
+</body>
+</html>

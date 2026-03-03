@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil del Usuario</title>
+</head>
+<body>
+
+<h1>Perfil del Usuario (Admin)</h1>
+
+<ul>
+    <li><strong>ID:</strong> {{ perfil.id }}</li>
+    <li><strong>Nombre:</strong> {{ perfil.nombre }}</li>
+    <li><strong>Rol:</strong> {{ perfil.rol }}</li>
+    <li><strong>Estado:</strong> {{ perfil.estado }}</li>
+    <li><strong>Tipo de pago:</strong> {{ perfil.tipo_pago }}</li>
+</ul>
+<hr>
+
+<a href="/admin/usuario/{{ perfil.id }}/reset_password"
+   onclick="return confirm('¿Resetear la contraseña de este usuario?')">
+   🔐 Resetear contraseña
+</a>
+
+<hr>
+
+<h3>Carpetas</h3>
+<ul>
+    <li>Asignadas: {{ perfil.carpetas_asignadas }}</li>
+    <li>Compradas: {{ perfil.carpetas_compradas }}</li>
+</ul>
+
+<hr>
+
+<h3>Estado financiero</h3>
+<ul>
+    <li>Monto base: S/ {{ perfil.monto_base }}</li>
+    <li>Total pagado: S/ {{ perfil.total_pagado }}</li>
+    <li><strong>Saldo pendiente: S/ {{ perfil.saldo_pendiente }}</strong></li>
+</ul>
+
+<hr>
+
+<a href="/admin/usuario/{{ perfil.id }}/pagos">
+    📄 Ver pagos de este usuario
+</a>
+
+<br><br>
+<a href="/admin/usuarios">⬅ Volver a usuarios</a>
+
+</body>
+</html>

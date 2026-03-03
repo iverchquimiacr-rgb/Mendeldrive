@@ -1,0 +1,5 @@
+flask
+pandas
+werkzeug
+gunicorn
+psycopg2-binary

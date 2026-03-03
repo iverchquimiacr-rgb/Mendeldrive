@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seleccionar planes</title>
+</head>
+<body>
+
+<h2>Selecciona tu tipo de pago</h2>
+
+<form method="POST">
+
+    <fieldset>
+        <legend>Tipo de pago</legend>
+        <label>
+            <input type="radio" name="tipo_pago" value="Semanal" required>
+            Semanal — S/ 1.00
+        </label><br>
+
+        <label>
+            <input type="radio" name="tipo_pago" value="Mensual">
+            Mensual — S/ 3.00
+        </label><br>
+
+        <label>
+            <input type="radio" name="tipo_pago" value="Unico">
+            Pago único — según carpetas
+        </label>
+    </fieldset>
+
+    <hr>
+
+    <h3>Selecciona hasta 3 carpetas</h3>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    {% for key, producto in productos.items() %}
+        {% if producto.vendible %}
+            <div>
+                <input type="checkbox" name="carpetas" value="{{ key }}">
+                {{ producto.nombre }} — S/ {{ producto.precio }} (pago único)
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <br>
+    <button type="submit">Confirmar selección</button>
+
+</form>
+
+</body>
+</html>

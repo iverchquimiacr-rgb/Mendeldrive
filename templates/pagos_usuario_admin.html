@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagos del Usuario</title>
+</head>
+<body>
+
+<h1>Pagos de {{ usuario }}</h1>
+
+{% if pagos %}
+<table border="1" cellpadding="5">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Monto</th>
+        <th>Estado</th>
+        <th>Comprobante</th>
+    </tr>
+
+    {% for p in pagos %}
+    <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.fecha }}</td>
+        <td>
+            {% if p.monto < 0 %}
+                🔵 Adelanto: S/ {{ p.monto }}
+            {% else %}
+                 S/ {{ p.monto }}
+            {% endif %}
+        </td>
+        <td>{{ p.estado }}</td>
+        <td>
+            {% if p.comprobante %}
+                <a href="/{{ p.comprobante }}" target="_blank">Ver</a>
+            {% else %}
+                —
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Este usuario no tiene pagos registrados.</p>
+{% endif %}
+
+<hr>
+
+<h3>Resumen de pagos</h3>
+<ul>
+    <li>🟢 Aprobados: {{ resumen.cant_aprobados }} — Total: S/ {{ resumen.total_aprobado }}</li>
+    <li>🟡 Pendientes: {{ resumen.cant_pendientes }} — Total: S/ {{ resumen.total_pendiente }}</li>
+    <li>🔴 Rechazados: {{ resumen.cant_rechazados }} — Total: S/ {{ resumen.total_rechazado }}</li>
+</ul>
+
+<hr>
+
+<br>
+<a href="/admin/usuario/{{ user_id }}">⬅ Volver al perfil</a>
+
+</body>
+</html>

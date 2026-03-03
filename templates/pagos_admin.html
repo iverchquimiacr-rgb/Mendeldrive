@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagos - Admin</title>
+</head>
+<body>
+
+<h1>Pagos registrados</h1>
+<p>Administrador: {{ nombre }}</p>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Monto</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Comprobante</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for p in pagos %}
+    <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.usuario }}</td>
+        <td>S/ {{ p.monto }}</td>
+        <td>{{ p.fecha }}</td>
+        <td>{{ p.estado }}</td>
+        <td>
+    <a href="/admin/comprobantes/{{ p.usuario_id }}">
+        Ver comprobantes
+    </a>
+</td>
+        <td>
+            {% if p.estado == "Pendiente" %}
+                <a href="/admin/aprobar/{{ p.id }}">✅ Aprobar</a>
+                |
+                <a href="/admin/rechazar/{{ p.id }}">❌ Rechazar</a>
+            {% else %}
+                —
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<a href="/dashboard">Volver al panel</a>
+
+</body>
+</html>
