@@ -151,11 +151,20 @@ def save_users(df):
 
             cursor.execute("""
             INSERT INTO usuarios (
-                nombre, password, tipo_pago, carpetas_compradas,
-                carpetas_asignadas, monto_base, pago_confirmado,
-                fecha_registro, estado, fecha_ultimo_pago,
-                fecha_vencimiento, rol, debe_cambiar_password,
-                debe_elegir_plan
+                Nombre,
+                Password,
+                Tipo_pago,
+                Carpetas_compradas,
+                Carpetas_asignadas,
+                Monto_base,
+                Pago_confirmado,
+                Fecha_registro,
+                Estado,
+                Fecha_ultimo_pago,
+                Fecha_vencimiento,
+                Rol,
+                Debe_cambiar_password,
+                Debe_elegir_plan
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             """, (
