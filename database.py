@@ -112,6 +112,17 @@ def load_users():
     conn = get_connection()
     df = pd.read_sql_query("SELECT * FROM usuarios", conn)
     conn.close()
+
+    columnas_necesarias = {
+        "Rol": "Usuario",
+        "Debe_cambiar_password": 0,
+        "Debe_elegir_plan": 0
+    }
+
+    for col, default in columnas_necesarias.items():
+        if col not in df.columns:
+            df[col] = default
+
     return df
 
 def save_users(df):
