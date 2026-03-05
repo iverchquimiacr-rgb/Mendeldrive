@@ -144,6 +144,9 @@ def save_users(df):
 
         cursor.execute("DELETE FROM usuarios")
 
+        if "ID" in df.columns:
+            df = df.drop(columns=["ID"])
+            
         for _, row in df.iterrows():
 
             cursor.execute("""
