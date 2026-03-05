@@ -1,48 +1,159 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Catálogo</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Catálogo{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.catalog-container{
+margin-top:30px;
+}
+
+.catalog-header{
+margin-bottom:20px;
+}
+
+.catalog-header p{
+color:rgba(255,255,255,0.8);
+}
+
+.catalog-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+color:black;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+}
+
+.catalog-table th{
+background:linear-gradient(135deg,var(--emerald),var(--green));
+color:white;
+padding:14px;
+text-align:left;
+font-size:14px;
+}
+
+.catalog-table td{
+padding:14px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.catalog-table tr:hover{
+background:#f6f6f6;
+}
+
+.badge-paid{
+background:#ffd70033;
+color:#b58b00;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.badge-free{
+background:#00bb2d22;
+color:#007a1c;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.drive-btn{
+padding:8px 14px;
+border-radius:8px;
+background:linear-gradient(135deg,var(--indigo),var(--emerald));
+color:white;
+text-decoration:none;
+font-size:13px;
+font-weight:500;
+transition:0.3s;
+}
+
+.drive-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 5px 12px rgba(0,0,0,0.25);
+}
+
+.actions{
+margin-top:20px;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="catalog-container">
+
+<div class="catalog-header">
 
 <h1>Catálogo de Productos</h1>
-<p>Usuario: {{ nombre }}</p>
+<p>Usuario: <strong>{{ nombre }}</strong></p>
 
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Producto</th>
-        <th>Precio (S/)</th>
-        <th>Descripción</th>
-        <th>Disponible</th>
-        <th>Acceso</th>
-    </tr>
+</div>
 
-    {% for p in productos %}
-    <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.nombre }}</td>
-        <td>{{ p.precio }}</td>
-        <td>{{ p.descripcion }}</td>
-        <td>
-            {% if p.vendible %}
-                ✅ Sí
-            {% else %}
-                 Gratis
-            {% endif %}
-        </td>
-        <td>
-            <a href="{{ p.link }}" target="_blank">
-                Abrir Drive
-            </a>
-        </td>
-    </tr>
-    {% endfor %}
+<table class="catalog-table">
+
+<tr>
+<th>ID</th>
+<th>Producto</th>
+<th>Precio (S/)</th>
+<th>Descripción</th>
+<th>Disponible</th>
+<th>Acceso</th>
+</tr>
+
+{% for p in productos %}
+
+<tr>
+
+<td>{{ p.id }}</td>
+
+<td><strong>{{ p.nombre }}</strong></td>
+
+<td>S/ {{ p.precio }}</td>
+
+<td>{{ p.descripcion }}</td>
+
+<td>
+
+{% if p.vendible %}
+<span class="badge-paid">De pago</span>
+{% else %}
+<span class="badge-free">Gratis</span>
+{% endif %}
+
+</td>
+
+<td>
+
+<a href="{{ p.link }}" target="_blank" class="drive-btn">
+Abrir Drive
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
 </table>
 
-<br>
-<a href="/dashboard">Volver</a>
+<div class="actions">
 
-</body>
-</html>
+<a href="/dashboard">
+<button class="btn-gold">Volver al dashboard</button>
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,45 +1,193 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mis pagos</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Mis pagos{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.payments-container{
+margin-top:30px;
+}
+
+.payments-header{
+margin-bottom:20px;
+}
+
+.payments-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+color:black;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+}
+
+.payments-table th{
+background:linear-gradient(135deg,var(--emerald),var(--green));
+color:white;
+padding:14px;
+text-align:left;
+font-size:14px;
+}
+
+.payments-table td{
+padding:14px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.payments-table tr:hover{
+background:#f7f7f7;
+}
+
+.badge-aprobado{
+background:#00bb2d22;
+color:#007a1c;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.badge-pendiente{
+background:#ffd70033;
+color:#a07a00;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.badge-rechazado{
+background:#ff4d4d22;
+color:#b00000;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.view-btn{
+padding:7px 12px;
+border-radius:8px;
+background:linear-gradient(135deg,var(--indigo),var(--emerald));
+color:white;
+text-decoration:none;
+font-size:13px;
+transition:0.3s;
+}
+
+.view-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 5px 12px rgba(0,0,0,0.25);
+}
+
+.empty-box{
+background:white;
+color:black;
+padding:25px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.actions{
+margin-top:20px;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="payments-container">
+
+<div class="payments-header">
 
 <h1>Mis pagos</h1>
-<p>Usuario: {{ nombre }}</p>
+<p>Usuario: <strong>{{ nombre }}</strong></p>
+
+</div>
 
 {% if pagos %}
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Monto (S/)</th>
-            <th>Estado</th>
-            <th>Comprobante</th>
-        </tr>
-        {% for p in pagos %}
-        <tr>
-            <td>{{ p.id }}</td>
-            <td>{{ p.fecha }}</td>
-            <td>{{ p.monto }}</td>
-            <td>{{ p.estado }}</td>
-            <td>
-                {% if p.comprobante %}
-                    <a href="{{ p.comprobante }}" target="_blank">Ver</a>
-                {% else %}
-                    —
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+
+<table class="payments-table">
+
+<tr>
+<th>ID</th>
+<th>Fecha</th>
+<th>Monto</th>
+<th>Estado</th>
+<th>Comprobante</th>
+</tr>
+
+{% for p in pagos %}
+
+<tr>
+
+<td>#{{ p.id }}</td>
+
+<td>{{ p.fecha }}</td>
+
+<td>S/ {{ p.monto }}</td>
+
+<td>
+
+{% if p.estado == "Aprobado" %}
+<span class="badge-aprobado">Aprobado</span>
+
+{% elif p.estado == "Pendiente" %}
+<span class="badge-pendiente">Pendiente</span>
+
+{% elif p.estado == "Rechazado" %}
+<span class="badge-rechazado">Rechazado</span>
+
 {% else %}
-    <p>No tienes pagos registrados.</p>
+{{ p.estado }}
 {% endif %}
 
-<br>
-<a href="/dashboard">Volver</a>
+</td>
 
-</body>
-</html>
+<td>
+
+{% if p.comprobante %}
+
+<a href="{{ p.comprobante }}" target="_blank" class="view-btn">
+Ver comprobante
+</a>
+
+{% else %}
+
+—
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<div class="empty-box">
+No tienes pagos registrados.
+</div>
+
+{% endif %}
+
+<div class="actions">
+
+<a href="/dashboard">
+<button class="btn-gold">Volver al dashboard</button>
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

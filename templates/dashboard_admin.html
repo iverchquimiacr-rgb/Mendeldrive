@@ -1,29 +1,190 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.dashboard-header{
+margin-bottom:35px;
+text-align:center;
+}
+
+.dashboard-header h1{
+
+font-size:34px;
+
+background:linear-gradient(90deg,var(--gold),var(--emerald));
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+
+}
+
+.welcome-text{
+opacity:0.8;
+font-size:16px;
+margin-top:5px;
+}
+
+.card-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(230px,1fr));
+
+gap:22px;
+
+margin-top:30px;
+
+}
+
+.card{
+
+display:block;
+
+padding:22px;
+
+border-radius:14px;
+
+background:white;
+
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
+
+text-decoration:none;
+
+color:black;
+
+transition:all 0.25s ease;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 12px 28px rgba(0,0,0,0.15);
+
+}
+
+.card h3{
+margin-bottom:8px;
+}
+
+.card p{
+font-size:14px;
+opacity:0.7;
+}
+
+.highlight-green{
+border-left:5px solid var(--emerald);
+}
+
+.highlight-orange{
+border-left:5px solid var(--gold);
+}
+
+.logout-container{
+
+margin-top:45px;
+
+text-align:center;
+
+}
+
+.btn-logout{
+
+background:linear-gradient(135deg,#ff4d4d,#ff0000);
+
+padding:12px 28px;
+
+border-radius:12px;
+
+color:white;
+
+text-decoration:none;
+
+font-weight:600;
+
+display:inline-block;
+
+transition:0.25s;
+
+}
+
+.btn-logout:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+<div class="dashboard-header">
 
 <h1>Panel Administrador</h1>
-<p>Bienvenido, {{ nombre }}</p>
 
-<ul>
-    <li><a href="/crear_usuario">Crear usuario</a></li>
-    <li><a href="/registrar_pago">Registrar pago</a></li>
-    <li><a href="/subir_comprobante">Subir comprobante</a></li>
+<p class="welcome-text">Bienvenido, {{ nombre }}</p>
 
-    <!-- 🆕 PANEL DE USUARIOS -->
-    <li><a href="/admin/usuarios">Gestionar usuarios</a></li>
+</div>
 
-    <li><a href="/admin/pagos">Listar pagos</a></li>
-    <li><a href="/estado_cuenta">Ver estado de cuenta</a></li>
-    <li><a href="/catalogo">📂 Ver catálogo</a></li>
-</ul>
+<div class="card-grid">
 
-<br>
-<a href="/logout">Cerrar sesión</a>
+<a href="/crear_usuario" class="card">
+<h3>👤 Crear usuario</h3>
+<p>Registrar nuevos usuarios</p>
+</a>
 
-</body>
-</html>
+<a href="/registrar_pago" class="card">
+<h3>💳 Registrar pago</h3>
+<p>Ingresar pagos manualmente</p>
+</a>
+
+<a href="/subir_comprobante" class="card">
+<h3>📤 Subir comprobante</h3>
+<p>Adjuntar comprobantes</p>
+</a>
+
+<a href="/admin/usuarios" class="card highlight-green">
+<h3>👥 Gestionar usuarios</h3>
+<p>Administrar usuarios registrados</p>
+</a>
+
+<a href="/admin/pagos" class="card">
+<h3>📊 Ver pagos</h3>
+<p>Listado completo de pagos</p>
+</a>
+
+<a href="/estado_cuenta" class="card">
+<h3>📑 Estado de cuenta</h3>
+<p>Consultar balances</p>
+</a>
+
+<a href="/catalogo" class="card highlight-orange">
+<h3>📂 Catálogo</h3>
+<p>Explorar productos</p>
+</a>
+
+</div>
+
+<div class="logout-container">
+
+<a href="/logout" class="btn-logout">
+Cerrar sesión
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

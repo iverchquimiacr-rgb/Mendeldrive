@@ -1,22 +1,106 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Estado de Cuenta</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Estado de Cuenta</h1>
-    <p>Usuario: {{ nombre }}</p>
+{% block title %}Estado de cuenta{% endblock %}
 
-    <hr>
+{% block extra_css %}
 
-    <p><strong>Monto base:</strong> S/ {{ estado.MontoBase }}</p>
-    <p><strong>Total pagado:</strong> S/ {{ estado.TotalPagado }}</p>
-    <p><strong>Saldo pendiente:</strong> S/ {{ estado.SaldoPendiente }}</p>
+<style>
 
-    <br>
-    <a href="/dashboard">Volver al dashboard</a>
+.account-container{
+margin-top:30px;
+}
 
-</body>
-</html>
+.account-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-top:25px;
+}
+
+.account-card{
+background:white;
+color:black;
+padding:25px;
+border-radius:16px;
+box-shadow:0 15px 35px rgba(0,0,0,0.25);
+text-align:center;
+}
+
+.account-card h3{
+margin-bottom:10px;
+font-size:16px;
+color:#555;
+}
+
+.account-value{
+font-size:24px;
+font-weight:700;
+}
+
+.base{
+border-top:5px solid #403F6F;
+}
+
+.paid{
+border-top:5px solid #00bb2d;
+}
+
+.pending{
+border-top:5px solid #FFD700;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="account-container">
+
+<h1>Estado de Cuenta</h1>
+
+<p>Usuario: <strong>{{ nombre }}</strong></p>
+
+<div class="account-grid">
+
+<div class="account-card base">
+
+<h3>Monto base</h3>
+
+<div class="account-value">
+S/ {{ estado.MontoBase }}
+</div>
+
+</div>
+
+<div class="account-card paid">
+
+<h3>Total pagado</h3>
+
+<div class="account-value">
+S/ {{ estado.TotalPagado }}
+</div>
+
+</div>
+
+<div class="account-card pending">
+
+<h3>Saldo pendiente</h3>
+
+<div class="account-value">
+S/ {{ estado.SaldoPendiente }}
+</div>
+
+</div>
+
+</div>
+
+<br>
+
+<a href="/dashboard">
+<button class="btn-gold">Volver al dashboard</button>
+</a>
+
+</div>
+
+{% endblock %}

@@ -1,52 +1,131 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Perfil del Usuario</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Perfil Usuario{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.admin-actions{
+margin-bottom:25px;
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.profile-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+margin-top:20px;
+}
+
+.profile-card{
+background:white;
+color:black;
+padding:25px;
+border-radius:16px;
+box-shadow:0 15px 35px rgba(0,0,0,0.2);
+}
+
+.profile-card h3{
+margin-bottom:15px;
+}
+
+.profile-card ul{
+list-style:none;
+}
+
+.profile-card li{
+margin-bottom:8px;
+}
+
+.warning-btn{
+background:linear-gradient(135deg,#ff4d4d,#cc0000);
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+}
+
+.warning-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
 
 <h1>Perfil del Usuario (Admin)</h1>
 
-<ul>
-    <li><strong>ID:</strong> {{ perfil.id }}</li>
-    <li><strong>Nombre:</strong> {{ perfil.nombre }}</li>
-    <li><strong>Rol:</strong> {{ perfil.rol }}</li>
-    <li><strong>Estado:</strong> {{ perfil.estado }}</li>
-    <li><strong>Tipo de pago:</strong> {{ perfil.tipo_pago }}</li>
-</ul>
-<hr>
+<div class="admin-actions">
 
 <a href="/admin/usuario/{{ perfil.id }}/reset_password"
-   onclick="return confirm('¿Resetear la contraseña de este usuario?')">
-   🔐 Resetear contraseña
+onclick="return confirm('¿Resetear la contraseña de este usuario?')">
+
+<button class="warning-btn">
+🔐 Resetear contraseña
+</button>
+
 </a>
-
-<hr>
-
-<h3>Carpetas</h3>
-<ul>
-    <li>Asignadas: {{ perfil.carpetas_asignadas }}</li>
-    <li>Compradas: {{ perfil.carpetas_compradas }}</li>
-</ul>
-
-<hr>
-
-<h3>Estado financiero</h3>
-<ul>
-    <li>Monto base: S/ {{ perfil.monto_base }}</li>
-    <li>Total pagado: S/ {{ perfil.total_pagado }}</li>
-    <li><strong>Saldo pendiente: S/ {{ perfil.saldo_pendiente }}</strong></li>
-</ul>
-
-<hr>
 
 <a href="/admin/usuario/{{ perfil.id }}/pagos">
-    📄 Ver pagos de este usuario
+<button>📄 Ver pagos</button>
 </a>
 
-<br><br>
-<a href="/admin/usuarios">⬅ Volver a usuarios</a>
+</div>
 
-</body>
-</html>
+<div class="profile-grid">
+
+<div class="profile-card">
+
+<h3>Datos generales</h3>
+
+<ul>
+<li><strong>ID:</strong> {{ perfil.id }}</li>
+<li><strong>Nombre:</strong> {{ perfil.nombre }}</li>
+<li><strong>Rol:</strong> {{ perfil.rol }}</li>
+<li><strong>Estado:</strong> {{ perfil.estado }}</li>
+<li><strong>Tipo de pago:</strong> {{ perfil.tipo_pago }}</li>
+</ul>
+
+</div>
+
+<div class="profile-card">
+
+<h3>Carpetas</h3>
+
+<ul>
+<li>Asignadas: {{ perfil.carpetas_asignadas }}</li>
+<li>Compradas: {{ perfil.carpetas_compradas }}</li>
+</ul>
+
+</div>
+
+<div class="profile-card">
+
+<h3>Estado financiero</h3>
+
+<ul>
+<li>Monto base: <strong>S/ {{ perfil.monto_base }}</strong></li>
+<li>Total pagado: <strong>S/ {{ perfil.total_pagado }}</strong></li>
+<li><strong>Saldo pendiente: S/ {{ perfil.saldo_pendiente }}</strong></li>
+</ul>
+
+</div>
+
+</div>
+
+<br>
+
+<a href="/admin/usuarios">
+<button class="btn-gold">⬅ Volver a usuarios</button>
+</a>
+
+{% endblock %}

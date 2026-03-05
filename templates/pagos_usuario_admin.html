@@ -1,62 +1,211 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Pagos del Usuario</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Pagos del Usuario{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.user-payments-container{
+margin-top:30px;
+}
+
+.user-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+color:black;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+margin-bottom:30px;
+}
+
+.user-table th{
+background:linear-gradient(135deg,var(--emerald),var(--green));
+color:white;
+padding:14px;
+text-align:left;
+font-size:14px;
+}
+
+.user-table td{
+padding:14px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.user-table tr:hover{
+background:#f7f7f7;
+}
+
+.badge-aprobado{
+background:#00bb2d22;
+color:#007a1c;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.badge-pendiente{
+background:#ffd70033;
+color:#a07a00;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.badge-rechazado{
+background:#ff4d4d22;
+color:#b00000;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.badge-adelanto{
+background:#00ffff22;
+color:#007a7a;
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+font-weight:600;
+}
+
+.summary-card{
+background:white;
+color:black;
+padding:25px;
+border-radius:16px;
+box-shadow:0 15px 35px rgba(0,0,0,0.25);
+max-width:500px;
+}
+
+.summary-card ul{
+list-style:none;
+padding:0;
+}
+
+.summary-card li{
+margin-bottom:10px;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="user-payments-container">
 
 <h1>Pagos de {{ usuario }}</h1>
 
 {% if pagos %}
-<table border="1" cellpadding="5">
-    <tr>
-        <th>ID</th>
-        <th>Fecha</th>
-        <th>Monto</th>
-        <th>Estado</th>
-        <th>Comprobante</th>
-    </tr>
 
-    {% for p in pagos %}
-    <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.fecha }}</td>
-        <td>
-            {% if p.monto < 0 %}
-                🔵 Adelanto: S/ {{ p.monto }}
-            {% else %}
-                 S/ {{ p.monto }}
-            {% endif %}
-        </td>
-        <td>{{ p.estado }}</td>
-        <td>
-            {% if p.comprobante %}
-                <a href="/{{ p.comprobante }}" target="_blank">Ver</a>
-            {% else %}
-                —
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+<table class="user-table">
+
+<tr>
+<th>ID</th>
+<th>Fecha</th>
+<th>Monto</th>
+<th>Estado</th>
+<th>Comprobante</th>
+</tr>
+
+{% for p in pagos %}
+
+<tr>
+
+<td>#{{ p.id }}</td>
+
+<td>{{ p.fecha }}</td>
+
+<td>
+
+{% if p.monto < 0 %}
+
+<span class="badge-adelanto">
+Adelanto S/ {{ p.monto }}
+</span>
+
 {% else %}
-<p>Este usuario no tiene pagos registrados.</p>
+
+S/ {{ p.monto }}
+
 {% endif %}
 
-<hr>
+</td>
+
+<td>
+
+{% if p.estado == "Aprobado" %}
+<span class="badge-aprobado">Aprobado</span>
+
+{% elif p.estado == "Pendiente" %}
+<span class="badge-pendiente">Pendiente</span>
+
+{% elif p.estado == "Rechazado" %}
+<span class="badge-rechazado">Rechazado</span>
+
+{% else %}
+{{ p.estado }}
+{% endif %}
+
+</td>
+
+<td>
+
+{% if p.comprobante %}
+
+<a href="/{{ p.comprobante }}" target="_blank" class="btn-view">
+Ver
+</a>
+
+{% else %}
+
+—
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<p>Este usuario no tiene pagos registrados.</p>
+
+{% endif %}
+
+<div class="summary-card">
 
 <h3>Resumen de pagos</h3>
+
 <ul>
-    <li>🟢 Aprobados: {{ resumen.cant_aprobados }} — Total: S/ {{ resumen.total_aprobado }}</li>
-    <li>🟡 Pendientes: {{ resumen.cant_pendientes }} — Total: S/ {{ resumen.total_pendiente }}</li>
-    <li>🔴 Rechazados: {{ resumen.cant_rechazados }} — Total: S/ {{ resumen.total_rechazado }}</li>
+
+<li>🟢 Aprobados: {{ resumen.cant_aprobados }} — Total: S/ {{ resumen.total_aprobado }}</li>
+
+<li>🟡 Pendientes: {{ resumen.cant_pendientes }} — Total: S/ {{ resumen.total_pendiente }}</li>
+
+<li>🔴 Rechazados: {{ resumen.cant_rechazados }} — Total: S/ {{ resumen.total_rechazado }}</li>
+
 </ul>
 
-<hr>
+</div>
 
 <br>
-<a href="/admin/usuario/{{ user_id }}">⬅ Volver al perfil</a>
 
-</body>
-</html>
+<a href="/admin/usuario/{{ user_id }}">
+<button class="btn-gold">Volver al perfil</button>
+</a>
+
+</div>
+
+{% endblock %}

@@ -4,6 +4,7 @@ from user_manager import (
     create_user_web,
     crear_admin_inicial
 )
+from datetime import datetime
 from calculations import get_account_status
 from payment_manager import (
     add_payment,
@@ -22,6 +23,10 @@ from security import hash_password
 
 app = Flask(__name__)
 app.secret_key = "clave_secreta_temporal_123"
+
+@app.context_processor
+def inject_now():
+    return {'now': datetime.utcnow}
 
 crear_admin_inicial()
 # ==============================

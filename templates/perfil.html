@@ -1,48 +1,149 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Perfil de usuario</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.profile-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(280px,1fr));
+
+gap:25px;
+
+margin-top:30px;
+}
+
+.profile-card{
+background:white;
+color:black;
+padding:25px;
+border-radius:16px;
+box-shadow:0 15px 35px rgba(0,0,0,0.2);
+}
+
+.profile-card h2{
+margin-bottom:15px;
+font-size:20px;
+}
+
+.profile-card ul{
+list-style:none;
+}
+
+.profile-card li{
+margin-bottom:8px;
+font-size:14px;
+}
+
+.balance{
+font-size:18px;
+font-weight:600;
+margin-top:10px;
+}
+
+.summary li{
+font-size:15px;
+}
+
+.actions{
+margin-top:35px;
+display:flex;
+gap:15px;
+}
+
+.actions a{
+text-decoration:none;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
 
 <h1>Perfil del usuario</h1>
 
+<div class="profile-grid">
+
+<div class="profile-card">
+
 <h2>Datos generales</h2>
+
 <ul>
-    <li><strong>ID:</strong> {{ perfil.id }}</li>
-    <li><strong>Nombre:</strong> {{ perfil.nombre }}</li>
-    <li><strong>Rol:</strong> {{ perfil.rol }}</li>
-    <li><strong>Estado:</strong> {{ perfil.estado }}</li>
-    <li><strong>Tipo de pago:</strong> {{ perfil.tipo_pago }}</li>
+<li><strong>ID:</strong> {{ perfil.id }}</li>
+<li><strong>Nombre:</strong> {{ perfil.nombre }}</li>
+<li><strong>Rol:</strong> {{ perfil.rol }}</li>
+<li><strong>Estado:</strong> {{ perfil.estado }}</li>
+<li><strong>Tipo de pago:</strong> {{ perfil.tipo_pago }}</li>
 </ul>
 
-<hr>
+</div>
+
+
+<div class="profile-card">
 
 <h2>Carpetas</h2>
-<p><strong>Carpetas asignadas:</strong> {{ perfil.carpetas_asignadas }}</p>
-<p><strong>Carpetas compradas:</strong> {{ perfil.carpetas_compradas }}</p>
 
-<hr>
+<ul>
+<li><strong>Asignadas:</strong> {{ perfil.carpetas_asignadas }}</li>
+<li><strong>Compradas:</strong> {{ perfil.carpetas_compradas }}</li>
+</ul>
+
+</div>
+
+
+<div class="profile-card">
 
 <h2>Estado financiero</h2>
-<ul>
-    <li>Monto base: S/ {{ perfil.monto_base }}</li>
-    <li>Total pagado: S/ {{ perfil.total_pagado }}</li>
-    <li><strong>Saldo pendiente: S/ {{ perfil.saldo_pendiente }}</strong></li>
-</ul>
-<h2>Resumen</h2>
-<ul>
-    <li>🟢 Total aprobado: S/ {{ resumen.aprobado }}</li>
-    <li>🟡 Total pendiente: S/ {{ resumen.pendiente }}</li>
-    <li>🔴 Total rechazado: S/ {{ resumen.rechazado }}</li>
-    <li><strong>💰 Saldo neto: S/ {{ resumen.neto }}</strong></li>
-</ul>
-<hr>
-<hr>
-<a href="/catalogo">📂 Ir al catálogo</a>
-<br>
-<a href="/dashboard">Volver</a>
 
-</body>
-</html>
+<ul>
+<li>Monto base: <strong>S/ {{ perfil.monto_base }}</strong></li>
+<li>Total pagado: <strong>S/ {{ perfil.total_pagado }}</strong></li>
+</ul>
+
+<div class="balance">
+Saldo pendiente: S/ {{ perfil.saldo_pendiente }}
+</div>
+
+</div>
+
+
+<div class="profile-card">
+
+<h2>Resumen de pagos</h2>
+
+<ul class="summary">
+
+<li>🟢 Aprobado: S/ {{ resumen.aprobado }}</li>
+<li>🟡 Pendiente: S/ {{ resumen.pendiente }}</li>
+<li>🔴 Rechazado: S/ {{ resumen.rechazado }}</li>
+
+<li class="balance">
+💰 Saldo neto: S/ {{ resumen.neto }}
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<a href="/catalogo">
+<button class="btn-gold">Ver catálogo</button>
+</a>
+
+<a href="/dashboard">
+<button>Volver al dashboard</button>
+</a>
+
+</div>
+
+{% endblock %}

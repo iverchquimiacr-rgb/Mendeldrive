@@ -1,31 +1,122 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Crear usuario</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>Crear nuevo usuario</h1>
+{% block title %}Crear usuario{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.create-container{
+display:flex;
+justify-content:center;
+margin-top:40px;
+}
+
+.create-card{
+width:420px;
+background:white;
+color:black;
+padding:35px;
+border-radius:18px;
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+}
+
+.create-card h2{
+margin-bottom:20px;
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+margin-bottom:18px;
+}
+
+.form-group label{
+margin-bottom:6px;
+font-size:14px;
+}
+
+.form-group input,
+.form-group select{
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+outline:none;
+border-color:var(--emerald);
+box-shadow:0 0 0 2px rgba(80,200,120,0.2);
+}
+
+.actions{
+margin-top:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="create-container">
+
+<div class="create-card">
+
+<h2>Crear nuevo usuario</h2>
 
 <form method="POST">
-    <label>Nombre:</label><br>
-    <input type="text" name="nombre" required><br><br>
 
-    <label>Contraseña:</label><br>
-    <input type="password" name="password" required><br><br>
+<div class="form-group">
 
-    <label>Rol:</label><br>
-    <select name="rol">
-        <option value="Usuario">Usuario</option>
-        <option value="Admin">Admin</option>
-    </select><br><br>
+<label>Nombre</label>
 
-    <button type="submit">Crear usuario</button>
+<input type="text" name="nombre" required>
+
+</div>
+
+<div class="form-group">
+
+<label>Contraseña</label>
+
+<input type="password" name="password" required>
+
+</div>
+
+<div class="form-group">
+
+<label>Rol</label>
+
+<select name="rol">
+
+<option value="Usuario">Usuario</option>
+<option value="Admin">Admin</option>
+
+</select>
+
+</div>
+
+<button type="submit">
+Crear usuario
+</button>
+
 </form>
 
-<br>
-<a href="/dashboard">Volver</a>
+<div class="actions">
 
-</body>
-</html>
+<a href="/dashboard">
+<button class="btn-gold">Volver</button>
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

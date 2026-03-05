@@ -1,27 +1,121 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Registrar pago</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>Registrar pago</h1>
-<p>Usuario: {{ nombre }}</p>
+{% block title %}Registrar pago{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.payment-container{
+display:flex;
+justify-content:center;
+margin-top:40px;
+}
+
+.payment-card{
+width:420px;
+background:white;
+color:black;
+padding:35px;
+border-radius:18px;
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+}
+
+.payment-card h2{
+margin-bottom:10px;
+}
+
+.user-info{
+margin-bottom:25px;
+font-size:15px;
+color:#444;
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+margin-bottom:20px;
+}
+
+.form-group label{
+margin-bottom:6px;
+font-size:14px;
+}
+
+.form-group input{
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:15px;
+transition:0.25s;
+}
+
+.form-group input:focus{
+outline:none;
+border-color:var(--emerald);
+box-shadow:0 0 0 2px rgba(80,200,120,0.2);
+}
+
+.message-box{
+background:#e6ffe6;
+color:#006600;
+padding:12px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.actions{
+margin-top:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="payment-container">
+
+<div class="payment-card">
+
+<h2>Registrar pago</h2>
+
+<div class="user-info">
+Usuario: <strong>{{ nombre }}</strong>
+</div>
 
 {% if mensaje %}
-    <p><strong>{{ mensaje }}</strong></p>
+<div class="message-box">
+{{ mensaje }}
+</div>
 {% endif %}
 
 <form method="POST">
-    <label>Monto pagado (S/):</label><br>
-    <input type="number" step="0.01" name="monto" required>
-    <br><br>
-    <button type="submit">Registrar pago</button>
+
+<div class="form-group">
+<label>Monto pagado (S/)</label>
+<input type="number" step="0.01" name="monto" required>
+</div>
+
+<button type="submit">
+Registrar pago
+</button>
+
 </form>
 
-<br>
-<a href="/dashboard">Volver</a>
+<div class="actions">
 
-</body>
-</html>
+<a href="/dashboard">
+<button class="btn-gold">Volver</button>
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
