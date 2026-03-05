@@ -14,19 +14,10 @@ def get_connection():
 
     if database_url:
         # PostgreSQL en Render
-        url = urlparse(database_url)
-        conn = psycopg2.connect(
-            host=url.hostname,
-            port=url.port,
-            user=url.username,
-            password=url.password,
-            dbname=url.path[1:]
-        )
-        return conn
+        return psycopg2.connect(database_url)
     else:
-        # Local SQLite
+        # SQLite local
         return sqlite3.connect(DB_NAME)
-
 # ==============================
 # INICIALIZAR BASE DE DATOS
 # ==============================
