@@ -127,7 +127,15 @@ def load_users():
 
 def save_users(df):
     conn = get_connection()
-    df.to_sql("usuarios", conn, if_exists="replace", index=False)
+
+    # Si es SQLite usamos pandas
+    if isinstance(conn, sqlite3.Connection):
+        df.to_sql("usuarios", conn, if_exists="replace", index=False)
+
+    # Si es PostgreSQL NO hacemos replace
+    else:
+        pass  # Render maneja la tabla directamente
+
     conn.close()
 
 # ==============================
@@ -142,5 +150,8 @@ def load_payments():
 
 def save_payments(df):
     conn = get_connection()
-    df.to_sql("pagos", conn, if_exists="replace", index=False)
+
+    if isinstance(conn, sqlite3.Connection):
+        df.to_sql("pagos", conn, if_exists="replace", index=False)
+
     conn.close()
