@@ -5,6 +5,19 @@ import pandas as pd
 from logger_actions import log_action
 from logger import log_payment
 
+#--------------------
+# COLUMNAS
+# -------------------
+# 🔧 Helper para asegurar columnas
+def _ensure_columns(df, columnas):
+    for col in columnas:
+        if col not in df.columns:
+            df[col] = ""
+    return df
+
+# Ejemplo de uso:
+# payments_df = _ensure_columns(payments_df, ["Admin_ID", "Fecha_procesado", "Comprobante"])
+
 
 # ==============================
 # AGREGAR PAGO (USUARIO / ADMIN)

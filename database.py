@@ -173,20 +173,29 @@ def normalize_payments_columns(df):
 # USUARIOS
 # ==============================
 def load_users():
+    """
+    Carga los usuarios desde la base de datos SQLite y asegura tipos y columnas necesarias.
+    """
     initialize_database()
     engine = get_engine()
     df = pd.read_sql("SELECT * FROM usuarios", engine)  # 🔹 SQLAlchemy usado solo para lectura
     df = normalize_users_columns(df)
 
+    # Asegurar columnas necesarias con valores por defecto
     columnas_necesarias = {
         "Rol": "Usuario",
         "Debe_cambiar_password": 0,
-        "Debe_elegir_plan": 0
+        "Debe_elegir_plan": 0,
+        "Password": ""
     }
 
     for col, default in columnas_necesarias.items():
         if col not in df.columns:
             df[col] = default
+
+    # 🔹 Forzar ID como entero
+    if "ID" in df.columns:
+        df["ID"] = df["ID"].astype(int)
 
     return df
 

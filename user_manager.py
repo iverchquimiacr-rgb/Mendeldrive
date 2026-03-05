@@ -7,6 +7,20 @@ import pandas as pd
 # ✅ IMPORT CORRECTO
 from logger import log_access
 
+#-------------------------
+# HELPER
+#-------------------------
+# Helper para validar selección de productos
+def validar_seleccion_productos(seleccion, productos):
+    try:
+        seleccion_ids = [int(x.strip()) for x in seleccion.split(",")]
+        for s in seleccion_ids:
+            if s not in productos:
+                raise ValueError(f"ID de producto inválido: {s}")
+        return seleccion_ids
+    except Exception as e:
+        print("Error en selección:", e)
+        return []
 
 # ==============================
 # CREAR ADMIN INICIAL (AUTO)
@@ -16,7 +30,7 @@ def crear_admin_inicial():
     users_df = load_users()
 
     # Solo crear si no hay ningún admin
-    if not users_df[users_df["Rol"] == "Admin"].empty:
+    if "Rol" in users_df.columns and any(users_df["Rol"] == "Admin"):
         return
 
     admin_password = "admin123"
@@ -60,6 +74,9 @@ def login():
     try:
         user_id = int(input("ID: "))
         password = input("Password: ")
+
+        # 🔹 Debug: ver IDs disponibles
+        print(f"Debug: IDs disponibles en la base de datos: {users_df['ID'].tolist()}")
 
         if user_id not in users_df["ID"].values:
             print("Usuario no encontrado.")
@@ -110,6 +127,30 @@ def login():
         )
         return None
 
+        log_access(
+            user_id=user["ID"],
+            nombre=user["Nombre"],
+            rol=rol,
+            resultado="LOGIN_OK"
+        )
+
+        return {
+            "id": user["ID"],
+            "nombre": user["Nombre"],
+            "rol": rol
+        }
+
+    except ValueError:
+        print("Entrada inválida.")
+        log_access(
+            user_id="INVALID",
+            nombre="INVALID",
+            rol="",
+            resultado="LOGIN_FAIL",
+            motivo="Entrada inválida"
+        )
+        return None
+
 
 # ==============================
 # LOGIN (WEB)
@@ -119,6 +160,7 @@ def login_web(user_id, password):
     users_df = load_users()
 
     if users_df.empty:
+        print("Debug: La tabla de usuarios está vacía")
         return None
 
     if "ID" in users_df.columns:
@@ -126,6 +168,9 @@ def login_web(user_id, password):
 
     try:
         user_id = int(user_id)
+
+        # 🔹 Debug: ver IDs disponibles
+        print(f"Debug: IDs disponibles en la base de datos (web): {users_df['ID'].tolist()}")
 
         if user_id not in users_df["ID"].values:
             log_access(
@@ -149,6 +194,30 @@ def login_web(user_id, password):
                 motivo="Password incorrecto (web)"
             )
             return None
+
+        log_access(
+            user_id=user["ID"],
+            nombre=user["Nombre"],
+            rol=rol,
+            resultado="LOGIN_OK (web)"
+        )
+
+        return {
+            "id": user["ID"],
+            "nombre": user["Nombre"],
+            "rol": rol
+        }
+
+    except Exception as e:
+        print("Error login_web:", e)
+        log_access(
+            user_id="INVALID",
+            nombre="INVALID",
+            rol="",
+            resultado="LOGIN_FAIL",
+            motivo="Error en login web"
+        )
+        return None
 
         log_access(
             user_id=user["ID"],
@@ -224,8 +293,12 @@ def create_user():
             return
 
         mostrar_productos_vendibles()
+
         seleccion = input("Seleccione carpetas (ej: 1,2): ")
-        seleccion_ids = [int(x.strip()) for x in seleccion.split(",")]
+        seleccion_ids = validar_seleccion_productos(seleccion, PRODUCTS)
+
+        if not seleccion_ids:
+            return  # Salir si no hay selección válida
 
         nombres = [PRODUCTS[s]["nombre"] for s in seleccion_ids]
 
@@ -264,7 +337,6 @@ def create_user():
 
     except Exception as e:
         print("Error:", e)
-
 
 # ==============================
 # LISTAR USUARIOS
