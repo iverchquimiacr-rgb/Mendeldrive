@@ -208,58 +208,109 @@ def load_users():
 
 
 def save_users(df):
-
     conn = get_connection()
+    cursor = conn.cursor() if is_postgres(conn) else None
 
     if not is_postgres(conn):
-
+        # SQLite: reemplaza tabla completa (ok porque es local y simple)
         df.to_sql("usuarios", conn, if_exists="replace", index=False)
 
     else:
-
-        cursor = conn.cursor()
-
-        cursor.execute("DELETE FROM usuarios")
-
-        if "ID" in df.columns:
-            df = df.drop(columns=["ID"])
-
+        # PostgreSQL: hacer "upsert" para no borrar todos los usuarios
         for _, row in df.iterrows():
 
-            cursor.execute("""
-            INSERT INTO usuarios (
-                nombre,
-                password,
-                tipo_pago,
-                carpetas_compradas,
-                carpetas_asignadas,
-                monto_base,
-                pago_confirmado,
-                fecha_registro,
-                estado,
-                fecha_ultimo_pago,
-                fecha_vencimiento,
-                rol,
-                debe_cambiar_password,
-                debe_elegir_plan
-            )
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            """, (
-                row.get("Nombre"),
-                row.get("Password"),
-                row.get("Tipo_pago"),
-                row.get("Carpetas_compradas"),
-                row.get("Carpetas_asignadas"),
-                row.get("Monto_base"),
-                row.get("Pago_confirmado"),
-                row.get("Fecha_registro"),
-                row.get("Estado"),
-                row.get("Fecha_ultimo_pago"),
-                row.get("Fecha_vencimiento"),
-                row.get("Rol"),
-                row.get("Debe_cambiar_password"),
-                row.get("Debe_elegir_plan")
-            ))
+            # Mantener ID si existe
+            user_id = row.get("ID")
+
+            if user_id is None:
+                # Insertar nuevo usuario
+                cursor.execute("""
+                INSERT INTO usuarios (
+                    nombre,
+                    password,
+                    tipo_pago,
+                    carpetas_compradas,
+                    carpetas_asignadas,
+                    monto_base,
+                    pago_confirmado,
+                    fecha_registro,
+                    estado,
+                    fecha_ultimo_pago,
+                    fecha_vencimiento,
+                    rol,
+                    debe_cambiar_password,
+                    debe_elegir_plan
+                ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                """, (
+                    row.get("Nombre"),
+                    row.get("Password"),
+                    row.get("Tipo_pago"),
+                    row.get("Carpetas_compradas"),
+                    row.get("Carpetas_asignadas"),
+                    row.get("Monto_base"),
+                    row.get("Pago_confirmado"),
+                    row.get("Fecha_registro"),
+                    row.get("Estado"),
+                    row.get("Fecha_ultimo_pago"),
+                    row.get("Fecha_vencimiento"),
+                    row.get("Rol"),
+                    row.get("Debe_cambiar_password"),
+                    row.get("Debe_elegir_plan")
+                ))
+            else:
+                # Upsert: si existe, actualizar; si no, insertar
+                cursor.execute("""
+                INSERT INTO usuarios (
+                    id,
+                    nombre,
+                    password,
+                    tipo_pago,
+                    carpetas_compradas,
+                    carpetas_asignadas,
+                    monto_base,
+                    pago_confirmado,
+                    fecha_registro,
+                    estado,
+                    fecha_ultimo_pago,
+                    fecha_vencimiento,
+                    rol,
+                    debe_cambiar_password,
+                    debe_elegir_plan
+                )
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                ON CONFLICT (id)
+                DO UPDATE SET
+                    nombre = EXCLUDED.nombre,
+                    password = EXCLUDED.password,
+                    tipo_pago = EXCLUDED.tipo_pago,
+                    carpetas_compradas = EXCLUDED.carpetas_compradas,
+                    carpetas_asignadas = EXCLUDED.carpetas_asignadas,
+                    monto_base = EXCLUDED.monto_base,
+                    pago_confirmado = EXCLUDED.pago_confirmado,
+                    fecha_registro = EXCLUDED.fecha_registro,
+                    estado = EXCLUDED.estado,
+                    fecha_ultimo_pago = EXCLUDED.fecha_ultimo_pago,
+                    fecha_vencimiento = EXCLUDED.fecha_vencimiento,
+                    rol = EXCLUDED.rol,
+                    debe_cambiar_password = EXCLUDED.debe_cambiar_password,
+                    debe_elegir_plan = EXCLUDED.debe_elegir_plan
+                """, (
+                    row.get("ID"),
+                    row.get("Nombre"),
+                    row.get("Password"),
+                    row.get("Tipo_pago"),
+                    row.get("Carpetas_compradas"),
+                    row.get("Carpetas_asignadas"),
+                    row.get("Monto_base"),
+                    row.get("Pago_confirmado"),
+                    row.get("Fecha_registro"),
+                    row.get("Estado"),
+                    row.get("Fecha_ultimo_pago"),
+                    row.get("Fecha_vencimiento"),
+                    row.get("Rol"),
+                    row.get("Debe_cambiar_password"),
+                    row.get("Debe_elegir_plan")
+                ))
 
         conn.commit()
 

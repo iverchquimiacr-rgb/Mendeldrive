@@ -15,6 +15,7 @@ from logger import log_access
 def crear_admin_inicial():
     users_df = load_users()
 
+    # Solo crear si no hay ningún admin
     if not users_df[users_df["Rol"] == "Admin"].empty:
         return
 
@@ -27,6 +28,7 @@ def crear_admin_inicial():
         "ID": new_id,
         "Nombre": "Administrador",
         "Password": admin_hash,
+        "Rol": "Admin",
         "Tipo_pago": "Unico",
         "Carpetas_compradas": "Sistema",
         "Carpetas_asignadas": 0,
@@ -36,18 +38,17 @@ def crear_admin_inicial():
         "Estado": "Activo",
         "Fecha_ultimo_pago": "",
         "Fecha_vencimiento": "No vence",
-        "Rol": "Admin",
         "Debe_cambiar_password": 0,
         "Debe_elegir_plan": 0
     }
 
-    df_admin = pd.DataFrame([admin])
-    save_users(df_admin)
+    # 🚀 Concatenar sin borrar
+    users_df = pd.concat([users_df, pd.DataFrame([admin])], ignore_index=True)
+    save_users(users_df)
 
     print("\n🛡️ ADMIN INICIAL CREADO")
     print(f"🆔 ID: {new_id}")
     print("🔑 Password: admin123")
-
 
 # ==============================
 # LOGIN (CONSOLA)
