@@ -22,7 +22,10 @@ def add_payment(user_id, monto):
     if "Comprobante" not in payments_df.columns:
         payments_df["Comprobante"] = ""
 
-    new_payment_id = 1 if payments_df.empty else payments_df["ID"].max() + 1
+    if payments_df.empty or "ID" not in payments_df.columns:
+        new_payment_id = 1
+    else:
+        new_payment_id = int(payments_df["ID"].max()) + 1
     fecha_pago = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     nuevo_pago = {
@@ -122,15 +125,6 @@ def approve_payment(payment_id, sesion):
     save_payments(payments_df)
     save_users(users_df)
 
-
-    estado_actual = payments_df.loc[
-        payments_df["ID"] == payment_id,
-        "Estado"
-    ].values[0]
-
-    if estado_actual == "Aprobado":
-        print("⚠️ Este pago ya fue aprobado.")
-        return
     
     log_action(
         actor_id=sesion["id"],
@@ -147,8 +141,8 @@ def approve_payment(payment_id, sesion):
     )
 
     print(
-    "✅ Pago registrado por S/ {monto}. "
-    "Será revisado por un administrador."
+    f"✅ Pago aprobado por S/ {pago['Monto']}. "
+    "Acceso actualizado correctamente." 
     )
 
 # ==============================

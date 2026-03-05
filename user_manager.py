@@ -117,7 +117,11 @@ def login():
 def login_web(user_id, password):
     users_df = load_users()
 
-    users_df["ID"] = users_df["ID"].astype(int)  # 🔴 CLAVE
+    if users_df.empty:
+        return None
+
+    if "ID" in users_df.columns:
+        users_df["ID"] = users_df["ID"].astype(int)
 
     try:
         user_id = int(user_id)
@@ -230,8 +234,10 @@ def create_user():
             else sum(PRODUCTS[s]["precio"] for s in seleccion_ids)
         )
 
-        new_id = 1 if users_df.empty else users_df["ID"].max() + 1
-
+        if users_df.empty or "ID" not in users_df.columns:
+            new_id = 1
+        else:
+            new_id = int(users_df["ID"].max()) + 1
         nuevo_usuario = {
             "ID": new_id,
             "Nombre": nombre,

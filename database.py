@@ -10,14 +10,18 @@ DB_NAME = "database.db"
 # CONEXIÓN
 # ==============================
 def get_connection():
+
     database_url = os.environ.get("DATABASE_URL")
 
     if database_url:
         # PostgreSQL (Render)
-        return psycopg2.connect(database_url)
+        conn = psycopg2.connect(database_url)
+        return conn
+
     else:
-        # SQLite (local)
-        return sqlite3.connect(DB_NAME)
+        # SQLite local
+        conn = sqlite3.connect(DB_NAME)
+        return conn
 
 
 def is_postgres(conn):
@@ -33,6 +37,10 @@ def initialize_database():
     cursor = conn.cursor()
 
     if is_postgres(conn):
+
+        # ==============================
+        # USUARIOS
+        # ==============================
 
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuarios (
@@ -54,6 +62,10 @@ def initialize_database():
         )
         """)
 
+        # ==============================
+        # PAGOS
+        # ==============================
+
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS pagos (
             id SERIAL PRIMARY KEY,
@@ -68,6 +80,10 @@ def initialize_database():
         """)
 
     else:
+
+        # ==============================
+        # SQLITE
+        # ==============================
 
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuarios (
@@ -107,6 +123,63 @@ def initialize_database():
 
 
 # ==============================
+# NORMALIZAR COLUMNAS
+# ==============================
+def normalize_users_columns(df):
+
+    if df.empty:
+        return df
+
+    # PostgreSQL usa minúsculas
+    df.columns = [col.capitalize() for col in df.columns]
+
+    rename_map = {
+        "Id": "ID",
+        "Nombre": "Nombre",
+        "Password": "Password",
+        "Tipo_pago": "Tipo_pago",
+        "Carpetas_compradas": "Carpetas_compradas",
+        "Carpetas_asignadas": "Carpetas_asignadas",
+        "Monto_base": "Monto_base",
+        "Pago_confirmado": "Pago_confirmado",
+        "Fecha_registro": "Fecha_registro",
+        "Estado": "Estado",
+        "Fecha_ultimo_pago": "Fecha_ultimo_pago",
+        "Fecha_vencimiento": "Fecha_vencimiento",
+        "Rol": "Rol",
+        "Debe_cambiar_password": "Debe_cambiar_password",
+        "Debe_elegir_plan": "Debe_elegir_plan"
+    }
+
+    df = df.rename(columns=rename_map)
+
+    return df
+
+
+def normalize_payments_columns(df):
+
+    if df.empty:
+        return df
+
+    df.columns = [col.capitalize() for col in df.columns]
+
+    rename_map = {
+        "Id": "ID",
+        "Usuario_id": "Usuario_ID",
+        "Monto": "Monto",
+        "Fecha": "Fecha",
+        "Estado": "Estado",
+        "Comprobante": "Comprobante",
+        "Admin_id": "Admin_ID",
+        "Fecha_procesado": "Fecha_procesado"
+    }
+
+    df = df.rename(columns=rename_map)
+
+    return df
+
+
+# ==============================
 # USUARIOS
 # ==============================
 def load_users():
@@ -114,8 +187,12 @@ def load_users():
     initialize_database()
 
     conn = get_connection()
+
     df = pd.read_sql_query("SELECT * FROM usuarios", conn)
+
     conn.close()
+
+    df = normalize_users_columns(df)
 
     columnas_necesarias = {
         "Rol": "Usuario",
@@ -135,36 +212,36 @@ def save_users(df):
     conn = get_connection()
 
     if not is_postgres(conn):
-        # SQLite permite replace
+
         df.to_sql("usuarios", conn, if_exists="replace", index=False)
 
     else:
-        # PostgreSQL → actualizar fila por fila
+
         cursor = conn.cursor()
 
         cursor.execute("DELETE FROM usuarios")
 
         if "ID" in df.columns:
             df = df.drop(columns=["ID"])
-            
+
         for _, row in df.iterrows():
 
             cursor.execute("""
             INSERT INTO usuarios (
-                Nombre,
-                Password,
-                Tipo_pago,
-                Carpetas_compradas,
-                Carpetas_asignadas,
-                Monto_base,
-                Pago_confirmado,
-                Fecha_registro,
-                Estado,
-                Fecha_ultimo_pago,
-                Fecha_vencimiento,
-                Rol,
-                Debe_cambiar_password,
-                Debe_elegir_plan
+                nombre,
+                password,
+                tipo_pago,
+                carpetas_compradas,
+                carpetas_asignadas,
+                monto_base,
+                pago_confirmado,
+                fecha_registro,
+                estado,
+                fecha_ultimo_pago,
+                fecha_vencimiento,
+                rol,
+                debe_cambiar_password,
+                debe_elegir_plan
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             """, (
@@ -197,8 +274,12 @@ def load_payments():
     initialize_database()
 
     conn = get_connection()
+
     df = pd.read_sql_query("SELECT * FROM pagos", conn)
+
     conn.close()
+
+    df = normalize_payments_columns(df)
 
     return df
 
@@ -221,8 +302,13 @@ def save_payments(df):
 
             cursor.execute("""
             INSERT INTO pagos (
-                usuario_id, monto, fecha, estado,
-                comprobante, admin_id, fecha_procesado
+                usuario_id,
+                monto,
+                fecha,
+                estado,
+                comprobante,
+                admin_id,
+                fecha_procesado
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s)
             """, (
