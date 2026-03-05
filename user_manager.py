@@ -334,7 +334,8 @@ def create_user_web(nombre, password, rol="Usuario"):
         "Estado": "Activo",
         "Fecha_ultimo_pago": "",
         "Fecha_vencimiento": "",
-        "Debe_cambiar_password": True
+        "Debe_cambiar_password": 1,
+        "Debe_elegir_plan": 1
     }
 
     users_df = pd.concat(
