@@ -16,3 +16,5 @@ uploads/
 
 # Archivos de VSCode (opcional)
 .vscode/
+database.db
+logs_access.csv
