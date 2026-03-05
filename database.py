@@ -2,46 +2,48 @@ import os
 import sqlite3
 import psycopg2
 import pandas as pd
+from sqlalchemy import create_engine
 
 DB_NAME = "database.db"
 
+# ==============================
+# MOTOR SQLALCHEMY
+# ==============================
+def get_engine():
+    database_url = os.environ.get("DATABASE_URL")
+    if database_url:
+        return create_engine(database_url)  # PostgreSQL
+    else:
+        return create_engine(f"sqlite:///{DB_NAME}")  # SQLite local
 
 # ==============================
-# CONEXIÓN
+# CONEXIÓN DIRECTA
 # ==============================
 def get_connection():
-
     database_url = os.environ.get("DATABASE_URL")
-
     if database_url:
         # PostgreSQL (Render)
         conn = psycopg2.connect(database_url)
         return conn
-
     else:
         # SQLite local
         conn = sqlite3.connect(DB_NAME)
         return conn
 
-
 def is_postgres(conn):
     return "psycopg2" in str(type(conn))
-
 
 # ==============================
 # INICIALIZAR BASE DE DATOS
 # ==============================
 def initialize_database():
-
     conn = get_connection()
     cursor = conn.cursor()
 
     if is_postgres(conn):
-
         # ==============================
         # USUARIOS
         # ==============================
-
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuarios (
             id SERIAL PRIMARY KEY,
@@ -65,7 +67,6 @@ def initialize_database():
         # ==============================
         # PAGOS
         # ==============================
-
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS pagos (
             id SERIAL PRIMARY KEY,
@@ -78,13 +79,10 @@ def initialize_database():
             fecha_procesado TEXT
         )
         """)
-
     else:
-
         # ==============================
         # SQLITE
         # ==============================
-
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS usuarios (
             ID INTEGER PRIMARY KEY,
@@ -121,16 +119,13 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-
 # ==============================
 # NORMALIZAR COLUMNAS
 # ==============================
 def normalize_users_columns(df):
-
     if df.empty:
         return df
 
-    # PostgreSQL usa minúsculas
     df.columns = [col.capitalize() for col in df.columns]
 
     rename_map = {
@@ -152,12 +147,9 @@ def normalize_users_columns(df):
     }
 
     df = df.rename(columns=rename_map)
-
     return df
 
-
 def normalize_payments_columns(df):
-
     if df.empty:
         return df
 
@@ -175,23 +167,15 @@ def normalize_payments_columns(df):
     }
 
     df = df.rename(columns=rename_map)
-
     return df
-
 
 # ==============================
 # USUARIOS
 # ==============================
 def load_users():
-
     initialize_database()
-
-    conn = get_connection()
-
-    df = pd.read_sql_query("SELECT * FROM usuarios", conn)
-
-    conn.close()
-
+    engine = get_engine()
+    df = pd.read_sql("SELECT * FROM usuarios", engine)  # 🔹 SQLAlchemy usado solo para lectura
     df = normalize_users_columns(df)
 
     columnas_necesarias = {
@@ -206,24 +190,18 @@ def load_users():
 
     return df
 
-
 def save_users(df):
     conn = get_connection()
     cursor = conn.cursor() if is_postgres(conn) else None
 
     if not is_postgres(conn):
-        # SQLite: reemplaza tabla completa (ok porque es local y simple)
-        df.to_sql("usuarios", conn, if_exists="replace", index=False)
-
+        engine = get_engine()  # 🔹 SQLAlchemy para SQLite simple
+        df.to_sql("usuarios", engine, if_exists="replace", index=False)
     else:
-        # PostgreSQL: hacer "upsert" para no borrar todos los usuarios
+        # PostgreSQL upsert sin tocar lógica
         for _, row in df.iterrows():
-
-            # Mantener ID si existe
             user_id = row.get("ID")
-
             if user_id is None:
-                # Insertar nuevo usuario
                 cursor.execute("""
                 INSERT INTO usuarios (
                     nombre,
@@ -258,7 +236,6 @@ def save_users(df):
                     row.get("Debe_elegir_plan")
                 ))
             else:
-                # Upsert: si existe, actualizar; si no, insertar
                 cursor.execute("""
                 INSERT INTO usuarios (
                     id,
@@ -311,46 +288,30 @@ def save_users(df):
                     row.get("Debe_cambiar_password"),
                     row.get("Debe_elegir_plan")
                 ))
-
         conn.commit()
 
     conn.close()
-
 
 # ==============================
 # PAGOS
 # ==============================
 def load_payments():
-
     initialize_database()
-
     conn = get_connection()
-
-    df = pd.read_sql_query("SELECT * FROM pagos", conn)
-
+    df = pd.read_sql_query("SELECT * FROM pagos", conn)  # 🔹 lectura directa, PostgreSQL y SQLite
     conn.close()
-
     df = normalize_payments_columns(df)
-
     return df
 
-
 def save_payments(df):
-
     conn = get_connection()
-
     if not is_postgres(conn):
-
-        df.to_sql("pagos", conn, if_exists="replace", index=False)
-
+        engine = get_engine()  # 🔹 SQLAlchemy solo para SQLite
+        df.to_sql("pagos", engine, if_exists="replace", index=False)
     else:
-
         cursor = conn.cursor()
-
         cursor.execute("DELETE FROM pagos")
-
         for _, row in df.iterrows():
-
             cursor.execute("""
             INSERT INTO pagos (
                 usuario_id,
@@ -371,7 +332,5 @@ def save_payments(df):
                 row.get("Admin_ID"),
                 row.get("Fecha_procesado")
             ))
-
         conn.commit()
-
     conn.close()
