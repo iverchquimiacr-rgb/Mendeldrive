@@ -28,7 +28,9 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
 def inject_now():
     return {'now': datetime.utcnow}
 
+print("DEBUG: app iniciando")
 crear_admin_inicial()
+print("DEBUG: admin inicial verificado")
 # ==============================
 # FIX GLOBAL PARA USERS (OBLIGATORIO)
 # ==============================
@@ -49,6 +51,18 @@ def load_users_safe():
 
     # ❌ NO GUARDAR AQUÍ
     return users_df
+
+#------------------
+# PROBAR
+#-------------------
+@app.route("/debug_users")
+def debug_users():
+    users_df = load_users()
+    return users_df.to_html()
+
+@app.route("/test")
+def test():
+    return "APP FUNCIONANDO"
 
 # ==============================
 # CONFIGURACIÓN DE SUBIDAS
@@ -78,7 +92,13 @@ def login():
             password = request.form["password"]
 
             # 1️⃣ Validar credenciales
-            if not login_web(user_id, password):
+            print("DEBUG login intentando:", user_id, password)
+
+            resultado = login_web(user_id, password)
+
+            print("DEBUG resultado login:", resultado)
+
+            if not resultado:
                 return render_template("login.html", error="Credenciales incorrectas")
 
             # 2️⃣ Cargar usuario de forma segura

@@ -27,8 +27,12 @@ def validar_seleccion_productos(seleccion, productos):
 # ==============================
 
 def crear_admin_inicial():
-    users_df = load_users()
+    print("DEBUG: entrar a crear_admin_inicial")
 
+    users_df = load_users()
+    print("DEBUG: users_df cargado")
+    print("DEBUG filas:", len(users_df))
+    print("DEBUG columnas:", users_df.columns.tolist())
     # Si la tabla está vacía, crear admin
     if users_df.empty:
         crear = True
@@ -165,22 +169,32 @@ def login():
 # ==============================
 
 def login_web(user_id, password):
+    print("----- DEBUG LOGIN WEB START -----")
+
     users_df = load_users()
 
     if users_df.empty:
         print("Debug: La tabla de usuarios está vacía")
         return None
 
+    print("Debug: Número de usuarios cargados:", len(users_df))
+    print("Debug: Columnas disponibles:", users_df.columns.tolist())
+
+    # 🔧 Asegurar que ID sea int
     if "ID" in users_df.columns:
         users_df["ID"] = users_df["ID"].astype(int)
 
     try:
         user_id = int(user_id)
 
-        # 🔹 Debug: ver IDs disponibles
-        print(f"Debug: IDs disponibles en la base de datos (web): {users_df['ID'].tolist()}")
+        # 🔎 Mostrar IDs disponibles
+        print("Debug: IDs disponibles en DB:", users_df["ID"].tolist())
+        print("Debug: ID ingresado:", user_id)
 
+        # ❌ Usuario no existe
         if user_id not in users_df["ID"].values:
+            print("Debug: Usuario no encontrado en la base")
+
             log_access(
                 user_id=user_id,
                 nombre="DESCONOCIDO",
@@ -188,12 +202,33 @@ def login_web(user_id, password):
                 resultado="LOGIN_FAIL",
                 motivo="Usuario no existe (web)"
             )
+
             return None
 
+        print("Debug: Usuario encontrado")
+
         user = users_df[users_df["ID"] == user_id].iloc[0]
+
         rol = user.get("Rol", "Usuario")
 
-        if not verify_password(password, user["Password"]):
+        print("Debug usuario:")
+        print("   ID:", user["ID"])
+        print("   Nombre:", user["Nombre"])
+        print("   Rol:", rol)
+
+        # 🔐 Verificar password
+        stored_password = str(user["Password"])
+
+        print("Debug: Password ingresado:", password)
+        print("Debug: Password guardado:", stored_password)
+
+        password_ok = verify_password(password, stored_password)
+
+        print("Debug: Resultado verify_password:", password_ok)
+
+        if not password_ok:
+            print("Debug: Password incorrecto")
+
             log_access(
                 user_id=user["ID"],
                 nombre=user["Nombre"],
@@ -201,7 +236,10 @@ def login_web(user_id, password):
                 resultado="LOGIN_FAIL",
                 motivo="Password incorrecto (web)"
             )
+
             return None
+
+        print("Debug: LOGIN EXITOSO")
 
         log_access(
             user_id=user["ID"],
@@ -210,14 +248,18 @@ def login_web(user_id, password):
             resultado="LOGIN_OK (web)"
         )
 
+        print("----- DEBUG LOGIN WEB END -----")
+
         return {
-            "id": user["ID"],
-            "nombre": user["Nombre"],
-            "rol": rol
+            "id": int(user["ID"]),
+            "nombre": str(user["Nombre"]),
+            "rol": str(rol)
         }
 
     except Exception as e:
-        print("Error login_web:", e)
+
+        print("🚨 ERROR en login_web:", e)
+
         log_access(
             user_id="INVALID",
             nombre="INVALID",
@@ -225,29 +267,7 @@ def login_web(user_id, password):
             resultado="LOGIN_FAIL",
             motivo="Error en login web"
         )
-        return None
 
-        log_access(
-            user_id=user["ID"],
-            nombre=user["Nombre"],
-            rol=rol,
-            resultado="LOGIN_OK (web)"
-        )
-
-        return {
-            "id": user["ID"],
-            "nombre": user["Nombre"],
-            "rol": rol
-        }
-
-    except Exception:
-        log_access(
-            user_id="INVALID",
-            nombre="INVALID",
-            rol="",
-            resultado="LOGIN_FAIL",
-            motivo="Error en login web"
-        )
         return None
 
 
