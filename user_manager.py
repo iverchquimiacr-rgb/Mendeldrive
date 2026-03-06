@@ -29,8 +29,18 @@ def validar_seleccion_productos(seleccion, productos):
 def crear_admin_inicial():
     users_df = load_users()
 
-    # Solo crear si no hay ningún admin
-    if "Rol" in users_df.columns and any(users_df["Rol"] == "Admin"):
+    # Si la tabla está vacía, crear admin
+    if users_df.empty:
+        crear = True
+
+    # Si existe columna Rol y hay admin, no crear
+    elif "Rol" in users_df.columns and any(users_df["Rol"] == "Admin"):
+        crear = False
+
+    else:
+        crear = True
+
+    if not crear:
         return
 
     admin_password = "admin123"
@@ -56,14 +66,12 @@ def crear_admin_inicial():
         "Debe_elegir_plan": 0
     }
 
-    # 🚀 Concatenar sin borrar
     users_df = pd.concat([users_df, pd.DataFrame([admin])], ignore_index=True)
     save_users(users_df)
 
     print("\n🛡️ ADMIN INICIAL CREADO")
     print(f"🆔 ID: {new_id}")
     print("🔑 Password: admin123")
-
 # ==============================
 # LOGIN (CONSOLA)
 # ==============================

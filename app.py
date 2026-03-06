@@ -22,7 +22,7 @@ from utils import generar_password_temporal
 from security import hash_password
 
 app = Flask(__name__)
-app.secret_key = "clave_secreta_temporal_123"
+app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
 
 @app.context_processor
 def inject_now():
@@ -63,7 +63,6 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-crear_admin_inicial()
 
 # ==============================
 # LOGIN
@@ -214,11 +213,6 @@ def admin_usuarios():
         nombre=str(session["nombre"])
     )
 
-    return render_template(
-        "usuarios_admin.html",
-        usuarios=usuarios,
-        nombre=session["nombre"]
-    )
 # ==============================
 # 🔴 ADMIN — PERFIL DE USUARIO
 # ==============================

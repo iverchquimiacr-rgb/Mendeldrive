@@ -8,9 +8,10 @@ cursor.execute("SELECT ID, Password FROM usuarios")
 users = cursor.fetchall()
 
 for user_id, password in users:
-    # Evitar doble hash
-    if len(password) != 64:
+
+    if not password.startswith("pbkdf2:"):
         hashed = hash_password(password)
+
         cursor.execute(
             "UPDATE usuarios SET Password = ? WHERE ID = ?",
             (hashed, user_id)
