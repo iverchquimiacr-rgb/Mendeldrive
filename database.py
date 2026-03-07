@@ -153,11 +153,12 @@ def normalize_payments_columns(df):
     if df.empty:
         return df
 
-    # Forzar minúsculas primero
-    df.columns = [col.lower() for col in df.columns]
+    print("DEBUG PAGOS COLUMNAS:", df.columns.tolist())
 
-    # Renombrar a formato usado en la app
-    df = df.rename(columns={
+    # Normalizar columnas
+    df.columns = [col.strip().lower() for col in df.columns]
+
+    rename_map = {
         "id": "ID",
         "usuario_id": "Usuario_ID",
         "monto": "Monto",
@@ -166,7 +167,9 @@ def normalize_payments_columns(df):
         "comprobante": "Comprobante",
         "admin_id": "Admin_ID",
         "fecha_procesado": "Fecha_procesado"
-    })
+    }
+
+    df = df.rename(columns=rename_map)
 
     print("DEBUG PAGOS COLUMNAS NORMALIZADAS:", df.columns.tolist())
 
