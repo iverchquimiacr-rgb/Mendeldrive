@@ -330,21 +330,71 @@ def load_payments():
 
     print("DEBUG PAGOS COLUMNAS:", df.columns.tolist())
 
-    df = normalize_payments_columns(df)
+    # 🔧 normalizar nombres de columnas (PostgreSQL -> formato app)
+    column_map = {
+        "id": "ID",
+        "usuario_id": "Usuario_ID",
+        "monto": "Monto",
+        "fecha": "Fecha",
+        "estado": "Estado",
+        "comprobante": "Comprobante",
+        "admin_id": "Admin_ID",
+        "fecha_procesado": "Fecha_procesado"
+    }
+
+    df = df.rename(columns=column_map)
 
     return df
 
 def save_payments(df):
+
     conn = get_connection()
+
+    # 🔹 Normalizar nombres de columnas para DB
+    column_map = {
+        "ID": "id",
+        "Usuario_ID": "usuario_id",
+        "Monto": "monto",
+        "Fecha": "fecha",
+        "Estado": "estado",
+        "Comprobante": "comprobante",
+        "Admin_ID": "admin_id",
+        "Fecha_procesado": "fecha_procesado"
+    }
+
+    df = df.rename(columns=column_map)
+
     if not is_postgres(conn):
-        engine = get_engine()  # 🔹 SQLAlchemy solo para SQLite
+
+        # 🔹 SQLite
+        engine = get_engine()
         df.to_sql("pagos", engine, if_exists="replace", index=False)
+
     else:
+
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM pagos")
-        for _, row in df.iterrows():
-            cursor.execute("""
+
+        # 🔹 borrar datos existentes
+        cursor.execute("TRUNCATE TABLE pagos RESTART IDENTITY")
+
+        # 🔹 insertar todos los registros
+        rows = [
+            (
+                row.get("id"),
+                row.get("usuario_id"),
+                row.get("monto"),
+                row.get("fecha"),
+                row.get("estado"),
+                row.get("comprobante"),
+                row.get("admin_id"),
+                row.get("fecha_procesado")
+            )
+            for _, row in df.iterrows()
+        ]
+
+        cursor.executemany("""
             INSERT INTO pagos (
+                id,
                 usuario_id,
                 monto,
                 fecha,
@@ -353,15 +403,9 @@ def save_payments(df):
                 admin_id,
                 fecha_procesado
             )
-            VALUES (%s,%s,%s,%s,%s,%s,%s)
-            """, (
-                row.get("Usuario_ID"),
-                row.get("Monto"),
-                row.get("Fecha"),
-                row.get("Estado"),
-                row.get("Comprobante"),
-                row.get("Admin_ID"),
-                row.get("Fecha_procesado")
-            ))
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+        """, rows)
+
         conn.commit()
+
     conn.close()
