@@ -43,8 +43,8 @@ def add_payment(user_id, monto):
         "Fecha": fecha_pago,
         "Estado": "Pendiente",
         "Comprobante": "",
-        "Admin_ID": "",
-        "Fecha_procesado": ""
+        "Admin_ID": None,
+        "Fecha_procesado": None
     }
 
     # 🔹 Para SQLite, seguimos generando ID manual

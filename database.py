@@ -362,14 +362,26 @@ def save_payments(df):
     }
     df = df.rename(columns=column_map)
 
+    # 🔹 Asegurar tipos correctos
+    if "monto" in df.columns:
+        df["monto"] = df["monto"].astype(float)
+    if "usuario_id" in df.columns:
+        df["usuario_id"] = df["usuario_id"].astype(int)
+    if "admin_id" in df.columns:
+        # Convertir strings vacíos a None para PostgreSQL
+        df["admin_id"] = df["admin_id"].apply(lambda x: int(x) if pd.notna(x) and x != "" else None)
+    if "fecha_procesado" in df.columns:
+        df["fecha_procesado"] = df["fecha_procesado"].apply(lambda x: x if pd.notna(x) and x != "" else None)
+
     if not is_postgres(conn):
-        # SQLite
+        # 🔹 SQLite
         engine = get_engine()
         df.to_sql("pagos", engine, if_exists="replace", index=False)
     else:
-        # PostgreSQL: truncate y luego insertar sin enviar ID (Postgres usa SERIAL)
+        # 🔹 PostgreSQL: truncate y luego insertar
         cursor = conn.cursor()
         cursor.execute("TRUNCATE TABLE pagos RESTART IDENTITY")
+
         for _, row in df.iterrows():
             cursor.execute("""
                 INSERT INTO pagos (usuario_id, monto, fecha, estado, comprobante, admin_id, fecha_procesado)
@@ -379,9 +391,9 @@ def save_payments(df):
                 row["monto"],
                 row["fecha"],
                 row["estado"],
-                row["comprobante"],
-                row.get("admin_id"),
-                row.get("fecha_procesado")
+                row["comprobante"] if pd.notna(row["comprobante"]) else None,
+                row["admin_id"],
+                row["fecha_procesado"]
             ))
         conn.commit()
 
