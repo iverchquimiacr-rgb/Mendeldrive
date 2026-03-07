@@ -445,7 +445,10 @@ def admin_reset_password(user_id):
 
     # 💾 Guardar
     users_df.at[idx[0], "Password"] = password_hash
-    users_df.loc[idx, "Debe_cambiar_password"] = 0
+
+    # ✅ Activar usuario y permitir cambio de contraseña si es necesario
+    users_df.loc[idx, "Debe_cambiar_password"] = 1   # fuerza al usuario a cambiar password al ingresar
+    users_df.loc[idx, "Estado"] = "Activo"          # activa al usuario para que pueda loguearse
 
     save_users(users_df)
 

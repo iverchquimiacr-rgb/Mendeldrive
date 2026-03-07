@@ -122,9 +122,9 @@ def approve_payment(payment_id, sesion):
         return
 
     # 🔒 Validar comprobante
-    if not pago.get("Comprobante"):
-        print("⛔ No se puede aprobar un pago sin comprobante.")
-        return
+    #if not pago.get("Comprobante"):
+     #   print("⛔ No se puede aprobar un pago sin comprobante.")
+      #  return
 
     # ✅ Aprobar
     payments_df.loc[payments_df["ID"] == payment_id, "Estado"] = "Aprobado"
