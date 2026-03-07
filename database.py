@@ -153,10 +153,11 @@ def normalize_payments_columns(df):
     if df.empty:
         return df
 
-    # Convertir todo a minúsculas primero (forma segura)
+    # Forzar minúsculas primero
     df.columns = [col.lower() for col in df.columns]
 
-    rename_map = {
+    # Renombrar a formato usado en la app
+    df = df.rename(columns={
         "id": "ID",
         "usuario_id": "Usuario_ID",
         "monto": "Monto",
@@ -165,9 +166,9 @@ def normalize_payments_columns(df):
         "comprobante": "Comprobante",
         "admin_id": "Admin_ID",
         "fecha_procesado": "Fecha_procesado"
-    }
+    })
 
-    df = df.rename(columns=rename_map)
+    print("DEBUG PAGOS COLUMNAS NORMALIZADAS:", df.columns.tolist())
 
     return df
 
@@ -311,6 +312,7 @@ def load_payments():
     conn = get_connection()
 
     df = pd.read_sql_query("SELECT * FROM pagos", conn)
+
     conn.close()
 
     print("DEBUG PAGOS COLUMNAS:", df.columns.tolist())
