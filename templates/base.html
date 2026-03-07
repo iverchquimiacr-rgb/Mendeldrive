@@ -286,7 +286,6 @@ margin:20px auto;
 }
 
 </style>
-
 {% block extra_css %}{% endblock %}
 
 </head>
@@ -301,19 +300,32 @@ margin:20px auto;
 Sistema
 </div>
 
+{% if session.get("user_id") %}
+
 <div class="nav-links">
 
 <a href="/dashboard">Dashboard</a>
 
 <a href="/catalogo">Catálogo</a>
 
+<a href="/perfil">Perfil</a>
+
+{% if session.get("rol") == "Admin" %}
+
+<a href="/admin/usuarios">Usuarios</a>
+<a href="/admin/pagos">Pagos</a>
+
+{% else %}
+
 <a href="/mis_pagos">Mis pagos</a>
 
-<a href="/perfil">Perfil</a>
+{% endif %}
 
 <a href="/logout">Salir</a>
 
 </div>
+
+{% endif %}
 
 </div>
 

@@ -168,7 +168,7 @@ margin-top:20px;
 
 <td>{{ p.usuario }}</td>
 
-<td>S/ {{ p.monto }}</td>
+<td>S/ {{ "%.2f"|format(p.monto) }}</td>
 
 <td>{{ p.fecha }}</td>
 

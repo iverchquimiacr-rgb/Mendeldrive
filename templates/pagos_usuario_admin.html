@@ -151,12 +151,12 @@ margin-bottom:10px;
 {% if p.monto < 0 %}
 
 <span class="badge-adelanto">
-Adelanto S/ {{ p.monto }}
+Adelanto S/ {{ "%.2f"|format(p.monto) }}
 </span>
 
 {% else %}
 
-S/ {{ p.monto }}
+S/ {{ "%.2f"|format(p.monto) }}
 
 {% endif %}
 
@@ -213,11 +213,11 @@ Ver
 
 <ul>
 
-<li>🟢 Aprobados: {{ resumen.cant_aprobados }} — Total: S/ {{ resumen.total_aprobado }}</li>
+<li>🟢 Aprobados: {{ resumen.cant_aprobados }} — Total: S/ {{ "%.2f"|format(resumen.total_aprobado) }}</li>
 
-<li>🟡 Pendientes: {{ resumen.cant_pendientes }} — Total: S/ {{ resumen.total_pendiente }}</li>
+<li>🟡 Pendientes: {{ resumen.cant_pendientes }} — Total: S/ {{ "%.2f"|format(resumen.total_pendiente) }}</li>
 
-<li>🔴 Rechazados: {{ resumen.cant_rechazados }} — Total: S/ {{ resumen.total_rechazado }}</li>
+<li>🔴 Rechazados: {{ resumen.cant_rechazados }} — Total: S/ {{ "%.2f"|format(resumen.total_rechazado) }}</li>
 
 </ul>
 

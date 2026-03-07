@@ -154,7 +154,7 @@ Administrador: {{ nombre }}
 
 <td>{{ u.carpetas }}</td>
 
-<td><strong>S/ {{ u.saldo }}</strong></td>
+<td><strong>S/ {{ "%.2f"|format(u.saldo) }}</strong></td>
 
 <td>
 <a class="profile-btn" href="/admin/usuario/{{ u.id }}">

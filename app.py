@@ -22,9 +22,36 @@ from werkzeug.utils import secure_filename
 from utils import generar_password_temporal
 from security import hash_password
 import json
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
+
+def login_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+
+        if "user_id" not in session:
+            return redirect(url_for("login"))
+
+        return f(*args, **kwargs)
+
+    return wrapper
+
+
+def admin_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+
+        if "user_id" not in session:
+            return redirect(url_for("login"))
+
+        if session.get("rol") != "Admin":
+            return redirect(url_for("dashboard"))
+
+        return f(*args, **kwargs)
+
+    return wrapper
 
 @app.context_processor
 def inject_now():
@@ -139,9 +166,8 @@ def login():
 # ==============================
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
 
     if session["rol"] == "Admin":
         return render_template("dashboard_admin.html", nombre=session["nombre"])
@@ -182,6 +208,7 @@ def catalogo():
 #------------------------------
 
 @app.route("/admin/ingresos")
+@admin_required
 def admin_ingresos():
 
     if "rol" not in session or session["rol"] != "Admin":
@@ -225,6 +252,7 @@ def estado_cuenta():
 # ==============================
 
 @app.route("/admin/usuarios")
+@admin_required
 def admin_usuarios():
     if "user_id" not in session or session["rol"] != "Admin":
         return redirect(url_for("login"))
@@ -262,6 +290,7 @@ def admin_usuarios():
 # ==============================
 
 @app.route("/admin/usuario/<int:user_id>")
+@admin_required
 def admin_ver_usuario(user_id):
     # 🔐 Seguridad
     if "user_id" not in session or session["rol"] != "Admin":
@@ -315,6 +344,7 @@ def admin_ver_usuario(user_id):
 # ==============================
 
 @app.route("/admin/usuario/<int:user_id>/pagos")
+@admin_required
 def admin_pagos_usuario(user_id):
     # 🔐 Seguridad
     if "user_id" not in session or session["rol"] != "Admin":
@@ -395,6 +425,7 @@ def admin_pagos_usuario(user_id):
 # ==============================
 
 @app.route("/admin/usuario/<int:user_id>/reset_password")
+@admin_required
 def admin_reset_password(user_id):
     if "user_id" not in session or session["rol"] != "Admin":
         return redirect(url_for("login"))
@@ -668,6 +699,7 @@ def mis_pagos():
 # ==============================
 
 @app.route("/admin/pagos")
+@admin_required
 def admin_pagos():
     if "user_id" not in session or session["rol"] != "Admin":
         return redirect(url_for("login"))
@@ -764,6 +796,7 @@ def ver_comprobantes(user_id):
 
 
 @app.route("/uploads/comprobantes/<path:filename>")
+@admin_required
 def descargar_comprobante(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 # ==============================
@@ -847,6 +880,7 @@ def seleccionar_planes():
                     total += producto["precio"]
 
         # 💳 Montos fijos
+        # CAMBIAR PRECIOS SEMANAL MENSUAL MODIFICAR COSTO
         if tipo_pago == "Semanal":
             total = 1
         elif tipo_pago == "Mensual":

@@ -123,7 +123,7 @@ box-shadow:0 10px 30px rgba(0,0,0,0.2);
 
 <h2>Ingresos del sistema</h2>
 
-<h3>Total ingresos: S/ {{ total }}</h3>
+<h3>Total ingresos: S/ {{ "%.2f"|format(total) }}</h3>
 
 <div class="chart-container">
 <canvas id="incomeChart"></canvas>

@@ -91,7 +91,7 @@ border-top:5px solid #FFD700;
 <h3>Monto base</h3>
 
 <div class="account-value">
-S/ {{ estado.MontoBase }}
+S/ {{ "%.2f"|format(estado.MontoBase) }}
 </div>
 
 </div>
@@ -101,7 +101,7 @@ S/ {{ estado.MontoBase }}
 <h3>Total pagado</h3>
 
 <div class="account-value">
-S/ {{ estado.TotalPagado }}
+S/ {{ "%.2f"|format(estado.TotalPagado) }}
 </div>
 
 </div>
@@ -111,7 +111,7 @@ S/ {{ estado.TotalPagado }}
 <h3>Saldo pendiente</h3>
 
 <div class="account-value">
-S/ {{ estado.SaldoPendiente }}
+S/ {{ "%.2f"|format(estado.SaldoPendiente) }}
 </div>
 
 </div>
