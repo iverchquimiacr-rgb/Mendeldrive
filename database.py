@@ -347,10 +347,9 @@ def load_payments():
     return df
 
 def save_payments(df):
-
     conn = get_connection()
 
-    # 🔹 Normalizar nombres de columnas para DB
+    # 🔹 Normalizar nombres de columnas
     column_map = {
         "ID": "id",
         "Usuario_ID": "usuario_id",
@@ -361,51 +360,29 @@ def save_payments(df):
         "Admin_ID": "admin_id",
         "Fecha_procesado": "fecha_procesado"
     }
-
     df = df.rename(columns=column_map)
 
     if not is_postgres(conn):
-
-        # 🔹 SQLite
+        # SQLite
         engine = get_engine()
         df.to_sql("pagos", engine, if_exists="replace", index=False)
-
     else:
-
+        # PostgreSQL: truncate y luego insertar sin enviar ID (Postgres usa SERIAL)
         cursor = conn.cursor()
-
-        # 🔹 borrar datos existentes
         cursor.execute("TRUNCATE TABLE pagos RESTART IDENTITY")
-
-        # 🔹 insertar todos los registros
-        rows = [
-            (
-                row.get("id"),
-                row.get("usuario_id"),
-                row.get("monto"),
-                row.get("fecha"),
-                row.get("estado"),
-                row.get("comprobante"),
+        for _, row in df.iterrows():
+            cursor.execute("""
+                INSERT INTO pagos (usuario_id, monto, fecha, estado, comprobante, admin_id, fecha_procesado)
+                VALUES (%s,%s,%s,%s,%s,%s,%s)
+            """, (
+                row["usuario_id"],
+                row["monto"],
+                row["fecha"],
+                row["estado"],
+                row["comprobante"],
                 row.get("admin_id"),
                 row.get("fecha_procesado")
-            )
-            for _, row in df.iterrows()
-        ]
-
-        cursor.executemany("""
-            INSERT INTO pagos (
-                id,
-                usuario_id,
-                monto,
-                fecha,
-                estado,
-                comprobante,
-                admin_id,
-                fecha_procesado
-            )
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-        """, rows)
-
+            ))
         conn.commit()
 
     conn.close()

@@ -1,8 +1,8 @@
-from database import load_users, save_users, load_payments, save_payments
+from database import get_connection, load_users, save_users, load_payments, save_payments
 from datetime import datetime, timedelta
 import pandas as pd
 from collections import defaultdict
-
+import os
 from logger_actions import log_action
 from logger import log_payment
 
@@ -32,32 +32,52 @@ def add_payment(user_id, monto):
         print("Usuario no encontrado.")
         return
 
-    # 🧾 aseguramos columna Comprobante
-    if "Comprobante" not in payments_df.columns:
-        payments_df["Comprobante"] = ""
+    # 🧾 aseguramos columnas necesarias
+    payments_df = _ensure_columns(payments_df, ["Comprobante", "Admin_ID", "Fecha_procesado"])
 
-    if payments_df.empty or "ID" not in payments_df.columns:
-        new_payment_id = 1
-    else:
-        new_payment_id = int(payments_df["ID"].max()) + 1
     fecha_pago = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     nuevo_pago = {
-        "ID": new_payment_id,
         "Usuario_ID": user_id,
         "Monto": monto,
         "Fecha": fecha_pago,
         "Estado": "Pendiente",
-        "Comprobante": ""
+        "Comprobante": "",
+        "Admin_ID": "",
+        "Fecha_procesado": ""
     }
 
-    payments_df = pd.concat(
-        [payments_df, pd.DataFrame([nuevo_pago])],
-        ignore_index=True
-    )
+    # 🔹 Para SQLite, seguimos generando ID manual
+    if os.environ.get("DATABASE_URL") is None:
+        if payments_df.empty or "ID" not in payments_df.columns:
+            new_payment_id = 1
+        else:
+            new_payment_id = int(payments_df["ID"].max()) + 1
+        nuevo_pago["ID"] = new_payment_id
+        payments_df = pd.concat([payments_df, pd.DataFrame([nuevo_pago])], ignore_index=True)
+        save_payments(payments_df)
+    else:
+        # 🔹 PostgreSQL: insertamos sin ID y recuperamos el id generado
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO pagos (usuario_id, monto, fecha, estado, comprobante, admin_id, fecha_procesado)
+            VALUES (%s,%s,%s,%s,%s,%s,%s)
+            RETURNING id
+        """, (
+            nuevo_pago["Usuario_ID"],
+            nuevo_pago["Monto"],
+            nuevo_pago["Fecha"],
+            nuevo_pago["Estado"],
+            nuevo_pago["Comprobante"],
+            nuevo_pago["Admin_ID"],
+            nuevo_pago["Fecha_procesado"]
+        ))
+        new_payment_id = cursor.fetchone()[0]
+        conn.commit()
+        conn.close()
 
-    save_payments(payments_df)
-
+    # 🔹 Log con ID correcto
     log_payment(
         user_id=user_id,
         pago_id=new_payment_id,
@@ -66,7 +86,6 @@ def add_payment(user_id, monto):
     )
 
     print("✅ Pago registrado correctamente. Estado: Pendiente")
-
 
 # ==============================
 # APROBAR PAGO (SOLO ADMIN)

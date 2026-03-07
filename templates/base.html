@@ -304,20 +304,12 @@ Sistema
 
 <div class="nav-links">
 
-<a href="/dashboard">Dashboard</a>
-
 <a href="/catalogo">Catálogo</a>
-
-<a href="/perfil">Perfil</a>
 
 {% if session.get("rol") == "Admin" %}
 
 <a href="/admin/usuarios">Usuarios</a>
 <a href="/admin/pagos">Pagos</a>
-
-{% else %}
-
-<a href="/mis_pagos">Mis pagos</a>
 
 {% endif %}
 
