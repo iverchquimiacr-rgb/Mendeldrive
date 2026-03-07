@@ -150,23 +150,50 @@ def normalize_users_columns(df):
     return df
 
 def normalize_payments_columns(df):
+    """
+    Normaliza los nombres de columnas de la tabla pagos
+    para evitar errores entre SQLite, PostgreSQL o CSV.
+    """
+
     if df.empty:
         return df
 
-    df.columns = [col.capitalize() for col in df.columns]
+    # 🔹 Normalizar formato general (evita problemas de mayúsculas)
+    df.columns = [col.strip() for col in df.columns]
 
+    # 🔹 Mapa de nombres posibles → nombre estándar usado en el proyecto
     rename_map = {
         "Id": "ID",
+        "id": "ID",
+
         "Usuario_id": "Usuario_ID",
+        "usuario_id": "Usuario_ID",
+        "User_id": "Usuario_ID",
+        "user_id": "Usuario_ID",
+        "Id_usuario": "Usuario_ID",
+
         "Monto": "Monto",
+        "monto": "Monto",
+
         "Fecha": "Fecha",
+        "fecha": "Fecha",
+
         "Estado": "Estado",
+        "estado": "Estado",
+
         "Comprobante": "Comprobante",
+        "comprobante": "Comprobante",
+
         "Admin_id": "Admin_ID",
-        "Fecha_procesado": "Fecha_procesado"
+        "admin_id": "Admin_ID",
+
+        "Fecha_procesado": "Fecha_procesado",
+        "fecha_procesado": "Fecha_procesado"
     }
 
-    df = df.rename(columns=rename_map)
+    # 🔹 Renombrar columnas si coinciden
+    df = df.rename(columns=lambda col: rename_map.get(col, col))
+
     return df
 
 # ==============================
