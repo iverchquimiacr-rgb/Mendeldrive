@@ -24,6 +24,7 @@ from security import hash_password
 import json
 from functools import wraps
 
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
 
@@ -799,6 +800,7 @@ def ver_comprobantes(user_id):
 @admin_required
 def descargar_comprobante(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
+    
 # ==============================
 # CREAR USUARIO EN WEB
 # ==============================
