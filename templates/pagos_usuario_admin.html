@@ -66,6 +66,14 @@ font-size:12px;
 font-weight:600;
 }
 
+.back-link{
+display:inline-block;
+margin-top:20px;
+text-decoration:none;
+color:var(--emerald);
+font-weight:600;
+}
+
 .badge-adelanto{
 background:#00ffff22;
 color:#007a7a;
@@ -203,9 +211,8 @@ Ver
 <br>
 
 <a href="/admin/usuario/{{ user_id }}">
-<button class="btn-gold">Volver al perfil</button>
+<button class="back-link">⬅ Volver al perfil</button>
 </a>
-
 </div>
 
 {% endblock %}

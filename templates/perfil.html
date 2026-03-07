@@ -46,6 +46,22 @@ font-weight:600;
 margin-top:10px;
 }
 
+.catalogo{
+display:inline-block;
+margin-top:20px;
+text-decoration:none;
+color:var(--lightblue);
+font-weight:600;
+}
+
+.back-link{
+display:inline-block;
+margin-top:20px;
+text-decoration:none;
+color:var(--emerald);
+font-weight:600;
+}
+
 .summary li{
 font-size:15px;
 }
@@ -137,11 +153,11 @@ Saldo pendiente: S/ {{ perfil.saldo_pendiente }}
 <div class="actions">
 
 <a href="/catalogo">
-<button class="btn-gold">Ver catálogo</button>
+<button class="catalogo">Ver catálogo</button>
 </a>
 
-<a href="/dashboard">
-<button>Volver al dashboard</button>
+<a class="back-link" href="/dashboard">
+⬅ Volver al panel
 </a>
 
 </div>

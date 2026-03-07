@@ -41,8 +41,32 @@ margin-bottom:6px;
 font-size:14px;
 }
 
+.submit{
+display:inline-block;
+margin-top:20px;
+text-decoration:none;
+color:var(--gold);
+font-weight:600;
+}
+
 .form-group select,
 .form-group input[type="file"]{
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+.form-group select
+
+.form-group input[type="file"]{
+padding:12px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+.file{
 padding:12px;
 border-radius:10px;
 border:1px solid #ddd;
@@ -53,6 +77,14 @@ font-size:14px;
 outline:none;
 border-color:var(--emerald);
 box-shadow:0 0 0 2px rgba(80,200,120,0.2);
+}
+
+.back-link{
+display:inline-block;
+margin-top:20px;
+text-decoration:none;
+color:var(--emerald);
+font-weight:600;
 }
 
 .success-box{
@@ -128,8 +160,8 @@ Subir comprobante
 
 <div class="actions">
 
-<a href="/dashboard">
-<button class="btn-gold">Volver al dashboard</button>
+<a class="back-link" href="/dashboard">
+⬅ Volver al panel
 </a>
 
 </div>
