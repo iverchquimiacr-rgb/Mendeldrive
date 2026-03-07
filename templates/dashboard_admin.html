@@ -90,6 +90,22 @@ border-left:5px solid var(--emerald);
 border-left:5px solid var(--gold);
 }
 
+.highlight-blue{
+border-left:5px solid #3b82f6;
+}
+
+.highlight-purple{
+border-left:5px solid #8b5cf6;
+}
+
+.highlight-red{
+border-left:5px solid #ef4444;
+}
+
+.highlight-teal{
+border-left:5px solid #14b8a6;
+}
+
 .logout-container{
 
 margin-top:45px;
@@ -126,6 +142,25 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
 
 }
 
+.card[class*="highlight"]{
+position:relative;
+}
+
+.card[class*="highlight"]::before{
+content:"";
+position:absolute;
+left:0;
+top:0;
+height:100%;
+width:5px;
+transition:all 0.25s ease;
+}
+
+.card[class*="highlight"]:hover::before{
+width:9px;
+filter:brightness(1.25);
+}
+
 </style>
 
 {% endblock %}
@@ -144,17 +179,17 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
 
 <div class="card-grid">
 
-<a href="/crear_usuario" class="card">
+<a href="/crear_usuario" class="card highlight-blue">
 <h3>👤 Crear usuario</h3>
 <p>Registrar nuevos usuarios</p>
 </a>
 
-<a href="/registrar_pago" class="card">
+<a href="/registrar_pago" class="card highlight-purple">
 <h3>💳 Registrar pago</h3>
 <p>Ingresar pagos manualmente</p>
 </a>
 
-<a href="/subir_comprobante" class="card">
+<a href="/subir_comprobante" class="card highlight-teal">
 <h3>📤 Subir comprobante</h3>
 <p>Adjuntar comprobantes</p>
 </a>
@@ -164,7 +199,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
 <p>Administrar usuarios registrados</p>
 </a>
 
-<a href="/admin/pagos" class="card">
+<a href="/admin/pagos" class="card highlight-red">
 <h3>📊 Ver pagos</h3>
 <p>Listado completo de pagos</p>
 </a>
@@ -174,7 +209,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
 <p>Ver ingresos y métricas</p>
 </a>
 
-<a href="/estado_cuenta" class="card">
+<a href="/estado_cuenta" class="card highlight-purple">
 <h3>📑 Estado de cuenta</h3>
 <p>Consultar balances</p>
 </a>

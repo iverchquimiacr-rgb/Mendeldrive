@@ -78,6 +78,22 @@ font-size:14px;
 opacity:0.7;
 }
 
+.highlight-blue{
+border-left:5px solid #3b82f6;
+}
+
+.highlight-purple{
+border-left:5px solid #8b5cf6;
+}
+
+.highlight-red{
+border-left:5px solid #ef4444;
+}
+
+.highlight-teal{
+border-left:5px solid #14b8a6;
+}
+
 .highlight-orange{
 border-left:5px solid var(--gold);
 }
@@ -118,6 +134,25 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
 
 }
 
+.card[class*="highlight"]{
+position:relative;
+}
+
+.card[class*="highlight"]::before{
+content:"";
+position:absolute;
+left:0;
+top:0;
+height:100%;
+width:5px;
+transition:all 0.25s ease;
+}
+
+.card[class*="highlight"]:hover::before{
+width:9px;
+filter:brightness(1.25);
+}
+
 </style>
 
 {% endblock %}
@@ -136,27 +171,27 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
 
 <div class="card-grid">
 
-<a href="/perfil" class="card">
+<a href="/perfil" class="card highlight-blue">
 <h3>👤 Mi perfil</h3>
 <p>Actualizar información personal</p>
 </a>
 
-<a href="/registrar_pago" class="card">
+<a href="/registrar_pago" class="card highlight-purple">
 <h3>💳 Registrar pago</h3>
 <p>Reportar un nuevo pago</p>
 </a>
 
-<a href="/subir_comprobante" class="card">
+<a href="/subir_comprobante" class="card highlight-teal">
 <h3>📤 Subir comprobante</h3>
 <p>Adjuntar comprobante</p>
 </a>
 
-<a href="/estado_cuenta" class="card">
+<a href="/estado_cuenta" class="card highlight-purple">
 <h3>📑 Estado de cuenta</h3>
 <p>Consultar tu balance</p>
 </a>
 
-<a href="/mis_pagos" class="card">
+<a href="/mis_pagos" class="card highlight-red">
 <h3>📋 Mis pagos</h3>
 <p>Historial de pagos</p>
 </a>
