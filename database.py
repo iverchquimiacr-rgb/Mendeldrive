@@ -153,10 +153,17 @@ def normalize_payments_columns(df):
     if df.empty:
         return df
 
-    print("DEBUG PAGOS COLUMNAS:", df.columns.tolist())
+    print("DEBUG PAGOS COLUMNAS RAW:", df.columns.tolist())
 
-    # Normalizar columnas
-    df.columns = [col.strip().lower() for col in df.columns]
+    # 🔹 limpieza completa de columnas
+    df.columns = (
+        df.columns
+        .str.strip()
+        .str.lower()
+        .str.replace(" ", "")
+    )
+
+    print("DEBUG PAGOS COLUMNAS LIMPIAS:", df.columns.tolist())
 
     rename_map = {
         "id": "ID",
@@ -171,7 +178,7 @@ def normalize_payments_columns(df):
 
     df = df.rename(columns=rename_map)
 
-    print("DEBUG PAGOS COLUMNAS NORMALIZADAS:", df.columns.tolist())
+    print("DEBUG PAGOS COLUMNAS FINAL:", df.columns.tolist())
 
     return df
 
@@ -321,8 +328,6 @@ def load_payments():
     print("DEBUG PAGOS COLUMNAS:", df.columns.tolist())
 
     df = normalize_payments_columns(df)
-
-    print("DEBUG PAGOS COLUMNAS NORMALIZADAS:", df.columns.tolist())
 
     return df
 
