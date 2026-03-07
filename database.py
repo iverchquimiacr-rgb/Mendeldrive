@@ -150,6 +150,9 @@ def normalize_users_columns(df):
     return df
 
 def normalize_payments_columns(df):
+    
+    print("🚨 NORMALIZE PAYMENTS EJECUTADA")
+    
     if df.empty:
         return df
 
