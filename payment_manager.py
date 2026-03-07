@@ -1,6 +1,7 @@
 from database import load_users, save_users, load_payments, save_payments
 from datetime import datetime, timedelta
 import pandas as pd
+from collections import defaultdict
 
 from logger_actions import log_action
 from logger import log_payment
@@ -326,3 +327,28 @@ def get_payment_summary_by_user(user_id):
         "rechazado": float(rechazado),
         "neto": float(aprobado + pendiente)
     }
+
+
+def get_monthly_income():
+
+    payments_df = load_payments()
+
+    if payments_df.empty:
+        return {}
+
+    payments_df["Estado"] = payments_df["Estado"].astype(str)
+    payments_df["Monto"] = payments_df["Monto"].astype(float)
+    payments_df["Fecha"] = payments_df["Fecha"].astype(str)
+
+    pagos_aprobados = payments_df[payments_df["Estado"] == "Aprobado"]
+
+    ingresos_por_mes = defaultdict(float)
+
+    for _, row in pagos_aprobados.iterrows():
+
+        fecha = datetime.strptime(row["Fecha"][:10], "%Y-%m-%d")
+        mes = fecha.strftime("%Y-%m")
+
+        ingresos_por_mes[mes] += float(row["Monto"])
+
+    return dict(sorted(ingresos_por_mes.items()))

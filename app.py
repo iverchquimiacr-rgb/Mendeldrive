@@ -11,7 +11,8 @@ from payment_manager import (
     approve_payment,
     reject_payment,
     attach_receipt,
-    get_payment_summary_by_user
+    get_payment_summary_by_user,
+    get_monthly_income
 )
 from database import load_payments, load_users, save_users
 from products import PRODUCTS
@@ -20,6 +21,7 @@ import os
 from werkzeug.utils import secure_filename
 from utils import generar_password_temporal
 from security import hash_password
+import json
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
@@ -175,7 +177,29 @@ def catalogo():
         rol=session["rol"]
     )
 
+#-------------------------------
+# INGRESOS
+#------------------------------
 
+@app.route("/admin/ingresos")
+def admin_ingresos():
+
+    if "rol" not in session or session["rol"] != "Admin":
+        return redirect(url_for("login"))
+
+    ingresos = get_monthly_income()
+
+    labels = list(ingresos.keys())
+    valores = list(ingresos.values())
+
+    total = sum(valores)
+
+    return render_template(
+        "admin_ingresos.html",
+        labels=json.dumps(labels),
+        valores=json.dumps(valores),
+        total=total
+    )
 # ==============================
 # ESTADO DE CUENTA
 # ==============================
