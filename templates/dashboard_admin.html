@@ -143,24 +143,14 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 .card[class*="highlight"]{
-position:relative;
+transition:all 0.25s ease, border-left-width 0.25s ease, filter 0.25s ease;
 }
 
-.card[class*="highlight"]::before{
-content:"";
-position:absolute;
-left:0;
-top:0;
-height:100%;
-width:5px;
-transition:all 0.25s ease;
+.card[class*="highlight"]:hover{
+border-left-width:9px;
+filter:brightness(1.08);
+box-shadow:0 12px 30px rgba(0,0,0,0.18);
 }
-
-.card[class*="highlight"]:hover::before{
-width:9px;
-filter:brightness(1.25);
-}
-
 </style>
 
 {% endblock %}
