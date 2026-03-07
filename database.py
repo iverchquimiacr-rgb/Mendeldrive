@@ -334,9 +334,16 @@ def save_users(df):
 def load_payments():
     initialize_database()
     conn = get_connection()
-    df = pd.read_sql_query("SELECT * FROM pagos", conn)  # 🔹 lectura directa, PostgreSQL y SQLite
+
+    df = pd.read_sql_query("SELECT * FROM pagos", conn)
     conn.close()
+
+    print("DEBUG PAGOS COLUMNAS:", df.columns.tolist())
+
     df = normalize_payments_columns(df)
+
+    print("DEBUG PAGOS COLUMNAS NORMALIZADAS:", df.columns.tolist())
+
     return df
 
 def save_payments(df):
