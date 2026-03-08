@@ -216,13 +216,13 @@ def reject_payment(payment_id, sesion):
         cursor = conn.cursor()
 
         cursor.execute("""
-            UPDATE pagos
-            SET estado = %s,
-                admin_id = %s,
-                fecha_procesado = %s
-            WHERE id = %s
+        UPDATE pagos
+        SET estado = %s,
+            admin_id = %s,
+            fecha_procesado = %s
+        WHERE id = %s
         """, (
-            "Aprobado",
+            "Rechazado",
             int(sesion["id"]),
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             payment_id

@@ -385,9 +385,18 @@ def save_payments(df):
         df["usuario_id"] = df["usuario_id"].astype(int)
 
     if "admin_id" in df.columns:
-        df["admin_id"] = df["admin_id"].apply(
-            lambda x: int(x) if x not in [None, "", "nan"] else None
-        )
+        def clean_admin_id(x):
+            if x in [None, "", "nan"]:
+                return None
+            try:
+                x = int(x)
+                if x > 2147483647:
+                    return None
+                return x
+            except:
+                return None
+
+        df["admin_id"] = df["admin_id"].apply(clean_admin_id)
 
     if "fecha_procesado" in df.columns:
         df["fecha_procesado"] = df["fecha_procesado"].apply(
