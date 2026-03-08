@@ -126,7 +126,7 @@ def approve_payment(payment_id, sesion):
 
     # ✅ Aprobar
     payments_df.loc[payments_df["ID"] == payment_id, "Estado"] = "Aprobado"
-    payments_df.loc[payments_df["ID"] == payment_id, "Admin_ID"] = str(sesion["id"])
+    payments_df.loc[payments_df["ID"] == payment_id, "Admin_ID"] = int(sesion["id"])
     payments_df.loc[
         payments_df["ID"] == payment_id,
         "Fecha_procesado"
@@ -179,10 +179,6 @@ def approve_payment(payment_id, sesion):
 # RECHAZAR PAGO (SOLO ADMIN)
 # ==============================
 
-# ==============================
-# RECHAZAR PAGO (SOLO ADMIN)
-# ==============================
-
 def reject_payment(payment_id, sesion):
 
     if sesion["rol"] != "Admin":
@@ -209,13 +205,34 @@ def reject_payment(payment_id, sesion):
         return
 
     payments_df.loc[payments_df["ID"] == payment_id, "Estado"] = "Rechazado"
-    payments_df.loc[payments_df["ID"] == payment_id, "Admin_ID"] = str(sesion["id"])
+    payments_df.loc[payments_df["ID"] == payment_id, "Admin_ID"] = int(sesion["id"])
     payments_df.loc[
         payments_df["ID"] == payment_id,
         "Fecha_procesado"
     ] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    save_payments(payments_df)
+    if os.environ.get("DATABASE_URL"):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE pagos
+            SET estado = %s,
+                admin_id = %s,
+                fecha_procesado = %s
+            WHERE id = %s
+        """, (
+            "Aprobado",
+            int(sesion["id"]),
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            payment_id
+        ))
+
+        conn.commit()
+        conn.close()
+
+    else:
+        save_payments(payments_df)
 
     user_id = int(pago["Usuario_ID"])
 

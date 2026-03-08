@@ -344,7 +344,18 @@ def load_payments():
 
     df = df.rename(columns=column_map)
 
+    # 🔧 evitar NaN que luego rompen PostgreSQL
+    if "Admin_ID" in df.columns:
+        df["Admin_ID"] = df["Admin_ID"].fillna("")
+
+    if "Fecha_procesado" in df.columns:
+        df["Fecha_procesado"] = df["Fecha_procesado"].fillna("")
+
+    if "Comprobante" in df.columns:
+        df["Comprobante"] = df["Comprobante"].fillna("")
+
     return df
+
 
 def save_payments(df):
     conn = get_connection()
@@ -360,41 +371,55 @@ def save_payments(df):
         "Admin_ID": "admin_id",
         "Fecha_procesado": "fecha_procesado"
     }
+
     df = df.rename(columns=column_map)
 
-    # 🔹 Asegurar tipos correctos
+    # 🔹 limpiar NaN
+    df = df.where(pd.notnull(df), None)
+
+    # 🔹 asegurar tipos correctos
     if "monto" in df.columns:
         df["monto"] = df["monto"].astype(float)
+
     if "usuario_id" in df.columns:
         df["usuario_id"] = df["usuario_id"].astype(int)
+
     if "admin_id" in df.columns:
-        # Convertir strings vacíos a None para PostgreSQL
-        df["admin_id"] = df["admin_id"].apply(lambda x: int(x) if pd.notna(x) and x != "" else None)
+        df["admin_id"] = df["admin_id"].apply(
+            lambda x: int(x) if x not in [None, "", "nan"] else None
+        )
+
     if "fecha_procesado" in df.columns:
-        df["fecha_procesado"] = df["fecha_procesado"].apply(lambda x: x if pd.notna(x) and x != "" else None)
+        df["fecha_procesado"] = df["fecha_procesado"].apply(
+            lambda x: x if x not in ["", "nan"] else None
+        )
 
     if not is_postgres(conn):
         # 🔹 SQLite
         engine = get_engine()
         df.to_sql("pagos", engine, if_exists="replace", index=False)
+
     else:
-        # 🔹 PostgreSQL: truncate y luego insertar
+        # 🔹 PostgreSQL
         cursor = conn.cursor()
+
         cursor.execute("TRUNCATE TABLE pagos RESTART IDENTITY")
 
         for _, row in df.iterrows():
             cursor.execute("""
-                INSERT INTO pagos (usuario_id, monto, fecha, estado, comprobante, admin_id, fecha_procesado)
+                INSERT INTO pagos
+                (usuario_id, monto, fecha, estado, comprobante, admin_id, fecha_procesado)
                 VALUES (%s,%s,%s,%s,%s,%s,%s)
             """, (
                 row["usuario_id"],
                 row["monto"],
                 row["fecha"],
                 row["estado"],
-                row["comprobante"] if pd.notna(row["comprobante"]) else None,
+                row["comprobante"],
                 row["admin_id"],
                 row["fecha_procesado"]
             ))
+
         conn.commit()
 
     conn.close()
