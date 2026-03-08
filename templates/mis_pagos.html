@@ -51,6 +51,29 @@ font-size:12px;
 font-weight:600;
 }
 
+.submit{
+display:inline-block;
+margin-top:20px;
+padding:12px 26px;
+text-decoration:none;
+font-weight:600;
+
+color:white;
+background:linear-gradient(135deg,var(--gold),#d4a017);
+
+border-radius:10px;
+
+box-shadow:0 6px 14px rgba(0,0,0,0.15);
+
+transition:all 0.25s ease;
+}
+
+.submit:hover{
+transform:translateY(-3px);
+box-shadow:0 12px 24px rgba(0,0,0,0.25);
+background:linear-gradient(135deg,#e6b800,#c99900);
+}
+
 .badge-pendiente{
 background:#ffd70033;
 color:#a07a00;
@@ -177,8 +200,8 @@ margin-top:20px;
 
 {% if p.comprobante %}
 
-<a href="{{ p.comprobante }}" target="_blank" class="view-btn">
-Ver comprobante
+<a href="{{ url_for('descargar_comprobante', filename=p.comprobante) }}" target="_blank" class="submit">
+Ver
 </a>
 
 {% else %}
