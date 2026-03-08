@@ -380,7 +380,7 @@ def save_payments(df):
     if "id" in df.columns:
         df = df.drop(columns=["id"])
 
-    # 🔹 resetear índice para evitar problemas
+    # 🔹 resetear índice
     df = df.reset_index(drop=True)
 
     # 🔹 asegurar tipos
@@ -393,7 +393,7 @@ def save_payments(df):
     if "admin_id" in df.columns:
 
         def clean_admin_id(x):
-            if x in [None, "", "nan"]:
+            if pd.isna(x) or x in ["", "nan"]:
                 return None
             try:
                 x = int(x)
@@ -405,12 +405,9 @@ def save_payments(df):
 
         df["admin_id"] = df["admin_id"].apply(clean_admin_id)
 
-        # 🔹 permitir enteros con NULL para postgres
-        df["admin_id"] = df["admin_id"].astype("Int64")
-
     if "fecha_procesado" in df.columns:
         df["fecha_procesado"] = df["fecha_procesado"].apply(
-            lambda x: None if x in ["", "nan", None] else x
+            lambda x: None if pd.isna(x) or x in ["", "nan"] else x
         )
 
     if not is_postgres(conn):
@@ -425,17 +422,22 @@ def save_payments(df):
         cursor.execute("TRUNCATE TABLE pagos RESTART IDENTITY")
 
         for _, row in df.iterrows():
+
+            usuario_id = None if pd.isna(row["usuario_id"]) else int(row["usuario_id"])
+            monto = None if pd.isna(row["monto"]) else float(row["monto"])
+            admin_id = None if pd.isna(row["admin_id"]) else int(row["admin_id"])
+
             cursor.execute("""
                 INSERT INTO pagos
                 (usuario_id, monto, fecha, estado, comprobante, admin_id, fecha_procesado)
                 VALUES (%s,%s,%s,%s,%s,%s,%s)
             """, (
-                int(row["usuario_id"]) if row["usuario_id"] is not None else None,
-                float(row["monto"]) if row["monto"] is not None else None,
+                usuario_id,
+                monto,
                 row["fecha"],
                 row["estado"],
                 row["comprobante"],
-                int(row["admin_id"]) if row["admin_id"] is not None else None,
+                admin_id,
                 row["fecha_procesado"]
             ))
 
