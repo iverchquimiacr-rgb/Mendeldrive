@@ -808,11 +808,17 @@ def ver_comprobantes(user_id):
     )
 
 
-@app.route("/uploads/comprobantes/<path:filename>")
-@admin_required
-def descargar_comprobante(filename):
+@app.route("/ver_comprobante/<path:filename>")
+def ver_comprobante_usuario(filename):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    # seguridad: verificar que el archivo pertenece al usuario
+    if not filename.startswith(f"user_{session['user_id']}_"):
+        return redirect(url_for("dashboard"))
+
     return send_from_directory(UPLOAD_FOLDER, filename)
-    
 # ==============================
 # CREAR USUARIO EN WEB
 # ==============================
