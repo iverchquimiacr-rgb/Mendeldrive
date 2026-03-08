@@ -5,8 +5,6 @@ venv/
 __pycache__/
 *.pyc
 
-# Base de datos local
-database.db
 
 # Logs
 logs_*.csv
@@ -17,4 +15,3 @@ uploads/
 # Archivos de VSCode (opcional)
 .vscode/
 logs_access.csv
-database.db

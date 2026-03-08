@@ -42,6 +42,7 @@ def create_tables(conn):
     conn.commit()
 
 def main():
+
     conn = sqlite3.connect(DB_PATH)
     create_tables(conn)
     print("✔ Base de datos creada correctamente")
