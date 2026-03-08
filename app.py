@@ -809,16 +809,20 @@ def ver_comprobantes(user_id):
 
 
 @app.route("/ver_comprobante/<path:filename>")
-def ver_comprobante_usuario(filename):
+def ver_comprobante(filename):
 
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    # seguridad: verificar que el archivo pertenece al usuario
-    if not filename.startswith(f"user_{session['user_id']}_"):
-        return redirect(url_for("dashboard"))
+    # admin puede ver todo
+    if session.get("rol") == "Admin":
+        return send_from_directory(UPLOAD_FOLDER, filename)
 
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    # usuario solo sus archivos
+    if filename.startswith(f"user_{session['user_id']}_"):
+        return send_from_directory(UPLOAD_FOLDER, filename)
+
+    return redirect(url_for("dashboard"))
 # ==============================
 # CREAR USUARIO EN WEB
 # ==============================
