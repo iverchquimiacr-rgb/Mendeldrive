@@ -136,8 +136,8 @@ box-shadow:0 10px 30px rgba(0,0,0,0.2);
 
 <script>
 
-const labels = JSON.parse('{{ labels | tojson | safe }}');
-const data = JSON.parse('{{ valores | tojson | safe }}');
+const labels = {{ labels | tojson }};
+const data = {{ valores | tojson }};
 
 const ctx = document.getElementById("incomeChart").getContext("2d");
 

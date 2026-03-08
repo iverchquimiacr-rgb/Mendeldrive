@@ -224,10 +224,10 @@ def admin_ingresos():
 
     return render_template(
         "admin_ingresos.html",
-        labels=json.dumps(labels),
-        valores=json.dumps(valores),
+        labels=labels,
+        valores=valores,
         total=total
-    )
+)
 # ==============================
 # ESTADO DE CUENTA
 # ==============================
