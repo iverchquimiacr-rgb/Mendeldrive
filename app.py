@@ -808,17 +808,17 @@ def ver_comprobantes(user_id):
     )
 
 
-@app.route("/ver_comprobante/<path:filename>")
-def ver_comprobante(filename):
+@app.route("/uploads/comprobantes/<path:filename>")
+def descargar_comprobante(filename):
 
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    # admin puede ver todo
+    # admin puede ver cualquier comprobante
     if session.get("rol") == "Admin":
         return send_from_directory(UPLOAD_FOLDER, filename)
 
-    # usuario solo sus archivos
+    # usuario solo puede ver sus archivos
     if filename.startswith(f"user_{session['user_id']}_"):
         return send_from_directory(UPLOAD_FOLDER, filename)
 
