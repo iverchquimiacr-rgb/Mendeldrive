@@ -644,16 +644,25 @@ def subir_comprobante():
 
             if archivo.filename == "":
                 mensaje = "Archivo no seleccionado"
+
             elif archivo and allowed_file(archivo.filename):
+
                 filename = secure_filename(archivo.filename)
-                nombre_final = f"pago_{payment_id}_{filename}"
+
+                # nombre único del archivo
+                nombre_final = f"user_{session['user_id']}_pago_{payment_id}_{filename}"
 
                 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
                 ruta = os.path.join(app.config["UPLOAD_FOLDER"], nombre_final)
+
                 archivo.save(ruta)
 
-                attach_receipt(payment_id, ruta)
+                # IMPORTANTE: guardar solo el nombre del archivo
+                attach_receipt(payment_id, nombre_final)
+
                 mensaje = "Comprobante asociado correctamente al pago"
+
             else:
                 mensaje = "Formato no permitido"
 
