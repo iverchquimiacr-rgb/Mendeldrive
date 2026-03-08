@@ -356,7 +356,6 @@ def load_payments():
 
     return df
 
-
 def save_payments(df):
     conn = get_connection()
 
@@ -374,14 +373,17 @@ def save_payments(df):
 
     df = df.rename(columns=column_map)
 
-    # limpiar NaN
+    # 🔹 limpiar NaN
     df = df.where(pd.notnull(df), None)
 
-    # eliminar id para postgres
+    # 🔹 eliminar id para postgres
     if "id" in df.columns:
         df = df.drop(columns=["id"])
 
-    # asegurar tipos
+    # 🔹 resetear índice para evitar problemas
+    df = df.reset_index(drop=True)
+
+    # 🔹 asegurar tipos
     if "monto" in df.columns:
         df["monto"] = df["monto"].astype(float)
 
@@ -389,6 +391,7 @@ def save_payments(df):
         df["usuario_id"] = df["usuario_id"].astype(int)
 
     if "admin_id" in df.columns:
+
         def clean_admin_id(x):
             if x in [None, "", "nan"]:
                 return None
@@ -402,9 +405,12 @@ def save_payments(df):
 
         df["admin_id"] = df["admin_id"].apply(clean_admin_id)
 
+        # 🔹 permitir enteros con NULL para postgres
+        df["admin_id"] = df["admin_id"].astype("Int64")
+
     if "fecha_procesado" in df.columns:
         df["fecha_procesado"] = df["fecha_procesado"].apply(
-            lambda x: x if x not in ["", "nan"] else None
+            lambda x: None if x in ["", "nan", None] else x
         )
 
     if not is_postgres(conn):
@@ -424,12 +430,12 @@ def save_payments(df):
                 (usuario_id, monto, fecha, estado, comprobante, admin_id, fecha_procesado)
                 VALUES (%s,%s,%s,%s,%s,%s,%s)
             """, (
-                row["usuario_id"],
-                row["monto"],
+                int(row["usuario_id"]) if row["usuario_id"] is not None else None,
+                float(row["monto"]) if row["monto"] is not None else None,
                 row["fecha"],
                 row["estado"],
                 row["comprobante"],
-                row["admin_id"],
+                int(row["admin_id"]) if row["admin_id"] is not None else None,
                 row["fecha_procesado"]
             ))
 
