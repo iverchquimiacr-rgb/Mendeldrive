@@ -121,10 +121,8 @@ def approve_payment(payment_id, sesion):
         print(f"⛔ No se puede aprobar un pago en estado '{pago['Estado']}'")
         return
 
-    # 🔒 Validar comprobante
-    #if not pago.get("Comprobante"):
-     #   print("⛔ No se puede aprobar un pago sin comprobante.")
-      #  return
+    # ⚠️ Eliminada validación de comprobante
+    # Ahora un pago puede aprobarse aunque no tenga comprobante
 
     # ✅ Aprobar
     payments_df.loc[payments_df["ID"] == payment_id, "Estado"] = "Aprobado"
@@ -158,7 +156,6 @@ def approve_payment(payment_id, sesion):
     save_payments(payments_df)
     save_users(users_df)
 
-    
     log_action(
         actor_id=sesion["id"],
         rol=sesion["rol"],
@@ -174,8 +171,8 @@ def approve_payment(payment_id, sesion):
     )
 
     print(
-    f"✅ Pago aprobado por S/ {pago['Monto']}. "
-    "Acceso actualizado correctamente." 
+        f"✅ Pago aprobado por S/ {pago['Monto']}. "
+        "Acceso actualizado correctamente." 
     )
 
 # ==============================
