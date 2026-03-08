@@ -374,10 +374,14 @@ def save_payments(df):
 
     df = df.rename(columns=column_map)
 
-    # 🔹 limpiar NaN
+    # limpiar NaN
     df = df.where(pd.notnull(df), None)
 
-    # 🔹 asegurar tipos correctos
+    # eliminar id para postgres
+    if "id" in df.columns:
+        df = df.drop(columns=["id"])
+
+    # asegurar tipos
     if "monto" in df.columns:
         df["monto"] = df["monto"].astype(float)
 
