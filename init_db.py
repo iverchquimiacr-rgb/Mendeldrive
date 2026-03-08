@@ -42,10 +42,19 @@ def create_tables(conn):
     conn.commit()
 
 def main():
-
+    # Conectar a la base de datos (si existe, se sobreescribe al borrar tablas)
     conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    # ⚠️ Borrar tablas existentes para empezar desde cero
+    cursor.execute("DROP TABLE IF EXISTS usuarios")
+    cursor.execute("DROP TABLE IF EXISTS pagos")
+    conn.commit()
+    
+    # Crear tablas vacías
     create_tables(conn)
-    print("✔ Base de datos creada correctamente")
+    
+    print("✔ Base de datos reiniciada y tablas vacías")
     conn.close()
 
 if __name__ == "__main__":
