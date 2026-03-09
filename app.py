@@ -14,7 +14,7 @@ from payment_manager import (
     get_payment_summary_by_user,
     get_monthly_income
 )
-from database import load_payments, initialize_database, load_users, save_users
+from database import load_payments, get_connection, initialize_database, load_users, save_users
 from products import PRODUCTS
 from folder_manager import assign_folder
 import os
@@ -172,6 +172,45 @@ def login():
 
     return render_template("login.html", error=error)
 
+
+#--------------------
+# RESET 
+#--------------------
+@app.route("/admin/system/reset_database")
+def admin_reset_database():
+
+    # Verificar sesión
+    if "usuario_id" not in session:
+        return "No autorizado", 403
+
+    # Verificar rol admin
+    if session.get("rol") != "Admin":
+        return "Acceso solo para administradores", 403
+
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+
+        print("ADMIN RESET DATABASE iniciado")
+
+        # Borrar datos
+        cur.execute("TRUNCATE TABLE pagos RESTART IDENTITY CASCADE")
+        cur.execute("TRUNCATE TABLE usuarios RESTART IDENTITY CASCADE")
+
+        conn.commit()
+        conn.close()
+
+        # Recrear admin inicial
+        crear_admin_inicial()
+
+        print("ADMIN RESET DATABASE completado")
+
+        return "Base de datos reiniciada correctamente"
+
+    except Exception as e:
+        print("Error en reset_database:", e)
+        return f"Error: {e}", 500
+    
 
 # ==============================
 # DASHBOARD
