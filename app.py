@@ -14,7 +14,7 @@ from payment_manager import (
     get_payment_summary_by_user,
     get_monthly_income
 )
-from database import load_payments, load_users, save_users
+from database import load_payments, initialize_database, load_users, save_users
 from products import PRODUCTS
 from folder_manager import assign_folder
 import os
@@ -31,51 +31,6 @@ import sqlite3  # 🔹 necesario para initialize_database
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
-
-# ===========================
-# 🔹 Funciones de inicialización
-# ===========================
-def initialize_database():
-    conn = sqlite3.connect()
-    cursor = conn.cursor()
-    
-    # Crear tablas si no existen
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS usuarios (
-        ID INTEGER PRIMARY KEY,
-        Nombre TEXT,
-        Password TEXT,
-        Tipo_pago TEXT,
-        Carpetas_compradas TEXT,
-        Carpetas_asignadas INTEGER,
-        Monto_base REAL,
-        Pago_confirmado TEXT,
-        Fecha_registro TEXT,
-        Estado TEXT,
-        Fecha_ultimo_pago TEXT,
-        Fecha_vencimiento TEXT,
-        Rol TEXT,
-        Debe_cambiar_password INTEGER,
-        Debe_elegir_plan INTEGER
-    )
-    """)
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS pagos (
-        ID INTEGER PRIMARY KEY,
-        usuario_ID INTEGER,
-        monto REAL,
-        fecha TEXT,
-        estado TEXT,
-        comprobante TEXT,
-        admin_ID INTEGER,
-        fecha_procesado TEXT
-    )
-    """)
-
-    conn.commit()
-    conn.close()
-    print("✔ Tablas verificadas/creadas correctamente")
 
 # ===========================
 # 🔹 Inicialización de la base y admin
