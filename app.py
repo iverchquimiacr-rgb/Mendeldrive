@@ -23,8 +23,6 @@ from utils import generar_password_temporal
 from security import hash_password
 import json
 from functools import wraps
-import sqlite3
-from init_db import create_tables
 
 
 app = Flask(__name__)
@@ -63,38 +61,6 @@ def inject_now():
 print("DEBUG: app iniciando")
 crear_admin_inicial()
 print("DEBUG: admin inicial verificado")
-
-#####
-####
-####
-####
-# Endpoint temporal para reiniciar la base de datos
-@app.route("/reiniciar_db")
-def reiniciar_db():
-    # 🔒 Contraseña simple en query string (solo tú la conoces)
-    clave = request.args.get("clave")
-    if clave != "mi_clave_super_secreta":
-        return "Acceso denegado", 403
-
-    DB_PATH = "database.db"
-
-    # Borrar la base de datos existente
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
-
-    # Crear la base vacía
-    conn = sqlite3.connect(DB_PATH)
-    create_tables(conn)
-    conn.close()
-
-    # Crear admin inicial
-    crear_admin_inicial()
-
-    return "✔ Base de datos reiniciada correctamente. Admin creado con contraseña admin123."
-####
-####
-####
-####
 
 # ==============================
 # FIX GLOBAL PARA USERS (OBLIGATORIO)
