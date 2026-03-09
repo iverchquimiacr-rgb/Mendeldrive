@@ -132,9 +132,9 @@ def login():
             user_id = int(request.form["user_id"])
             password = request.form["password"]
 
-            # 1️⃣ Validar credenciales
             print("DEBUG login intentando:", user_id, password)
 
+            # 1️⃣ Validar credenciales
             resultado = login_web(user_id, password)
 
             print("DEBUG resultado login:", resultado)
@@ -142,7 +142,7 @@ def login():
             if not resultado:
                 return render_template("login.html", error="Credenciales incorrectas")
 
-            # 2️⃣ Cargar usuario de forma segura
+            # 2️⃣ Cargar usuario
             users_df = load_users_safe()
             user_df = users_df[users_df["ID"] == user_id]
 
@@ -151,27 +151,30 @@ def login():
 
             user = user_df.iloc[0]
 
-            # 3️⃣ Guardar sesión
-            session["user_id"] = int(user["ID"])
+            # 3️⃣ Guardar sesión (VERSIÓN SEGURA)
+            session.clear()   # 🔹 importante para evitar sesiones viejas
+
+            session["usuario_id"] = int(user["ID"])
             session["nombre"] = str(user["Nombre"])
-            session["rol"] = str(user["Rol"])
+            session["rol"] = str(user["Rol"]).strip()   # 🔹 evita errores por espacios
+
+            print("DEBUG SESSION LOGIN:", dict(session))
 
             # 4️⃣ Forzar cambio de password si aplica
             if user.get("Debe_cambiar_password", False):
                 session["forzar_cambio_password"] = True
                 return redirect(url_for("cambiar_password"))
 
-            # 🧾 Si no tiene carpetas, debe elegir planes
+            # 5️⃣ Si no tiene carpetas
             if int(user["Carpetas_asignadas"]) == 0:
                 return redirect(url_for("seleccionar_planes"))
 
-            return redirect(url_for("dashboard"))       
+            return redirect(url_for("dashboard"))
 
         except ValueError:
             error = "ID inválido"
 
     return render_template("login.html", error=error)
-
 
 #--------------------
 # RESET 
@@ -179,13 +182,21 @@ def login():
 @app.route("/admin/system/reset_database")
 def admin_reset_database():
 
-    # Verificar sesión
+    print("DEBUG SESSION RESET:", dict(session))
+
+    # 1️⃣ Verificar sesión
     if "usuario_id" not in session:
         return "No autorizado", 403
 
-    # Verificar rol admin
-    if session.get("rol") != "Admin":
+    # 2️⃣ Verificar rol admin
+    if str(session.get("rol", "")).strip() != "Admin":
         return "Acceso solo para administradores", 403
+
+    # 3️⃣ Confirmación extra para evitar resets accidentales
+    if request.args.get("confirm") != "YES":
+        return "Agrega ?confirm=YES para confirmar el reset"
+
+    conn = None
 
     try:
         conn = get_connection()
@@ -193,24 +204,35 @@ def admin_reset_database():
 
         print("ADMIN RESET DATABASE iniciado")
 
-        # Borrar datos
-        cur.execute("TRUNCATE TABLE pagos RESTART IDENTITY CASCADE")
-        cur.execute("TRUNCATE TABLE usuarios RESTART IDENTITY CASCADE")
+        # 4️⃣ Limpiar tablas
+        cur.execute("TRUNCATE TABLE pagos RESTART IDENTITY CASCADE;")
+        cur.execute("TRUNCATE TABLE usuarios RESTART IDENTITY CASCADE;")
 
         conn.commit()
-        conn.close()
 
-        # Recrear admin inicial
-        crear_admin_inicial()
-
-        print("ADMIN RESET DATABASE completado")
-
-        return "Base de datos reiniciada correctamente"
+        print("Tablas truncadas correctamente")
 
     except Exception as e:
+        if conn:
+            conn.rollback()
         print("Error en reset_database:", e)
         return f"Error: {e}", 500
-    
+
+    finally:
+        if conn:
+            conn.close()
+
+    # 5️⃣ Recrear admin inicial
+    try:
+        crear_admin_inicial()
+        print("Admin inicial recreado")
+    except Exception as e:
+        print("Error creando admin inicial:", e)
+        return f"Error recreando admin: {e}", 500
+
+    print("ADMIN RESET DATABASE completado")
+
+    return "Base de datos reiniciada correctamente"
 
 # ==============================
 # DASHBOARD
