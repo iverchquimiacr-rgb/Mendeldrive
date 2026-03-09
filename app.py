@@ -14,7 +14,7 @@ from payment_manager import (
     get_payment_summary_by_user,
     get_monthly_income
 )
-from database import load_payments, load_users, save_users, DB_PATH
+from database import load_payments, load_users, save_users
 from products import PRODUCTS
 from folder_manager import assign_folder
 import os
@@ -36,7 +36,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev_key")
 # 🔹 Funciones de inicialización
 # ===========================
 def initialize_database():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect()
     cursor = conn.cursor()
     
     # Crear tablas si no existen
