@@ -21,14 +21,22 @@ def get_engine():
 # ==============================
 def get_connection():
     database_url = os.environ.get("DATABASE_URL")
+
     if database_url:
-        # PostgreSQL (Render)
-        conn = psycopg2.connect(database_url)
-        return conn
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+        try:
+            print("Using PostgreSQL database")
+            conn = psycopg2.connect(database_url, sslmode="require")
+            return conn
+        except Exception as e:
+            print("PostgreSQL connection error:", e)
+            raise
+
     else:
-        # SQLite local
-        conn = sqlite3.connect(DB_NAME)
-        return conn
+        print("Using SQLite local database")
+        return sqlite3.connect(DB_NAME)
 
 def is_postgres(conn):
     return "psycopg2" in str(type(conn))
