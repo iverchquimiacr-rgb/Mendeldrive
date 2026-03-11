@@ -18,6 +18,7 @@ from database import load_payments, get_connection, initialize_database, load_us
 from products import PRODUCTS
 from folder_manager import assign_folder
 from receipt_manager import create_receipt, get_all_receipts
+from receipt_generator import generar_comprobante
 import os
 from werkzeug.utils import secure_filename
 from utils import generar_password_temporal
@@ -506,6 +507,62 @@ def admin_reset_password(user_id):
         user_id=user_id,
         nombre=session["nombre"]
     )
+
+# ==============================
+# 🔴 ADMIN — TABLA COMPROBANTES
+# ==============================
+
+@app.route("/admin/comprobantes")
+@admin_required
+def admin_comprobantes():
+
+    buscar = request.args.get("buscar", "").lower()
+
+    archivos = []
+
+    if os.path.exists(UPLOAD_FOLDER):
+
+        for f in os.listdir(UPLOAD_FOLDER):
+
+            if not f.endswith(".png"):
+                continue
+
+            nombre_archivo = f.replace(".png","")
+
+            partes = nombre_archivo.split("-")
+
+            if len(partes) >= 3:
+
+                year = partes[0]
+                usuario = partes[1]
+                codigo_id = partes[2]
+
+            else:
+
+                year = ""
+                usuario = ""
+                codigo_id = ""
+
+            if buscar and buscar not in usuario.lower():
+                continue
+
+            archivos.append({
+                "codigo": nombre_archivo,
+                "usuario": usuario.replace("_"," "),
+                "year": year,
+                "id": codigo_id,
+                "archivo": f
+            })
+
+    archivos.sort(key=lambda x: x["codigo"], reverse=True)
+
+    return render_template(
+        "comprobantes_admin.html",
+        comprobantes=archivos,
+        nombre=session["nombre"],
+        buscar=buscar
+    )
+
 # ==============================
 # 👤 USUARIO CAMBIA CONTRASEÑA
 # ==============================
@@ -645,12 +702,32 @@ def registrar_pago():
         try:
             monto = float(request.form["monto"])
             add_payment(session["user_id"], monto)
+
+            # generar codigo de comprobante
             codigo = create_receipt(
                 session["user_id"],
                 session["nombre"],
                 monto
             )
-            mensaje = "Pago registrado correctamente. Ahora sube tu comprobante."
+
+            # obtener ultimo pago
+            pagos_df = load_payments()
+            ultimo_pago = pagos_df.iloc[-1]
+            payment_id = int(ultimo_pago["ID"])
+
+            # generar imagen comprobante
+            archivo_comprobante = generar_comprobante(
+                codigo,
+                session["nombre"],
+                monto,
+                payment_id
+            )
+
+            # asociar comprobante al pago
+            attach_receipt(payment_id, archivo_comprobante)
+
+            mensaje = f"Pago registrado correctamente. Comprobante generado."
+
         except ValueError:
             mensaje = "Monto inválido"
 
@@ -902,6 +979,85 @@ def descargar_comprobante(filename):
         return send_from_directory(UPLOAD_FOLDER, filename)
 
     return redirect(url_for("dashboard"))
+
+#=============================
+# ELIMINAR COMPROBANTE
+#=============================
+
+@app.route("/admin/eliminar_comprobante/<int:comp_id>")
+@admin_required
+def eliminar_comprobante(comp_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT archivo FROM comprobantes WHERE id = ?", (comp_id,))
+    row = cur.fetchone()
+
+    if row:
+
+        archivo = row[0]
+
+        ruta = os.path.join("static/comprobantes", archivo)
+
+        if os.path.exists(ruta):
+            os.remove(ruta)
+
+        cur.execute("DELETE FROM comprobantes WHERE id = ?", (comp_id,))
+        conn.commit()
+
+    conn.close()
+
+    return redirect("/admin/comprobantes")
+
+#=============================
+# ELIMINAR PAGO
+#=============================
+
+@app.route("/admin/eliminar_pago/<int:pago_id>")
+@admin_required
+def eliminar_pago(pago_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("DELETE FROM pagos WHERE id = ?", (pago_id,))
+    conn.commit()
+
+    conn.close()
+
+    return redirect("/admin/pagos")
+
+#=============================
+# ELIMINAR USUARIO
+#=============================
+
+@app.route("/admin/eliminar_usuario/<int:user_id>")
+@admin_required
+def eliminar_usuario(user_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT archivo FROM comprobantes WHERE usuario_id = ?", (user_id,))
+    comprobantes = cur.fetchall()
+
+    for c in comprobantes:
+
+        ruta = os.path.join("static/comprobantes", c[0])
+
+        if os.path.exists(ruta):
+            os.remove(ruta)
+
+    cur.execute("DELETE FROM comprobantes WHERE usuario_id = ?", (user_id,))
+    cur.execute("DELETE FROM pagos WHERE usuario_id = ?", (user_id,))
+    cur.execute("DELETE FROM usuarios WHERE id = ?", (user_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/admin/usuarios")
+
 # ==============================
 # CREAR USUARIO EN WEB
 # ==============================

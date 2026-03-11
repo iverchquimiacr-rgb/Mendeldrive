@@ -1,28 +1,253 @@
 {% extends "base.html" %}
 
+{% block title %}Comprobantes{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+.admin-container{
+margin-top:30px;
+}
+
+.admin-header{
+margin-bottom:20px;
+}
+
+.search-box{
+margin-bottom:20px;
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.search-box input{
+padding:10px 14px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+.search-btn{
+padding:10px 18px;
+border:none;
+border-radius:8px;
+font-weight:600;
+color:white;
+background:linear-gradient(135deg,var(--emerald),var(--green));
+cursor:pointer;
+transition:0.25s;
+}
+
+.search-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 14px rgba(0,0,0,0.2);
+}
+
+.comprobantes-table{
+width:100%;
+border-collapse:collapse;
+background:white;
+color:black;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+}
+
+.comprobantes-table th{
+background:linear-gradient(135deg,var(--emerald),var(--green));
+color:white;
+padding:14px;
+text-align:left;
+font-size:14px;
+}
+
+.comprobantes-table td{
+padding:14px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.comprobantes-table tr:hover{
+background:#f7f7f7;
+}
+
+.view-btn{
+padding:7px 12px;
+border-radius:8px;
+background:linear-gradient(135deg,var(--indigo),var(--emerald));
+color:white;
+text-decoration:none;
+font-size:13px;
+transition:0.3s;
+}
+
+.view-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 5px 12px rgba(0,0,0,0.25);
+}
+
+.download-btn{
+padding:7px 12px;
+border-radius:8px;
+background:linear-gradient(135deg,var(--gold),#d4a017);
+color:white;
+text-decoration:none;
+font-size:13px;
+transition:0.3s;
+}
+
+.download-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 5px 12px rgba(0,0,0,0.25);
+}
+
+.empty-box{
+background:white;
+color:black;
+padding:25px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.back-link{
+display:inline-block;
+margin-top:20px;
+padding:10px 22px;
+text-decoration:none;
+color:white;
+font-weight:600;
+background:linear-gradient(135deg,var(--emerald),#2ecc71);
+border-radius:10px;
+box-shadow:0 5px 12px rgba(0,0,0,0.15);
+transition:all 0.25s ease;
+}
+
+.back-link:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 22px rgba(0,0,0,0.25);
+background:linear-gradient(135deg,#3fdc84,#27ae60);
+}
+
+</style>
+
+{% endblock %}
+
 {% block content %}
 
-<h2>Comprobantes</h2>
+<div class="admin-container">
 
-<table>
+<div class="admin-header">
+
+<h1>Comprobantes registrados</h1>
+<p>Administrador: <strong>{{ nombre }}</strong></p>
+
+</div>
+
+<form method="GET" class="search-box">
+
+<input
+type="text"
+name="buscar"
+placeholder="Buscar comprobantes por usuario"
+value="{{ buscar }}"
+>
+
+<button type="submit" class="search-btn">
+Buscar
+</button>
+
+</form>
+
+{% if comprobantes %}
+
+<table class="comprobantes-table">
+
 <tr>
-<th>ID</th>
-<th>Codigo</th>
+<th>Código</th>
 <th>Usuario</th>
-<th>Monto</th>
-<th>Fecha</th>
+<th>Año</th>
+<th>ID</th>
+<th>Ver</th>
+<th>Descargar</th>
+<th>Eliminar</th>
 </tr>
 
 {% for c in comprobantes %}
+
 <tr>
-<td>{{c.id}}</td>
-<td>{{c.codigo}}</td>
-<td>{{c.usuario}}</td>
-<td>{{c.monto}}</td>
-<td>{{c.fecha}}</td>
+
+<td>{{ c.codigo }}</td>
+
+<td>{{ c.usuario }}</td>
+
+<td>{{ c.year }}</td>
+
+<td>#{{ c.id }}</td>
+
+<td>
+
+<a
+href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
+target="_blank"
+class="view-btn"
+>
+Ver
+</a>
+
+</td>
+
+<td>
+
+<a
+href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
+download
+class="download-btn"
+>
+Descargar
+</a>
+
+<td>
+
+<a
+href="/admin/eliminar_comprobante/{{ c.id }}"
+onclick="return confirm('¿Seguro que quieres eliminar este comprobante?')"
+style="
+padding:6px 12px;
+border-radius:8px;
+background:#ff4d4d;
+color:white;
+text-decoration:none;
+font-size:13px;
+"
+>
+
+Eliminar
+
+</a>
+
+</td>
+
+</td>
+
 </tr>
+
 {% endfor %}
 
 </table>
+
+{% else %}
+
+<div class="empty-box">
+No se encontraron comprobantes.
+</div>
+
+{% endif %}
+
+<a href="/dashboard" class="back-link">
+Volver al dashboard
+</a>
+
+</div>
 
 {% endblock %}

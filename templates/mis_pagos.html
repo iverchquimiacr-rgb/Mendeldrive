@@ -109,6 +109,21 @@ box-shadow:0 5px 12px rgba(0,0,0,0.15);
 transition:all 0.25s ease;
 }
 
+.download-btn{
+padding:7px 12px;
+border-radius:8px;
+background:linear-gradient(135deg,var(--gold),#d4a017);
+color:white;
+text-decoration:none;
+font-size:13px;
+transition:0.3s;
+}
+
+.download-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 5px 12px rgba(0,0,0,0.25);
+}
+
 .back-link:hover{
 transform:translateY(-3px);
 box-shadow:0 10px 22px rgba(0,0,0,0.25);
@@ -167,6 +182,7 @@ margin-top:20px;
 <th>Monto</th>
 <th>Estado</th>
 <th>Comprobante</th>
+<th>Descargar</th>
 </tr>
 
 {% for p in pagos %}
@@ -200,8 +216,24 @@ margin-top:20px;
 
 {% if p.comprobante %}
 
-<a href="{{ url_for('descargar_comprobante', filename=p.comprobante) }}" target="_blank" class="submit">
+<a href="{{ url_for('descargar_comprobante', filename=p.comprobante) }}" target="_blank" class="view-btn">
 Ver
+</a>
+
+{% else %}
+
+—
+
+{% endif %}
+
+</td>
+
+<td>
+
+{% if p.comprobante %}
+
+<a href="{{ url_for('descargar_comprobante', filename=p.comprobante) }}" download class="download-btn">
+Descargar
 </a>
 
 {% else %}

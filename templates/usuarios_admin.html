@@ -133,6 +133,7 @@ Administrador: {{ nombre }}
 <th>Carpetas</th>
 <th>Saldo pendiente</th>
 <th>Perfil</th>
+<th>Eliminar</th>
 </tr>
 
 {% for u in usuarios %}
@@ -160,6 +161,27 @@ Administrador: {{ nombre }}
 <a class="profile-btn" href="/admin/usuario/{{ u.id }}">
 👤 Ver perfil
 </a>
+</td>
+
+<td>
+
+<a
+href="/admin/eliminar_usuario/{{ u.id }}"
+onclick="return confirm('¿Seguro que quieres eliminar este usuario?')"
+style="
+padding:6px 12px;
+border-radius:8px;
+background:#ff4d4d;
+color:white;
+text-decoration:none;
+font-size:13px;
+"
+>
+
+❌Eliminar
+
+</a>
+
 </td>
 
 </tr>

@@ -158,6 +158,7 @@ margin-top:20px;
 <th>Estado</th>
 <th>Comprobantes</th>
 <th>Acciones</th>
+<th>Eliminar</th>
 </tr>
 
 {% for p in pagos %}
@@ -214,6 +215,27 @@ Rechazar
 —
 
 {% endif %}
+
+</td>
+
+<td>
+
+<a
+href="/admin/eliminar_pago/{{ p.id }}"
+onclick="return confirm('¿Seguro que quieres eliminar este pago?')"
+style="
+padding:6px 12px;
+border-radius:8px;
+background:#ff4d4d;
+color:white;
+text-decoration:none;
+font-size:13px;
+"
+>
+
+Eliminar
+
+</a>
 
 </td>
 
