@@ -551,7 +551,8 @@ def admin_comprobantes():
                 "usuario": usuario.replace("_"," "),
                 "year": year,
                 "id": codigo_id,
-                "archivo": f
+                "archivo": f,
+                "usuario_id": usuario
             })
 
     archivos.sort(key=lambda x: x["codigo"], reverse=True)
@@ -735,33 +736,6 @@ def registrar_pago():
         "registrar_pago.html",
         nombre=session["nombre"],
         mensaje=mensaje
-    )
-
-# ==============================
-# ADMIN — COMPROBANTES
-# ==============================
-
-@app.route("/admin/comprobantes")
-@admin_required
-def admin_comprobantes():
-
-    df = get_all_receipts()
-
-    comprobantes = []
-
-    for _, r in df.iterrows():
-        comprobantes.append({
-            "id": int(r["ID"]),
-            "codigo": r["Codigo"],
-            "usuario": r["Nombre"],
-            "monto": r["Monto"],
-            "fecha": r["Fecha"]
-        })
-
-    return render_template(
-        "comprobantes_admin.html",
-        comprobantes=comprobantes,
-        nombre=session["nombre"]
     )
 
 # ==============================
