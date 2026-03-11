@@ -953,7 +953,6 @@ def descargar_comprobante(filename):
         return send_from_directory(UPLOAD_FOLDER, filename)
 
     return redirect(url_for("dashboard"))
-
 #=============================
 # ELIMINAR COMPROBANTE
 #=============================
@@ -966,7 +965,7 @@ def eliminar_comprobante(comp_id):
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT archivo FROM comprobantes WHERE id = %s",
+        "SELECT comprobante FROM comprobantes WHERE id = %s",
         (comp_id,)
     )
     row = cur.fetchone()
@@ -990,8 +989,6 @@ def eliminar_comprobante(comp_id):
     conn.close()
 
     return redirect("/admin/comprobantes")
-
-
 #=============================
 # ELIMINAR PAGO
 #=============================
@@ -1012,8 +1009,6 @@ def eliminar_pago(pago_id):
     conn.close()
 
     return redirect("/admin/pagos")
-
-
 #=============================
 # ELIMINAR USUARIO
 #=============================
@@ -1042,7 +1037,7 @@ def eliminar_usuario(user_id):
 
     # Obtener comprobantes del usuario
     cur.execute(
-        "SELECT archivo FROM comprobantes WHERE usuario_id = %s",
+        "SELECT comprobante FROM comprobantes WHERE usuario_id = %s",
         (user_id,)
     )
 
@@ -1077,7 +1072,6 @@ def eliminar_usuario(user_id):
     conn.close()
 
     return redirect("/admin/usuarios")
-
 # ==============================
 # CREAR USUARIO EN WEB
 # ==============================
