@@ -965,7 +965,10 @@ def eliminar_comprobante(comp_id):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT archivo FROM comprobantes WHERE id = ?", (comp_id,))
+    cur.execute(
+        "SELECT archivo FROM comprobantes WHERE id = %s",
+        (comp_id,)
+    )
     row = cur.fetchone()
 
     if row:
@@ -977,12 +980,17 @@ def eliminar_comprobante(comp_id):
         if os.path.exists(ruta):
             os.remove(ruta)
 
-        cur.execute("DELETE FROM comprobantes WHERE id = ?", (comp_id,))
+        cur.execute(
+            "DELETE FROM comprobantes WHERE id = %s",
+            (comp_id,)
+        )
+
         conn.commit()
 
     conn.close()
 
     return redirect("/admin/comprobantes")
+
 
 #=============================
 # ELIMINAR PAGO
@@ -995,12 +1003,16 @@ def eliminar_pago(pago_id):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("DELETE FROM pagos WHERE id = ?", (pago_id,))
-    conn.commit()
+    cur.execute(
+        "DELETE FROM pagos WHERE id = %s",
+        (pago_id,)
+    )
 
+    conn.commit()
     conn.close()
 
     return redirect("/admin/pagos")
+
 
 #=============================
 # ELIMINAR USUARIO
@@ -1010,10 +1022,30 @@ def eliminar_pago(pago_id):
 @admin_required
 def eliminar_usuario(user_id):
 
+    # No permitir borrar al propio admin logueado
+    if user_id == session.get("user_id"):
+        return redirect("/admin/usuarios")
+
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT archivo FROM comprobantes WHERE usuario_id = ?", (user_id,))
+    # Verificar si el usuario es admin
+    cur.execute(
+        "SELECT rol FROM usuarios WHERE id = %s",
+        (user_id,)
+    )
+    user = cur.fetchone()
+
+    if user and user[0] == "Admin":
+        conn.close()
+        return redirect("/admin/usuarios")
+
+    # Obtener comprobantes del usuario
+    cur.execute(
+        "SELECT archivo FROM comprobantes WHERE usuario_id = %s",
+        (user_id,)
+    )
+
     comprobantes = cur.fetchall()
 
     for c in comprobantes:
@@ -1023,9 +1055,23 @@ def eliminar_usuario(user_id):
         if os.path.exists(ruta):
             os.remove(ruta)
 
-    cur.execute("DELETE FROM comprobantes WHERE usuario_id = ?", (user_id,))
-    cur.execute("DELETE FROM pagos WHERE usuario_id = ?", (user_id,))
-    cur.execute("DELETE FROM usuarios WHERE id = ?", (user_id,))
+    # Eliminar comprobantes
+    cur.execute(
+        "DELETE FROM comprobantes WHERE usuario_id = %s",
+        (user_id,)
+    )
+
+    # Eliminar pagos
+    cur.execute(
+        "DELETE FROM pagos WHERE usuario_id = %s",
+        (user_id,)
+    )
+
+    # Eliminar usuario
+    cur.execute(
+        "DELETE FROM usuarios WHERE id = %s",
+        (user_id,)
+    )
 
     conn.commit()
     conn.close()
