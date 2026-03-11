@@ -87,6 +87,19 @@ def initialize_database():
             fecha_procesado TEXT
         )
         """)
+                # ==============================
+        # COMPROBANTES
+        # ==============================
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS comprobantes (
+            id SERIAL PRIMARY KEY,
+            codigo TEXT,
+            usuario_id INTEGER,
+            nombre TEXT,
+            monto REAL,
+            fecha TEXT
+        )
+        """)
     else:
         # ==============================
         # SQLITE
@@ -121,6 +134,16 @@ def initialize_database():
             Comprobante TEXT,
             Admin_ID INTEGER,
             Fecha_procesado TEXT
+        )
+        """)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS comprobantes (
+            ID INTEGER PRIMARY KEY,
+            Codigo TEXT,
+            Usuario_ID INTEGER,
+            Nombre TEXT,
+            Monto REAL,
+            Fecha TEXT
         )
         """)
 

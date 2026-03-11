@@ -17,6 +17,7 @@ from payment_manager import (
 from database import load_payments, get_connection, initialize_database, load_users, save_users
 from products import PRODUCTS
 from folder_manager import assign_folder
+from receipt_manager import create_receipt, get_all_receipts
 import os
 from werkzeug.utils import secure_filename
 from utils import generar_password_temporal
@@ -644,6 +645,11 @@ def registrar_pago():
         try:
             monto = float(request.form["monto"])
             add_payment(session["user_id"], monto)
+            codigo = create_receipt(
+                session["user_id"],
+                session["nombre"],
+                monto
+            )
             mensaje = "Pago registrado correctamente. Ahora sube tu comprobante."
         except ValueError:
             mensaje = "Monto inválido"
@@ -654,6 +660,32 @@ def registrar_pago():
         mensaje=mensaje
     )
 
+# ==============================
+# ADMIN — COMPROBANTES
+# ==============================
+
+@app.route("/admin/comprobantes")
+@admin_required
+def admin_comprobantes():
+
+    df = get_all_receipts()
+
+    comprobantes = []
+
+    for _, r in df.iterrows():
+        comprobantes.append({
+            "id": int(r["ID"]),
+            "codigo": r["Codigo"],
+            "usuario": r["Nombre"],
+            "monto": r["Monto"],
+            "fecha": r["Fecha"]
+        })
+
+    return render_template(
+        "comprobantes_admin.html",
+        comprobantes=comprobantes,
+        nombre=session["nombre"]
+    )
 
 # ==============================
 # 🧾 SUBIR COMPROBANTE ASOCIADO A PAGO

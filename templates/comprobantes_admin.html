@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Comprobantes</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Codigo</th>
+<th>Usuario</th>
+<th>Monto</th>
+<th>Fecha</th>
+</tr>
+
+{% for c in comprobantes %}
+<tr>
+<td>{{c.id}}</td>
+<td>{{c.codigo}}</td>
+<td>{{c.usuario}}</td>
+<td>{{c.monto}}</td>
+<td>{{c.fecha}}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}
