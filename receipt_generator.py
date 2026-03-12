@@ -7,7 +7,12 @@ UPLOAD_FOLDER = "uploads/comprobantes"
 
 def generar_comprobante(codigo, nombre, monto, payment_id):
 
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    from PIL import Image, ImageDraw, ImageFont
+    import os
+    from datetime import datetime
+
+    carpeta = "static/comprobantes"
+    os.makedirs(carpeta, exist_ok=True)
 
     fecha = datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -28,14 +33,14 @@ def generar_comprobante(codigo, nombre, monto, payment_id):
 
     draw.text((80, 140), f"Codigo: {codigo}", fill="black", font=font_text)
     draw.text((80, 200), f"Usuario: {nombre}", fill="black", font=font_text)
-    draw.text((80, 240), f"Monto: ${monto}", fill="black", font=font_text)
+    draw.text((80, 240), f"Monto: S/ {monto}", fill="black", font=font_text)
     draw.text((80, 280), f"Fecha: {fecha}", fill="black", font=font_text)
     draw.text((80, 320), f"ID Pago: {payment_id}", fill="black", font=font_text)
 
     filename = f"{codigo}.png"
 
-    ruta = os.path.join(UPLOAD_FOLDER, filename)
+    ruta = os.path.join(carpeta, filename)
 
-    img.save(ruta, optimize=True)
+    img.save(ruta, optimize=True, quality=70)
 
     return filename
