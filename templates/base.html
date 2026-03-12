@@ -4,20 +4,37 @@
 <head>
 
 <meta charset="UTF-8">
-<title>{% block title %}Sistema{% endblock %}</title>
+
+<title>{% block title %}NovusPrep{% endblock %}</title>
+
+<!-- TIPOGRAFÍA PROFESIONAL -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- FAVICON -->
+<link rel="icon" href="{{ url_for('static', filename='assets/icon.png') }}">
 
 <style>
 
 /* =========================
-VARIABLES DE COLOR
+PALETA NOVUSPREP
 ========================= */
 
 :root{
---emerald:#50C878;
---green:#00bb2d;
---gold:#FFD700;
---cyan:#00FFFF;
---indigo:#403F6F;
+
+--primary:#22c55e;
+--primary-dark:#16a34a;
+
+--accent:#6366f1;
+--accent-2:#06b6d4;
+
+--bg-dark:#0f172a;
+--bg-dark-2:#020617;
+
+--bg-card:#ffffff;
+
+--text-light:#cbd5f5;
+--text-muted:#94a3b8;
+
 }
 
 /* =========================
@@ -25,16 +42,26 @@ RESET
 ========================= */
 
 *{
+
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Segoe UI,Roboto,Arial;
+font-family:"Inter",sans-serif;
+
 }
 
 body{
-background:linear-gradient(135deg,#0f0f0f,#1b1b1b);
+
+background:linear-gradient(
+135deg,
+var(--bg-dark),
+var(--bg-dark-2)
+);
+
 color:white;
+
 min-height:100vh;
+
 }
 
 /* =========================
@@ -43,39 +70,65 @@ NAVBAR
 
 .navbar{
 
-background:#111;
+background:#020617;
+
+border-bottom:1px solid rgba(255,255,255,0.05);
+
 padding:14px 30px;
+
 display:flex;
 align-items:center;
 justify-content:space-between;
-box-shadow:0 5px 15px rgba(0,0,0,0.4);
+
+box-shadow:0 5px 20px rgba(0,0,0,0.4);
+
 }
+
+/* =========================
+LOGO
+========================= */
 
 .logo{
 
-font-size:22px;
-font-weight:bold;
+display:flex;
+align-items:center;
+gap:10px;
 
-background:linear-gradient(90deg,var(--gold),var(--emerald));
-background-clip: text;
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
+font-weight:700;
+font-size:18px;
+
+color:white;
 
 }
+
+.logo img{
+
+height:34px;
+
+}
+
+/* =========================
+NAV LINKS
+========================= */
 
 .nav-links{
 
 display:flex;
-gap:18px;
+gap:20px;
+
 }
 
 .nav-links a{
 
 text-decoration:none;
-color:white;
+color:var(--text-light);
+
 font-size:14px;
+font-weight:500;
+
 padding:6px 10px;
 border-radius:8px;
+
 transition:0.25s;
 
 }
@@ -83,23 +136,26 @@ transition:0.25s;
 .nav-links a:hover{
 
 background:rgba(255,255,255,0.08);
+color:white;
 
 }
 
 /* =========================
-CONTENEDOR
+CONTENEDOR PRINCIPAL
 ========================= */
 
 .main-container{
 
 max-width:1100px;
+
 margin:40px auto;
+
 padding:0 20px;
 
 }
 
 /* =========================
-CARDS
+CARDS (NO CAMBIADO)
 ========================= */
 
 .card{
@@ -119,13 +175,23 @@ BOTONES
 
 .btn-primary{
 
-background:linear-gradient(135deg,var(--emerald),var(--green));
+background:linear-gradient(
+135deg,
+var(--primary),
+var(--accent-2)
+);
+
 border:none;
 color:white;
+
 padding:10px 18px;
+
 border-radius:10px;
+
 font-weight:600;
+
 cursor:pointer;
+
 transition:0.2s;
 
 }
@@ -133,38 +199,57 @@ transition:0.2s;
 .btn-primary:hover{
 
 transform:translateY(-2px);
-box-shadow:0 8px 20px rgba(0,0,0,0.35);
+
+box-shadow:0 8px 25px rgba(0,0,0,0.35);
 
 }
 
 .btn-secondary{
 
-background:var(--indigo);
+background:var(--accent);
+
 border:none;
+
 color:white;
+
 padding:8px 16px;
+
 border-radius:10px;
+
 cursor:pointer;
 
 }
 
 /* =========================
-TABLAS MODERNAS
+TABLAS
 ========================= */
 
 .table-modern{
 
 width:100%;
+
 border-collapse:collapse;
+
 margin-top:20px;
+
+background:white;
+
+color:black;
+
+border-radius:10px;
+
+overflow:hidden;
 
 }
 
 .table-modern th{
 
-background:#111;
+background:#020617;
+
 color:white;
+
 padding:12px;
+
 font-size:14px;
 
 }
@@ -172,7 +257,9 @@ font-size:14px;
 .table-modern td{
 
 padding:12px;
+
 border-bottom:1px solid #eee;
+
 text-align:center;
 
 }
@@ -196,8 +283,12 @@ margin-bottom:18px;
 .form-group label{
 
 display:block;
+
 font-size:14px;
+
 margin-bottom:5px;
+
+color:black;
 
 }
 
@@ -205,8 +296,11 @@ margin-bottom:5px;
 .form-group select{
 
 width:100%;
+
 padding:10px;
+
 border-radius:8px;
+
 border:1px solid #ddd;
 
 }
@@ -217,10 +311,14 @@ BADGES
 
 .badge-green{
 
-background:#00bb2d;
+background:#22c55e;
+
 color:white;
+
 padding:4px 10px;
+
 border-radius:8px;
+
 font-size:12px;
 
 }
@@ -228,19 +326,27 @@ font-size:12px;
 .badge-yellow{
 
 background:#ffc107;
+
 color:black;
+
 padding:4px 10px;
+
 border-radius:8px;
+
 font-size:12px;
 
 }
 
 .badge-red{
 
-background:#d9534f;
+background:#ef4444;
+
 color:white;
+
 padding:4px 10px;
+
 border-radius:8px;
+
 font-size:12px;
 
 }
@@ -252,9 +358,13 @@ MENSAJES
 .message-success{
 
 background:#e8f7ee;
+
 color:#1e7e34;
+
 padding:10px;
+
 border-radius:8px;
+
 margin-bottom:15px;
 
 }
@@ -262,10 +372,30 @@ margin-bottom:15px;
 .message-error{
 
 background:#fdeaea;
+
 color:#c0392b;
+
 padding:10px;
+
 border-radius:8px;
+
 margin-bottom:15px;
+
+}
+
+/* =========================
+FOOTER
+========================= */
+
+.footer{
+
+margin-top:60px;
+
+text-align:center;
+
+font-size:13px;
+
+color:var(--text-muted);
 
 }
 
@@ -276,16 +406,21 @@ RESPONSIVE
 @media(max-width:800px){
 
 .nav-links{
+
 display:none;
+
 }
 
 .main-container{
+
 margin:20px auto;
+
 }
 
 }
 
 </style>
+
 {% block extra_css %}{% endblock %}
 
 </head>
@@ -297,7 +432,11 @@ margin:20px auto;
 <div class="navbar">
 
 <div class="logo">
-Sistema
+
+<img src="{{ url_for('static', filename='assets/logo.png') }}">
+
+<span>NovusPrep</span>
+
 </div>
 
 {% if session.get("user_id") %}
@@ -325,10 +464,19 @@ Sistema
 <div class="main-container">
 
 {% block content %}
-
 {% endblock %}
 
 </div>
 
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+© 2026 NovusPrep — Quality and confidence forever
+
+</div>
+
 </body>
+
 </html>
