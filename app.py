@@ -698,6 +698,8 @@ def registrar_pago():
         return redirect(url_for("login"))
 
     mensaje = None
+    comprobante_url = None
+    archivo_comprobante = None
 
     if request.method == "POST":
         try:
@@ -727,7 +729,13 @@ def registrar_pago():
             # asociar comprobante al pago
             attach_receipt(payment_id, archivo_comprobante)
 
-            mensaje = f"Pago registrado correctamente. Comprobante generado."
+            # URL para previsualizar
+            comprobante_url = url_for(
+                "static",
+                filename=f"comprobantes/{archivo_comprobante}"
+            )
+
+            mensaje = "Pago registrado correctamente. Comprobante generado."
 
         except ValueError:
             mensaje = "Monto inválido"
@@ -735,9 +743,10 @@ def registrar_pago():
     return render_template(
         "registrar_pago.html",
         nombre=session["nombre"],
-        mensaje=mensaje
+        mensaje=mensaje,
+        comprobante_url=comprobante_url,
+        archivo_comprobante=archivo_comprobante
     )
-
 # ==============================
 # 🧾 SUBIR COMPROBANTE ASOCIADO A PAGO
 # ==============================
@@ -767,6 +776,21 @@ def subir_comprobante():
                 pagos=pagos_pendientes.to_dict("records")
             )
 
+        # ==============================
+        # VALIDACIÓN DE SEGURIDAD
+        # ==============================
+
+        if payment_id not in pagos_pendientes["ID"].values:
+            mensaje = "Pago no válido o no pertenece a este usuario"
+            return render_template(
+                "subir_comprobante.html",
+                nombre=session["nombre"],
+                mensaje=mensaje,
+                pagos=pagos_pendientes.to_dict("records")
+            )
+
+        # ==============================
+
         if "archivo" not in request.files:
             mensaje = "No se envió ningún archivo"
         else:
@@ -788,7 +812,7 @@ def subir_comprobante():
 
                 archivo.save(ruta)
 
-                # IMPORTANTE: guardar solo el nombre del archivo
+                # guardar nombre del archivo en la base de datos
                 attach_receipt(payment_id, nombre_final)
 
                 mensaje = "Comprobante asociado correctamente al pago"
@@ -802,7 +826,6 @@ def subir_comprobante():
         mensaje=mensaje,
         pagos=pagos_pendientes.to_dict("records")
     )
-
 
 # ==============================
 # 🔵 HISTORIAL DE PAGOS (USUARIO)
