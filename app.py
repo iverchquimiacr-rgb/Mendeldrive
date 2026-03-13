@@ -1234,9 +1234,9 @@ def seleccionar_planes():
         # 💳 Montos fijos
         # CAMBIAR PRECIOS SEMANAL MENSUAL MODIFICAR COSTO
         if tipo_pago == "Semanal":
-            total = 1.3
+            total = 1.5
         elif tipo_pago == "Mensual":
-            total = 4
+            total = 5
 
         idx = user_df.index[0]
 
