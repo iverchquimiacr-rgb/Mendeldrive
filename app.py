@@ -1013,6 +1013,48 @@ def eliminar_comprobante(comp_id):
     conn.close()
 
     return redirect("/admin/comprobantes")
+
+#=============================
+# MIS COMPROBANTES (USUARIO)
+#=============================
+
+@app.route("/mis_comprobantes")
+@login_required
+def mis_comprobantes():
+
+    user_id = session["user_id"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT id, fecha, comprobante
+        FROM pagos
+        WHERE user_id = %s
+        AND comprobante IS NOT NULL
+        ORDER BY fecha DESC
+    """, (user_id,))
+
+    rows = cur.fetchall()
+
+    comprobantes = []
+
+    for r in rows:
+        comprobantes.append({
+            "id": r[0],
+            "fecha": r[1],
+            "archivo": r[2]
+        })
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "mis_comprobantes.html",
+        comprobantes=comprobantes,
+        nombre=session.get("nombre")
+    )
+
 #=============================
 # ELIMINAR PAGO
 #=============================

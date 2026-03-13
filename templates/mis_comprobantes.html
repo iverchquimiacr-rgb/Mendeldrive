@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Mis comprobantes{% endblock %}
+
+{% block content %}
+
+<div class="payments-container">
+
+<div class="payments-header">
+
+<h1>Mis comprobantes</h1>
+<p>Usuario: <strong>{{ nombre }}</strong></p>
+
+</div>
+
+{% if comprobantes %}
+
+<table class="payments-table">
+
+<tr>
+<th>ID Pago</th>
+<th>Fecha</th>
+<th>Ver</th>
+<th>Descargar</th>
+</tr>
+
+{% for c in comprobantes %}
+
+<tr>
+
+<td>#{{ c.id }}</td>
+
+<td>{{ c.fecha }}</td>
+
+<td>
+
+<a href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
+target="_blank"
+class="view-btn">
+
+Ver
+
+</a>
+
+</td>
+
+<td>
+
+<a href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
+download
+class="download-btn">
+
+Descargar
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<div class="empty-box">
+No has subido comprobantes todavía.
+</div>
+
+{% endif %}
+
+<div class="actions">
+
+<a href="/dashboard">
+<button class="back-link">Volver al dashboard</button>
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}
