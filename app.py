@@ -1024,7 +1024,7 @@ def mis_comprobantes():
 
     user_id = session["user_id"]
 
-    conn = get_db_connection()
+    conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
