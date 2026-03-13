@@ -87,8 +87,8 @@ left:50%;
 
 transform:translate(-50%,-50%);
 
-width:800px;
-height:800px;
+width:900px;
+height:900px;
 
 background-image:url("/static/img/Logo.png");
 
@@ -96,7 +96,7 @@ background-repeat:no-repeat;
 background-position:center;
 background-size:contain;
 
-opacity:0.09;
+opacity:0.10;
 
 pointer-events:none;
 
@@ -144,6 +144,25 @@ color:white;
 .logo img{
 
 height:34px;
+
+}
+
+.logo-text{
+
+font-weight:700;
+
+background:linear-gradient(
+90deg,
+var(--cyan),
+var(--purple),
+var(--emerald)
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+background-clip:text;
+color:transparent;
 
 }
 
@@ -493,8 +512,8 @@ margin:20px auto;
 <div class="navbar">
 
 <div class="logo">
-<img src="{{ url_for('static', filename='assets/Logo.png') }}">
-<span>NovusPrep</span>
+<img src="{{ url_for('static', filename='img/Logo.png') }}">
+<span class="logo-text">NovusPrep</span>
 </div>
 
 <div class="nav-links">
