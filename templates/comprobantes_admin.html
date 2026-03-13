@@ -6,127 +6,311 @@
 
 <style>
 
+/* =========================
+CONTENEDOR
+========================= */
+
 .admin-container{
 margin-top:30px;
 }
 
+/* =========================
+HEADER
+========================= */
+
 .admin-header{
-margin-bottom:20px;
+margin-bottom:22px;
 }
 
+.admin-header h1{
+
+font-size:28px;
+
+background:linear-gradient(
+90deg,
+var(--cyan),
+var(--purple)
+);
+
+background-clip:text;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+margin-bottom:6px;
+
+}
+
+.admin-header p{
+color:var(--text-light);
+font-size:14px;
+}
+
+/* =========================
+BUSCADOR
+========================= */
+
 .search-box{
-margin-bottom:20px;
+
+margin-bottom:22px;
+
 display:flex;
+
 gap:10px;
+
 align-items:center;
+
 }
 
 .search-box input{
+
 padding:10px 14px;
+
 border-radius:8px;
-border:1px solid #ccc;
+
+border:1px solid #d1d5db;
+
 font-size:14px;
+
+transition:all 0.2s ease;
+
 }
 
+.search-box input:focus{
+
+outline:none;
+
+border-color:var(--cyan);
+
+box-shadow:0 0 0 3px rgba(0,212,255,0.18);
+
+}
+
+/* BOTÓN BUSCAR */
+
 .search-btn{
+
 padding:10px 18px;
+
 border:none;
+
 border-radius:8px;
+
 font-weight:600;
+
 color:white;
-background:linear-gradient(135deg,var(--emerald),var(--green));
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+
 cursor:pointer;
-transition:0.25s;
+
+transition:all 0.25s ease;
+
 }
 
 .search-btn:hover{
+
 transform:translateY(-2px);
-box-shadow:0 6px 14px rgba(0,0,0,0.2);
+
+box-shadow:0 8px 18px rgba(0,0,0,0.25);
+
 }
 
+/* =========================
+TABLA
+========================= */
+
 .comprobantes-table{
+
 width:100%;
+
 border-collapse:collapse;
+
 background:white;
-color:black;
+
+color:#0f172a;
+
 border-radius:16px;
+
 overflow:hidden;
+
 box-shadow:0 20px 45px rgba(0,0,0,0.25);
+
 }
 
 .comprobantes-table th{
-background:linear-gradient(135deg,var(--emerald),var(--green));
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+
 color:white;
+
 padding:14px;
+
 text-align:left;
+
 font-size:14px;
+
+letter-spacing:0.3px;
+
 }
 
 .comprobantes-table td{
+
 padding:14px;
-border-bottom:1px solid #eee;
+
+border-bottom:1px solid #f1f5f9;
+
 font-size:14px;
+
 }
 
 .comprobantes-table tr:hover{
-background:#f7f7f7;
+
+background:#f5f7fb;
+
 }
 
+/* =========================
+BOTÓN VER
+========================= */
+
 .view-btn{
+
 padding:7px 12px;
+
 border-radius:8px;
-background:linear-gradient(135deg,var(--indigo),var(--emerald));
+
+background:linear-gradient(
+135deg,
+var(--purple),
+var(--cyan)
+);
+
 color:white;
+
 text-decoration:none;
+
 font-size:13px;
-transition:0.3s;
+
+display:inline-block;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+
+transition:all 0.25s ease;
+
 }
 
 .view-btn:hover{
+
 transform:translateY(-2px);
-box-shadow:0 5px 12px rgba(0,0,0,0.25);
+
+box-shadow:0 8px 18px rgba(0,0,0,0.25);
+
 }
 
+/* =========================
+BOTÓN DESCARGAR
+========================= */
+
 .download-btn{
+
 padding:7px 12px;
+
 border-radius:8px;
-background:linear-gradient(135deg,var(--gold),#d4a017);
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+
 color:white;
+
 text-decoration:none;
+
 font-size:13px;
-transition:0.3s;
+
+display:inline-block;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+
+transition:all 0.25s ease;
+
 }
 
 .download-btn:hover{
+
 transform:translateY(-2px);
-box-shadow:0 5px 12px rgba(0,0,0,0.25);
+
+box-shadow:0 8px 18px rgba(0,0,0,0.25);
+
 }
+
+/* =========================
+MENSAJE VACÍO
+========================= */
 
 .empty-box{
+
 background:white;
-color:black;
+
+color:#0f172a;
+
 padding:25px;
+
 border-radius:14px;
+
 box-shadow:0 10px 25px rgba(0,0,0,0.2);
+
+font-size:15px;
+
 }
 
+/* =========================
+BOTÓN VOLVER
+========================= */
+
 .back-link{
+
 display:inline-block;
+
 margin-top:20px;
-padding:10px 22px;
+
+padding:11px 24px;
+
 text-decoration:none;
+
 color:white;
+
 font-weight:600;
-background:linear-gradient(135deg,var(--emerald),#2ecc71);
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+
 border-radius:10px;
-box-shadow:0 5px 12px rgba(0,0,0,0.15);
+
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+
 transition:all 0.25s ease;
+
 }
 
 .back-link:hover{
+
 transform:translateY(-3px);
-box-shadow:0 10px 22px rgba(0,0,0,0.25);
-background:linear-gradient(135deg,#3fdc84,#27ae60);
+
+box-shadow:0 12px 26px rgba(0,0,0,0.25);
+
 }
 
 </style>

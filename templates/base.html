@@ -7,32 +7,42 @@
 
 <title>{% block title %}NovusPrep{% endblock %}</title>
 
-<!-- TIPOGRAFÍA PROFESIONAL -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- FAVICON -->
 <link rel="icon" href="{{ url_for('static', filename='assets/icon.png') }}">
 
 <style>
 
 /* =========================
-PALETA NOVUSPREP
+NOVUSPREP DESIGN SYSTEM
 ========================= */
 
 :root{
 
---primary:#22c55e;
---primary-dark:#16a34a;
+/* COLORES DE MARCA */
 
---accent:#6366f1;
---accent-2:#06b6d4;
+--cyan:#00D4FF;
+--purple:#BB86FC;
+--emerald:#00C853;
 
---bg-dark:#0f172a;
---bg-dark-2:#020617;
+/* VARIANTES */
+
+--cyan-soft:#35e0ff;
+--purple-soft:#cda5ff;
+--emerald-soft:#2eea74;
+
+/* FONDOS */
+
+--bg-dark:#0B0F19;
+--bg-dark-2:#05070E;
+
+/* CARDS */
 
 --bg-card:#ffffff;
 
---text-light:#cbd5f5;
+/* TEXTO */
+
+--text-light:#e2e8f0;
 --text-muted:#94a3b8;
 
 }
@@ -65,14 +75,44 @@ min-height:100vh;
 }
 
 /* =========================
+WATERMARK LOGO
+========================= */
+
+.watermark{
+
+position:fixed;
+
+top:50%;
+left:50%;
+
+transform:translate(-50%,-50%);
+
+width:650px;
+height:650px;
+
+background-image:url("/static/img/Logo.png");
+
+background-repeat:no-repeat;
+background-position:center;
+background-size:contain;
+
+opacity:0.05;
+
+pointer-events:none;
+
+z-index:0;
+
+}
+
+/* =========================
 NAVBAR
 ========================= */
 
 .navbar{
 
-background:#020617;
+background:#05070E;
 
-border-bottom:1px solid rgba(255,255,255,0.05);
+border-bottom:1px solid rgba(255,255,255,0.06);
 
 padding:14px 30px;
 
@@ -80,7 +120,7 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 
-box-shadow:0 5px 20px rgba(0,0,0,0.4);
+box-shadow:0 5px 18px rgba(0,0,0,0.45);
 
 }
 
@@ -114,19 +154,21 @@ NAV LINKS
 .nav-links{
 
 display:flex;
-gap:20px;
+gap:18px;
 
 }
 
 .nav-links a{
 
 text-decoration:none;
+
 color:var(--text-light);
 
 font-size:14px;
 font-weight:500;
 
 padding:6px 10px;
+
 border-radius:8px;
 
 transition:0.25s;
@@ -136,12 +178,13 @@ transition:0.25s;
 .nav-links a:hover{
 
 background:rgba(255,255,255,0.08);
+
 color:white;
 
 }
 
 /* =========================
-CONTENEDOR PRINCIPAL
+CONTENEDOR
 ========================= */
 
 .main-container{
@@ -152,17 +195,23 @@ margin:40px auto;
 
 padding:0 20px;
 
+position:relative;
+z-index:1;
+
 }
 
 /* =========================
-CARDS (NO CAMBIADO)
+CARDS
 ========================= */
 
 .card{
 
 background:white;
-color:black;
+
+color:#0f172a;
+
 padding:35px;
+
 border-radius:18px;
 
 box-shadow:0 20px 50px rgba(0,0,0,0.35);
@@ -177,11 +226,12 @@ BOTONES
 
 background:linear-gradient(
 135deg,
-var(--primary),
-var(--accent-2)
+var(--emerald),
+var(--cyan)
 );
 
 border:none;
+
 color:white;
 
 padding:10px 18px;
@@ -194,19 +244,27 @@ cursor:pointer;
 
 transition:0.2s;
 
+box-shadow:0 6px 16px rgba(0,0,0,0.25);
+
 }
 
 .btn-primary:hover{
 
 transform:translateY(-2px);
 
-box-shadow:0 8px 25px rgba(0,0,0,0.35);
+box-shadow:0 10px 25px rgba(0,0,0,0.35);
 
 }
 
+/* BOTÓN SECUNDARIO */
+
 .btn-secondary{
 
-background:var(--accent);
+background:linear-gradient(
+135deg,
+var(--purple),
+var(--cyan)
+);
 
 border:none;
 
@@ -217,6 +275,8 @@ padding:8px 16px;
 border-radius:10px;
 
 cursor:pointer;
+
+font-weight:500;
 
 }
 
@@ -234,7 +294,7 @@ margin-top:20px;
 
 background:white;
 
-color:black;
+color:#0f172a;
 
 border-radius:10px;
 
@@ -244,7 +304,7 @@ overflow:hidden;
 
 .table-modern th{
 
-background:#020617;
+background:#0B0F19;
 
 color:white;
 
@@ -266,7 +326,7 @@ text-align:center;
 
 .table-modern tr:hover{
 
-background:#f7f7f7;
+background:#f5f7fb;
 
 }
 
@@ -288,7 +348,7 @@ font-size:14px;
 
 margin-bottom:5px;
 
-color:black;
+color:#0f172a;
 
 }
 
@@ -311,7 +371,7 @@ BADGES
 
 .badge-green{
 
-background:#22c55e;
+background:var(--emerald);
 
 color:white;
 
@@ -325,7 +385,7 @@ font-size:12px;
 
 .badge-yellow{
 
-background:#ffc107;
+background:#FFC107;
 
 color:black;
 
@@ -357,9 +417,9 @@ MENSAJES
 
 .message-success{
 
-background:#e8f7ee;
+background:#e8fdf2;
 
-color:#1e7e34;
+color:#047857;
 
 padding:10px;
 
@@ -373,7 +433,7 @@ margin-bottom:15px;
 
 background:#fdeaea;
 
-color:#c0392b;
+color:#b91c1c;
 
 padding:10px;
 
@@ -421,19 +481,20 @@ margin:20px auto;
 
 </style>
 
+<link rel="stylesheet" href="/static/css/ui.css">
 {% block extra_css %}{% endblock %}
 
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<div class="watermark"></div>
 
 <div class="navbar">
 
 <div class="logo">
 
-<img src="{{ url_for('static', filename='assets/logo.png') }}">
+<img src="{{ url_for('static', filename='assets/Logo.png') }}">
 
 <span>NovusPrep</span>
 
@@ -458,18 +519,12 @@ margin:20px auto;
 
 </div>
 
-
-<!-- CONTENIDO -->
-
 <div class="main-container">
 
 {% block content %}
 {% endblock %}
 
 </div>
-
-
-<!-- FOOTER -->
 
 <div class="footer">
 
@@ -478,5 +533,4 @@ margin:20px auto;
 </div>
 
 </body>
-
 </html>

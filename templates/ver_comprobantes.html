@@ -6,86 +6,206 @@
 
 <style>
 
+/* =========================
+CONTENEDOR
+========================= */
+
 .files-container{
+
 max-width:700px;
+
 margin:40px auto;
+
 }
+
+/* =========================
+CARD
+========================= */
 
 .files-card{
+
 background:white;
-color:black;
+
+color:#0f172a;
+
 padding:35px;
+
 border-radius:18px;
+
 box-shadow:0 20px 50px rgba(0,0,0,0.25);
+
 }
+
+/* =========================
+TÍTULO
+========================= */
 
 .files-title{
+
 font-size:24px;
+
 margin-bottom:20px;
+
+background:linear-gradient(
+90deg,
+var(--cyan),
+var(--purple)
+);
+
+background-clip:text;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
 }
+
+/* =========================
+LISTA
+========================= */
 
 .file-list{
+
 list-style:none;
+
 padding:0;
+
 margin:0;
+
 }
 
+/* ITEM */
+
 .file-item{
-background:#f7f7f7;
+
+background:#f8fafc;
+
 padding:12px 16px;
+
 border-radius:10px;
+
 margin-bottom:10px;
+
 display:flex;
+
 justify-content:space-between;
+
 align-items:center;
+
+border:1px solid #e2e8f0;
+
+transition:all 0.2s ease;
+
 }
 
 .file-item:hover{
-background:#ececec;
+
+background:#f1f5f9;
+
+transform:translateY(-1px);
+
 }
 
-.file-link{
-text-decoration:none;
-color:#333;
-font-weight:500;
+/* TEXTO ARCHIVO */
+
+.file-item span{
+
+font-size:14px;
+
+color:#334155;
+
 }
+
+/* =========================
+BOTÓN ABRIR
+========================= */
 
 .open-btn{
-background:linear-gradient(135deg,var(--emerald),var(--green));
-color:white;
-border:none;
-padding:6px 12px;
-border-radius:8px;
-font-size:13px;
-cursor:pointer;
-}
 
-.back-link{
-display:inline-block;
-margin-top:20px;
-padding:10px 22px;
-text-decoration:none;
+background:linear-gradient(
+135deg,
+var(--cyan),
+var(--purple)
+);
+
 color:white;
+
+border:none;
+
+padding:6px 12px;
+
+border-radius:8px;
+
+font-size:13px;
+
 font-weight:600;
 
-background:linear-gradient(135deg,var(--emerald),#2ecc71);
+cursor:pointer;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+
+transition:all 0.2s ease;
+
+}
+
+.open-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 18px rgba(0,0,0,0.25);
+
+}
+
+/* =========================
+BOTÓN VOLVER
+========================= */
+
+.back-link{
+
+display:inline-block;
+
+margin-top:20px;
+
+padding:10px 22px;
+
+text-decoration:none;
+
+color:white;
+
+font-weight:600;
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
 
 border-radius:10px;
 
-box-shadow:0 5px 12px rgba(0,0,0,0.15);
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
 
 transition:all 0.25s ease;
+
 }
 
 .back-link:hover{
+
 transform:translateY(-3px);
-box-shadow:0 10px 22px rgba(0,0,0,0.25);
-background:linear-gradient(135deg,#3fdc84,#27ae60);
+
+box-shadow:0 12px 26px rgba(0,0,0,0.25);
+
 }
 
+/* =========================
+MENSAJE VACÍO
+========================= */
+
 .empty-msg{
-color:#777;
+
+color:#64748b;
+
 margin-top:10px;
+
+font-size:14px;
+
 }
 
 </style>

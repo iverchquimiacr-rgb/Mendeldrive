@@ -6,6 +6,10 @@
 
 <style>
 
+/* =========================
+HEADER
+========================= */
+
 .dashboard-header{
 margin-bottom:35px;
 text-align:center;
@@ -15,14 +19,10 @@ text-align:center;
 
 font-size:34px;
 
-.dashboard-header h1{
-
-font-size:34px;
-
 background:linear-gradient(
 90deg,
-var(--primary),
-var(--accent)
+var(--cyan),
+var(--purple)
 );
 
 background-clip:text;
@@ -30,17 +30,16 @@ background-clip:text;
 -webkit-text-fill-color:transparent;
 
 }
-background-clip: text;
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-
-}
 
 .welcome-text{
-opacity:0.8;
+opacity:0.85;
 font-size:16px;
-margin-top:5px;
+margin-top:6px;
 }
+
+/* =========================
+GRID
+========================= */
 
 .card-grid{
 
@@ -55,6 +54,10 @@ margin-top:30px;
 
 }
 
+/* =========================
+CARD BASE
+========================= */
+
 .card{
 
 display:block;
@@ -65,11 +68,11 @@ border-radius:14px;
 
 background:white;
 
-box-shadow:0 6px 18px rgba(0,0,0,0.08);
+box-shadow:0 8px 22px rgba(0,0,0,0.12);
 
 text-decoration:none;
 
-color:black;
+color:#0f172a;
 
 transition:all 0.25s ease;
 
@@ -77,9 +80,9 @@ transition:all 0.25s ease;
 
 .card:hover{
 
-transform:translateY(-5px);
+transform:translateY(-6px);
 
-box-shadow:0 12px 28px rgba(0,0,0,0.15);
+box-shadow:0 16px 36px rgba(0,0,0,0.18);
 
 }
 
@@ -89,8 +92,12 @@ margin-bottom:8px;
 
 .card p{
 font-size:14px;
-opacity:0.7;
+opacity:0.75;
 }
+
+/* =========================
+HIGHLIGHT COLORS
+========================= */
 
 .highlight-blue{
 border-left:5px solid #3b82f6;
@@ -101,19 +108,15 @@ border-left:5px solid var(--emerald);
 }
 
 .highlight-orange{
-border-left:5px solid var(--gold);
-}
-
-.highlight-blue{
-border-left:5px solid #3b82f6;
+border-left:5px solid #f59e0b;
 }
 
 .highlight-yellow{
-border-left:5px solid #ffee00;
+border-left:5px solid #eab308;
 }
 
 .highlight-purple{
-border-left:5px solid #8b5cf6;
+border-left:5px solid var(--purple);
 }
 
 .highlight-red{
@@ -123,6 +126,33 @@ border-left:5px solid #ef4444;
 .highlight-teal{
 border-left:5px solid #14b8a6;
 }
+
+/* =========================
+CARD HOVER EFFECT
+========================= */
+
+.card[class*="highlight"]{
+
+transition:
+all 0.25s ease,
+border-left-width 0.25s ease,
+filter 0.25s ease;
+
+}
+
+.card[class*="highlight"]:hover{
+
+border-left-width:9px;
+
+filter:brightness(1.08);
+
+box-shadow:0 16px 36px rgba(0,0,0,0.20);
+
+}
+
+/* =========================
+LOGOUT
+========================= */
 
 .logout-container{
 
@@ -134,7 +164,11 @@ text-align:center;
 
 .btn-logout{
 
-background:linear-gradient(135deg,#ff4d4d,#ff0000);
+background:linear-gradient(
+135deg,
+#ff4d4d,
+#dc2626
+);
 
 padding:12px 28px;
 
@@ -148,27 +182,18 @@ font-weight:600;
 
 display:inline-block;
 
-transition:0.25s;
+transition:all 0.25s ease;
 
 }
 
 .btn-logout:hover{
 
-transform:translateY(-2px);
+transform:translateY(-3px);
 
-box-shadow:0 10px 25px rgba(0,0,0,0.25);
+box-shadow:0 12px 28px rgba(0,0,0,0.25);
 
 }
 
-.card[class*="highlight"]{
-transition:all 0.25s ease, border-left-width 0.25s ease, filter 0.25s ease;
-}
-
-.card[class*="highlight"]:hover{
-border-left-width:9px;
-filter:brightness(1.08);
-box-shadow:0 12px 30px rgba(0,0,0,0.18);
-}
 </style>
 
 {% endblock %}
