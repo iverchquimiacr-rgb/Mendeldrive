@@ -316,6 +316,21 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 </div>
 
+<form method="GET" class="search-box">
+
+<input
+type="text"
+name="buscar"
+placeholder="Buscar pago por ID..."
+value="{{ request.args.get('buscar','') }}"
+>
+
+<button type="submit">
+Buscar
+</button>
+
+</form>
+
 {% if pagos %}
 
 <table class="payments-table">

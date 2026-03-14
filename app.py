@@ -473,6 +473,7 @@ def estado_cuenta():
 @app.route("/admin/usuarios")
 @admin_required
 def admin_usuarios():
+
     if "user_id" not in session or session["rol"] != "Admin":
         return redirect(url_for("login"))
 
@@ -482,19 +483,40 @@ def admin_usuarios():
     # 🔧 FIX CRÍTICO: asegurar que ID sea int
     users_df["ID"] = users_df["ID"].astype(int)
 
+    # =========================
+    # 🔎 BUSCADOR
+    # =========================
+
+    buscar = request.args.get("buscar")
+
+    if buscar:
+
+        buscar = buscar.strip().lower()
+
+        users_df = users_df[
+            users_df["Nombre"].str.lower().str.contains(buscar, na=False)
+            |
+            users_df["ID"].astype(str).str.contains(buscar)
+        ]
+
+    # =========================
+    # CREAR LISTA USUARIOS
+    # =========================
+
     usuarios = []
 
     for _, u in users_df.iterrows():
+
         user_id = int(u["ID"])
 
         estado = get_account_status(user_id)
 
         usuarios.append({
-            "id": user_id,                                 # int puro
-            "nombre": str(u["Nombre"]),                    # str puro
-            "estado": str(u["Estado"]),                    # str puro
-            "tipo_pago": str(u["Tipo_pago"]),              # str puro
-            "carpetas": int(u["Carpetas_asignadas"]),      # int puro
+            "id": user_id,
+            "nombre": str(u["Nombre"]),
+            "estado": str(u["Estado"]),
+            "tipo_pago": str(u["Tipo_pago"]),
+            "carpetas": int(u["Carpetas_asignadas"]),
             "saldo": float(estado["SaldoPendiente"]) if estado else 0.0
         })
 
@@ -554,9 +576,6 @@ def admin_ver_usuario(user_id):
         perfil=perfil_data,
         nombre=str(session["nombre"])
     )
-# ==============================
-# 🔴 ADMIN — PAGOS DE UN USUARIO
-# ==============================
 
 # ==============================
 # 🔴 ADMIN — PAGOS DE UN USUARIO
@@ -999,27 +1018,45 @@ def subir_comprobante():
 # ==============================
 # 🔵 HISTORIAL DE PAGOS (USUARIO)
 # ==============================
-
 @app.route("/mis_pagos")
 def mis_pagos():
+
     if "user_id" not in session:
         return redirect(url_for("login"))
 
     pagos_df = load_payments()
 
+    pagos_df["ID"] = pagos_df["ID"].astype(int)
+    pagos_df["Usuario_ID"] = pagos_df["Usuario_ID"].astype(int)
+
     pagos_usuario = pagos_df[
         pagos_df["Usuario_ID"] == session["user_id"]
     ]
 
+    # 🔎 BUSCADOR
+
+    buscar = request.args.get("buscar")
+
+    if buscar:
+
+        buscar = buscar.strip()
+
+        if buscar.isdigit():
+
+            pagos_usuario = pagos_usuario[
+                pagos_usuario["ID"] == int(buscar)
+            ]
+
     pagos = []
 
     for _, pago in pagos_usuario.iterrows():
+
         pagos.append({
             "id": int(pago["ID"]),
-            "fecha": pago["Fecha"],
-            "monto": pago["Monto"],
-            "estado": pago["Estado"],
-            "comprobante": pago.get("Comprobante", "")
+            "fecha": str(pago["Fecha"]),
+            "monto": float(pago["Monto"]),
+            "estado": str(pago["Estado"]),
+            "comprobante": str(pago.get("Comprobante", ""))
         })
 
     return render_template(
@@ -1032,28 +1069,56 @@ def mis_pagos():
 # ==============================
 # 🔴 ADMIN — LISTAR PAGOS
 # ==============================
-
 @app.route("/admin/pagos")
 @admin_required
 def admin_pagos():
+
     if "user_id" not in session or session["rol"] != "Admin":
         return redirect(url_for("login"))
 
     pagos_df = load_payments()
     users_df = load_users()
 
+    # 🔧 NORMALIZAR IDS
+    pagos_df["ID"] = pagos_df["ID"].astype(int)
+    pagos_df["Usuario_ID"] = pagos_df["Usuario_ID"].astype(int)
+    users_df["ID"] = users_df["ID"].astype(int)
+
+    # =========================
+    # 🔎 BUSCAR POR ID
+    # =========================
+
+    buscar = request.args.get("buscar")
+
+    if buscar:
+
+        buscar = buscar.strip()
+
+        if buscar.isdigit():
+            pagos_df = pagos_df[
+                pagos_df["ID"] == int(buscar)
+            ]
+
+    # =========================
+    # CREAR LISTA PAGOS
+    # =========================
+
     pagos = []
 
     for _, pago in pagos_df.iterrows():
-        user = users_df[users_df["ID"] == pago["Usuario_ID"]].iloc[0]
+
+        user = users_df[
+            users_df["ID"] == pago["Usuario_ID"]
+        ].iloc[0]
+
         pagos.append({
             "id": int(pago["ID"]),
-            "usuario": user["Nombre"],
+            "usuario": str(user["Nombre"]),
             "usuario_id": int(user["ID"]),
-            "monto": pago["Monto"],
-            "fecha": pago["Fecha"],
-            "estado": pago["Estado"],
-            "comprobante": pago.get("Comprobante", "")
+            "monto": float(pago["Monto"]),
+            "fecha": str(pago["Fecha"]),
+            "estado": str(pago["Estado"]),
+            "comprobante": str(pago.get("Comprobante", ""))
         })
 
     return render_template(

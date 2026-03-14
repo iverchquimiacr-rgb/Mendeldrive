@@ -201,6 +201,62 @@ box-shadow:0 8px 18px rgba(0,0,0,0.25);
 }
 
 /* =========================
+BUSCADOR
+========================= */
+
+.search-box{
+
+display:flex;
+
+gap:10px;
+
+margin:20px 0;
+
+}
+
+.search-box input{
+
+flex:1;
+
+padding:10px;
+
+border-radius:8px;
+
+border:1px solid #d1d5db;
+
+font-size:14px;
+
+}
+
+.search-box button{
+
+padding:10px 16px;
+
+border:none;
+
+border-radius:8px;
+
+background:linear-gradient(
+135deg,
+var(--cyan),
+var(--purple)
+);
+
+color:white;
+
+font-weight:600;
+
+cursor:pointer;
+
+}
+
+.search-box button:hover{
+
+opacity:0.9;
+
+}
+
+/* =========================
 BOTÓN VOLVER
 ========================= */
 
@@ -256,6 +312,20 @@ Usuarios registrados
 
 <div class="admin-name">
 Administrador: {{ nombre }}
+<form method="GET" class="search-box">
+
+<input 
+type="text" 
+name="buscar"
+placeholder="Buscar por ID o nombre..."
+value="{{ request.args.get('buscar','') }}"
+>
+
+<button type="submit">
+Buscar
+</button>
+
+</form>
 </div>
 
 <table class="users-table">
