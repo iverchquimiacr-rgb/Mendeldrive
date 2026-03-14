@@ -1134,14 +1134,16 @@ def admin_pagos():
 
 @app.route("/admin/aprobar/<int:payment_id>")
 def aprobar_pago_web(payment_id):
+
     if "user_id" not in session or session["rol"] != "Admin":
         return redirect(url_for("login"))
 
     pagos_df = load_payments()
     pago = pagos_df[pagos_df["ID"] == payment_id]
 
-    if pago.empty or not pago.iloc[0].get("Comprobante"):
-        return "❌ No se puede aprobar un pago sin comprobante"
+    # 🔎 Solo verificamos que el pago exista
+    if pago.empty:
+        return "❌ Pago no encontrado"
 
     sesion = {
         "id": session["user_id"],
@@ -1160,6 +1162,7 @@ def aprobar_pago_web(payment_id):
 
 @app.route("/admin/rechazar/<int:payment_id>")
 def rechazar_pago_web(payment_id):
+
     if "user_id" not in session or session["rol"] != "Admin":
         return redirect(url_for("login"))
 
@@ -1169,8 +1172,8 @@ def rechazar_pago_web(payment_id):
     }
 
     reject_payment(payment_id, sesion)
-    return redirect(url_for("admin_pagos"))
 
+    return redirect(url_for("admin_pagos"))
 
 # ==============================
 # 🔴 VER COMPROBANTES
