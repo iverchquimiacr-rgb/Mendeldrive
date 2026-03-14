@@ -460,23 +460,39 @@ def admin_ingresos():
 def estado_cuenta():
     if "user_id" not in session:
         return redirect(url_for("login"))
-        # Si no tiene plan, mostrar estado vacío
+
+    # Crear un objeto vacío para el estado
+    class Estado:
+        def __init__(self, MontoBase=0, TotalPagado=0):
+            self.MontoBase = MontoBase
+            self.TotalPagado = TotalPagado
+
+    # Si el usuario no tiene plan, enviar estado vacío
     if session.get("sin_plan"):
+        estado = Estado()  # MontoBase = 0, TotalPagado = 0
+        pagos = []         # Lista vacía de pagos
         return render_template(
             "estado_cuenta.html",
-            saldo_pendiente=0,
-            total_pagado=0
+            estado=estado,
+            pagos=pagos,
+            nombre=session["nombre"]
         )
 
-
+    # Obtener estado real
     estado = get_account_status(session["user_id"])
 
     if estado is None:
-        return "Usuario no encontrado"
+        # Usuario no encontrado o error
+        estado = Estado()
+        pagos = []
+    else:
+        # Aquí también podrías cargar los pagos del usuario
+        pagos = []  # opcional: obtener lista de pagos si tu template los usa
 
     return render_template(
         "estado_cuenta.html",
         estado=estado,
+        pagos=pagos,
         nombre=session["nombre"]
     )
 

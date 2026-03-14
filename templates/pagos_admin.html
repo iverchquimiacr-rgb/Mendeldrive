@@ -489,22 +489,31 @@ Rechazar
 
 <td>
 
-<a
-href="/admin/eliminar_pago/{{ p.id }}"
-onclick="return confirm('¿Seguro que quieres eliminar este pago?')"
+<form 
+action="/admin/eliminar_pago/{{ p.id }}" 
+method="POST"
+style="display:inline;"
+onsubmit="return confirm('¿Seguro que quieres eliminar este pago?')"
+>
+
+<button
+type="submit"
 style="
 padding:6px 12px;
 border-radius:8px;
 background:#ff4d4d;
 color:white;
-text-decoration:none;
+border:none;
 font-size:13px;
+cursor:pointer;
 "
 >
 
 Eliminar
 
-</a>
+</button>
+
+</form>
 
 </td>
 
