@@ -226,6 +226,19 @@ font-weight:500;
 
 }
 
+/*===================
+INFO BOX
+==================*/
+.info-box{
+background:#f1f5f9;
+padding:14px;
+border-radius:10px;
+margin-bottom:18px;
+font-size:14px;
+color:#334155;
+line-height:1.5;
+}
+
 /* =========================
 PREVIEW COMPROBANTE
 ========================= */
@@ -297,6 +310,20 @@ gap:10px;
 <div class="payment-card">
 
 <h2>Registrar pago</h2>
+
+<div class="info-box">
+<p>
+Después de registrar tu pago podrás <strong>subir un comprobante de forma opcional</strong>.
+</p>
+
+<p>
+⚠️ Si realizaste el pago mediante <strong>Yape</strong>, es <strong>obligatorio subir la captura del pago</strong> para que el sistema pueda validarlo correctamente.
+</p>
+
+<p>
+Si realizaste el pago por otro medio y el administrador ya tiene confirmación del pago, el comprobante puede omitirse.
+</p>
+</div>
 
 <div class="user-info">
 Usuario: <strong>{{ nombre }}</strong>
