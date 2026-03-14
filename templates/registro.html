@@ -224,6 +224,13 @@ color:var(--cyan);
 <input type="password" name="password" required>
 </div>
 
+<!-- TURNSTILE CAPTCHA -->
+<div style="margin-top:20px; display:flex; justify-content:center;">
+<div class="cf-turnstile"
+data-sitekey="{{ turnstile_site_key }}">
+</div>
+</div>
+
 <button type="submit" class="submit">
 Crear cuenta
 </button>
@@ -241,5 +248,7 @@ Crear cuenta
 </div>
 
 </div>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 {% endblock %}

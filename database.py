@@ -100,6 +100,16 @@ def initialize_database():
             fecha TEXT
         )
         """)
+        # ==============================
+        # REGISTRO DE IPS (ANTI SPAM)
+        # ==============================
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS registro_ips (
+            id SERIAL PRIMARY KEY,
+            ip TEXT,
+           fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
     else:
         # ==============================
         # SQLITE
@@ -144,6 +154,13 @@ def initialize_database():
             Nombre TEXT,
             Monto REAL,
             Fecha TEXT
+        )
+        """)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS registro_ips (
+           ID INTEGER PRIMARY KEY,
+           IP TEXT,
+           Fecha TEXT
         )
         """)
 

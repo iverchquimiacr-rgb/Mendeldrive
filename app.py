@@ -26,7 +26,7 @@ from security import hash_password
 import json
 from functools import wraps
 import sqlite3  # 🔹 necesario para initialize_database
-
+import requests
 # ===========================
 # 🔹 Inicialización de la app
 # ===========================
@@ -94,6 +94,58 @@ def load_users_safe():
 
     # ❌ NO GUARDAR AQUÍ
     return users_df
+
+# ==============================
+# LIMITAR REGISTROS POR IP
+# ==============================
+
+def puede_registrar_ip(ip):
+
+    try:
+
+        conn = get_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+        SELECT COUNT(*)
+        FROM registro_ips
+        WHERE ip = %s
+        AND fecha > NOW() - INTERVAL '7 days'
+        """, (ip,))
+
+        count = cur.fetchone()[0]
+
+        conn.close()
+
+        return count < 2
+
+    except Exception as e:
+
+        print("Error verificando IP:", e)
+        return True
+
+# ==============================
+# GUARDAR IP DE REGISTRO
+# ==============================
+
+def registrar_ip(ip):
+
+    try:
+
+        conn = get_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+        INSERT INTO registro_ips (ip, fecha)
+        VALUES (%s, NOW())
+        """, (ip,))
+
+        conn.commit()
+        conn.close()
+
+    except Exception as e:
+
+        print("Error guardando IP:", e)
 
 #------------------
 # PROBAR
@@ -174,14 +226,6 @@ def login():
             error = "ID inválido"
 
     return render_template("login.html", error=error)
-
-# ==============================
-# REGISTRO PÚBLICO
-# ==============================
-# ==============================
-# REGISTRO PÚBLICO
-# ==============================
-
 # ==============================
 # REGISTRO PÚBLICO
 # ==============================
@@ -193,19 +237,66 @@ def registro():
 
     if request.method == "POST":
 
+        ip = request.remote_addr
+
+        if not puede_registrar_ip(ip):
+
+            error = "Solo se permiten 2 registros por semana desde la misma red"
+
+            return render_template(
+                "registro.html",
+                error=error,
+                turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY")
+            )
+
         nombre = request.form.get("nombre")
         password = request.form.get("password")
 
+        # =====================
+        # VALIDAR TURNSTILE
+        # =====================
+
+        turnstile_response = request.form.get("cf-turnstile-response")
+
+        verify = requests.post(
+            "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+            data={
+                "secret": os.environ.get("TURNSTILE_SECRET_KEY"),
+                "response": turnstile_response
+            }
+        ).json()
+
+        if not verify.get("success"):
+            error = "Verificación captcha fallida"
+
+            return render_template(
+                "registro.html",
+                error=error,
+                turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY")
+            )
+
+        # =====================
+        # VALIDACIONES
+        # =====================
+
         if not nombre or not password:
             error = "Todos los campos son obligatorios"
-            return render_template("registro.html", error=error)
+            return render_template(
+                "registro.html",
+                error=error,
+                turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY")
+            )
 
         users_df = load_users_safe()
 
         # verificar si el nombre ya existe
         if nombre.lower() in users_df["Nombre"].str.lower().values:
             error = "El usuario ya existe"
-            return render_template("registro.html", error=error)
+            return render_template(
+                "registro.html",
+                error=error,
+                turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY")
+            )
 
         try:
 
@@ -225,6 +316,8 @@ def registro():
 
             user_id = int(nuevo_usuario["ID"])
 
+            registrar_ip(ip)
+
             return redirect(url_for("registro_exitoso", user_id=user_id))
 
         except Exception as e:
@@ -232,7 +325,10 @@ def registro():
             print("ERROR REGISTRO:", e)
             error = "No se pudo crear la cuenta"
 
-    return render_template("registro.html", error=error
+    return render_template(
+        "registro.html",
+        error=error,
+        turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY")
     )
 
 # ==============================
