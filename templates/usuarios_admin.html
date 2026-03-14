@@ -370,22 +370,31 @@ Buscar
 
 <td>
 
-<a
-href="/admin/eliminar_usuario/{{ u.id }}"
-onclick="return confirm('¿Seguro que quieres eliminar este usuario?')"
+<form 
+action="/admin/eliminar_usuario/{{ u.id }}" 
+method="POST"
+style="display:inline;"
+onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')"
+>
+
+<button
+type="submit"
 style="
 padding:6px 12px;
 border-radius:8px;
 background:#ff4d4d;
 color:white;
-text-decoration:none;
+border:none;
 font-size:13px;
+cursor:pointer;
 "
 >
 
-❌Eliminar
+❌ Eliminar
 
-</a>
+</button>
+
+</form>
 
 </td>
 
