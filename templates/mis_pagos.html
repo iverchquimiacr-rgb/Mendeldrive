@@ -260,6 +260,37 @@ margin-top:20px;
 }
 
 /* =========================
+SEARCH BOX
+========================= */
+
+.search-box {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 250px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 5px rgba(14, 165, 233, 0.5);
+}
+
+.search-box button {
+    cursor: pointer;
+}
+
+/* =========================
 BOTÓN VOLVER
 ========================= */
 
@@ -318,16 +349,17 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <form method="GET" class="search-box">
 
-<input
-type="text"
-name="buscar"
-placeholder="Buscar pago por ID..."
-value="{{ request.args.get('buscar','') }}"
->
+    <input
+        type="text"
+        name="buscar"
+        placeholder="Buscar pago por ID..."
+        value="{{ request.args.get('buscar','') }}"
+        class="search-input"
+    >
 
-<button type="submit">
-Buscar
-</button>
+    <button type="submit" class="btn-primary">
+        Buscar
+    </button>
 
 </form>
 

@@ -1,5 +1,21 @@
 {% extends "base.html" %}
+<style>
+.btn-primary {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0ea5e9; /* azul destacado */
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+}
 
+.btn-primary:hover {
+    background-color: #0284c7; /* azul más oscuro al pasar el mouse */
+    transform: translateY(-2px);
+}
+</style>
 {% block title %}Cuenta creada{% endblock %}
 
 {% block content %}
@@ -35,9 +51,9 @@ Lo necesitarás para iniciar sesión.
 
 <div class="actions" style="justify-content:center">
 
-<a class="back-link" href="{{ url_for('login') }}">
-Ir al login
-</a>
+    <a href="{{ url_for('login') }}" class="btn-primary">
+        Ir al login
+    </a>
 
 </div>
 

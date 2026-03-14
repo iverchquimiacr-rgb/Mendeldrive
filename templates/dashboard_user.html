@@ -152,7 +152,21 @@ padding-left:18px;
 line-height:1.6;
 }
 
+.btn-secondary {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f59e0b; /* naranja para llamar atención */
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+}
 
+.btn-secondary:hover {
+    background-color: #d97706; /* naranja oscuro al hover */
+    transform: translateY(-2px);
+}
 /* =========================
 CARD HOVER EFFECT
 ========================= */
@@ -244,8 +258,8 @@ box-shadow:0 12px 28px rgba(0,0,0,0.25);
 
 Puedes explorar el sistema, pero para registrar pagos debes elegir uno.
 
-<a href="/seleccionar_planes" class="submit">
-Elegir plan
+<a href="/seleccionar_planes" class="btn-secondary">
+    Elegir plan
 </a>
 
 </div>
