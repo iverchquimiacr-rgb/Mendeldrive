@@ -461,16 +461,17 @@ def estado_cuenta():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    # Crear un objeto vacío para el estado
+    # Clase Estado con todos los atributos que usa el template
     class Estado:
-        def __init__(self, MontoBase=0, TotalPagado=0):
+        def __init__(self, MontoBase=0, TotalPagado=0, SaldoPendiente=0):
             self.MontoBase = MontoBase
             self.TotalPagado = TotalPagado
+            self.SaldoPendiente = SaldoPendiente
 
-    # Si el usuario no tiene plan, enviar estado vacío
+    # Usuario sin plan → enviar valores vacíos
     if session.get("sin_plan"):
-        estado = Estado()  # MontoBase = 0, TotalPagado = 0
-        pagos = []         # Lista vacía de pagos
+        estado = Estado()
+        pagos = []
         return render_template(
             "estado_cuenta.html",
             estado=estado,
@@ -478,16 +479,17 @@ def estado_cuenta():
             nombre=session["nombre"]
         )
 
-    # Obtener estado real
+    # Usuario con plan → obtener estado real
     estado = get_account_status(session["user_id"])
 
     if estado is None:
-        # Usuario no encontrado o error
         estado = Estado()
         pagos = []
     else:
-        # Aquí también podrías cargar los pagos del usuario
-        pagos = []  # opcional: obtener lista de pagos si tu template los usa
+        # Asegurarse de que el objeto tenga SaldoPendiente
+        if not hasattr(estado, "SaldoPendiente"):
+            estado.SaldoPendiente = estado.MontoBase - estado.TotalPagado
+        pagos = []  # opcional: cargar pagos si el template los necesita
 
     return render_template(
         "estado_cuenta.html",
