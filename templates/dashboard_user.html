@@ -236,6 +236,22 @@ box-shadow:0 12px 28px rgba(0,0,0,0.25);
 
 </div>
 
+{% if sin_plan %}
+
+<div class="info-box">
+
+⚠️ Aún no has elegido un plan.
+
+Puedes explorar el sistema, pero para registrar pagos debes elegir uno.
+
+<a href="/seleccionar_planes" class="submit">
+Elegir plan
+</a>
+
+</div>
+
+{% endif %}
+
 <div class="dashboard-guide">
 
 <h3>📌 Cómo usar el panel</h3>
@@ -258,6 +274,20 @@ box-shadow:0 12px 28px rgba(0,0,0,0.25);
 <p>Actualizar información personal</p>
 </a>
 
+{% if sin_plan %}
+
+<a class="card highlight-purple disabled">
+<h3>💳 Registrar pago</h3>
+<p>Debes elegir un plan primero</p>
+</a>
+
+<a class="card highlight-teal disabled">
+<h3>📤 Subir comprobante</h3>
+<p>Debes elegir un plan primero</p>
+</a>
+
+{% else %}
+
 <a href="/registrar_pago" class="card highlight-purple">
 <h3>💳 Registrar pago</h3>
 <p>Reportar un nuevo pago</p>
@@ -267,6 +297,8 @@ box-shadow:0 12px 28px rgba(0,0,0,0.25);
 <h3>📤 Subir comprobante</h3>
 <p>Adjuntar comprobante</p>
 </a>
+
+{% endif %}
 
 <a href="/estado_cuenta" class="card highlight-purple">
 <h3>📑 Estado de cuenta</h3>

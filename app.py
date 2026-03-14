@@ -178,7 +178,6 @@ def allowed_file(filename):
 # ==============================
 
 @app.route("/", methods=["GET", "POST"])
-@app.route("/", methods=["GET", "POST"])
 def login():
     error = None
 
@@ -197,7 +196,7 @@ def login():
             if not resultado:
                 return render_template("login.html", error="Credenciales incorrectas")
 
-            # 2️⃣ Cargar usuario de forma segura
+            # 2️⃣ Cargar usuario
             users_df = load_users_safe()
             user_df = users_df[users_df["ID"] == user_id]
 
@@ -211,15 +210,15 @@ def login():
             session["nombre"] = str(user["Nombre"])
             session["rol"] = str(user["Rol"])
 
+            # 🆕 Guardar si el usuario aún no tiene plan
+            session["sin_plan"] = int(user["Carpetas_asignadas"]) == 0
+
             # 4️⃣ Forzar cambio de password si aplica
             if user.get("Debe_cambiar_password", False):
                 session["forzar_cambio_password"] = True
                 return redirect(url_for("cambiar_password"))
 
-            # 🧾 Si no tiene carpetas, debe elegir planes
-            if int(user["Carpetas_asignadas"]) == 0:
-                return redirect(url_for("seleccionar_planes"))
-
+            # 🆕 Ahora SIEMPRE va al dashboard
             return redirect(url_for("dashboard"))
 
         except ValueError:
@@ -388,10 +387,17 @@ def admin_reset_database():
 @login_required
 def dashboard():
 
-    if session["rol"] == "Admin":
-        return render_template("dashboard_admin.html", nombre=session["nombre"])
-    else:
-        return render_template("dashboard_user.html", nombre=session["nombre"])
+    if session.get("rol") == "Admin":
+        return render_template(
+            "dashboard_admin.html",
+            nombre=session.get("nombre")
+        )
+
+    return render_template(
+        "dashboard_user.html",
+        nombre=session.get("nombre"),
+        sin_plan=session.get("sin_plan", False)
+    )
 
 
 # ==============================
@@ -454,6 +460,14 @@ def admin_ingresos():
 def estado_cuenta():
     if "user_id" not in session:
         return redirect(url_for("login"))
+        # Si no tiene plan, mostrar estado vacío
+    if session.get("sin_plan"):
+        return render_template(
+            "estado_cuenta.html",
+            saldo_pendiente=0,
+            total_pagado=0
+        )
+
 
     estado = get_account_status(session["user_id"])
 
@@ -785,7 +799,7 @@ def cambiar_password():
         # 🔓 Limpiar sesión
         session.pop("forzar_cambio_password", None)
 
-        return redirect(url_for("seleccionar_planes"))
+        return redirect(url_for("dashboard"))
 
     return render_template("cambiar_password.html")
 
@@ -884,7 +898,12 @@ def perfil():
 def registrar_pago():
     if "user_id" not in session:
         return redirect(url_for("login"))
-
+    # 🔒 Bloquear si no tiene plan
+    if session.get("sin_plan"):
+        return render_template(
+            "accion_bloqueada.html",
+            mensaje="Debes elegir un plan antes de registrar pagos."
+        )
     mensaje = None
     comprobante_url = None
     archivo_comprobante = None
@@ -903,7 +922,9 @@ def registrar_pago():
 
             # obtener ultimo pago
             pagos_df = load_payments()
-            ultimo_pago = pagos_df.iloc[-1]
+            ultimo_pago = pagos_df[
+                pagos_df["Usuario_ID"] == session["user_id"]
+            ].iloc[-1]
             payment_id = int(ultimo_pago["ID"])
 
             # generar imagen comprobante
@@ -941,11 +962,21 @@ def registrar_pago():
 
 @app.route("/subir_comprobante", methods=["GET", "POST"])
 def subir_comprobante():
+
     if "user_id" not in session:
         return redirect(url_for("login"))
 
+    # 🔒 Bloquear si no tiene plan
+    if session.get("sin_plan"):
+        return render_template(
+            "accion_bloqueada.html",
+            mensaje="Debes elegir un plan antes de subir comprobantes."
+        )
     mensaje = None
     pagos_df = load_payments()
+
+    # 🔒 asegurar tipo correcto
+    pagos_df["ID"] = pagos_df["ID"].astype(int)
 
     pagos_pendientes = pagos_df[
         (pagos_df["Usuario_ID"] == session["user_id"]) &
@@ -1217,7 +1248,7 @@ def descargar_comprobante(filename):
 # ELIMINAR COMPROBANTE
 #=============================
 
-@app.route("/admin/eliminar_comprobante/<int:comp_id>")
+@app.route("/admin/eliminar_comprobante/<int:comp_id>", methods=["POST"])
 @admin_required
 def eliminar_comprobante(comp_id):
 
@@ -1296,7 +1327,7 @@ def mis_comprobantes():
 # ELIMINAR PAGO
 #=============================
 
-@app.route("/admin/eliminar_pago/<int:pago_id>")
+@app.route("/admin/eliminar_pago/<int:pago_id>", methods=["POST"])
 @admin_required
 def eliminar_pago(pago_id):
 
@@ -1332,7 +1363,7 @@ def eliminar_pago(pago_id):
 # ELIMINAR USUARIO
 #=============================
 
-@app.route("/admin/eliminar_usuario/<int:user_id>")
+@app.route("/admin/eliminar_usuario/<int:user_id>", methods=["POST"])
 @admin_required
 def eliminar_usuario(user_id):
 
