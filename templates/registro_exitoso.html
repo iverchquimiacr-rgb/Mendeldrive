@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Cuenta creada{% endblock %}
+
+{% block content %}
+
+<div class="create-container">
+
+<div class="create-card">
+
+<h2>Cuenta creada correctamente</h2>
+
+<p style="margin-top:20px;font-size:16px">
+
+Tu <b>ID de usuario</b> es:
+
+</p>
+
+<div style="
+font-size:28px;
+font-weight:700;
+margin:20px 0;
+color:#0ea5e9;
+text-align:center;
+">
+{{ user_id }}
+</div>
+
+<p style="text-align:center">
+
+Guarda este ID.  
+Lo necesitarás para iniciar sesión.
+
+</p>
+
+<div class="actions" style="justify-content:center">
+
+<a class="back-link" href="{{ url_for('login') }}">
+Ir al login
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

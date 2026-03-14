@@ -174,6 +174,79 @@ def login():
             error = "ID inválido"
 
     return render_template("login.html", error=error)
+
+# ==============================
+# REGISTRO PÚBLICO
+# ==============================
+# ==============================
+# REGISTRO PÚBLICO
+# ==============================
+
+# ==============================
+# REGISTRO PÚBLICO
+# ==============================
+
+@app.route("/registro", methods=["GET", "POST"])
+def registro():
+
+    error = None
+
+    if request.method == "POST":
+
+        nombre = request.form.get("nombre")
+        password = request.form.get("password")
+
+        if not nombre or not password:
+            error = "Todos los campos son obligatorios"
+            return render_template("registro.html", error=error)
+
+        users_df = load_users_safe()
+
+        # verificar si el nombre ya existe
+        if nombre.lower() in users_df["Nombre"].str.lower().values:
+            error = "El usuario ya existe"
+            return render_template("registro.html", error=error)
+
+        try:
+
+            # crear usuario
+            create_user_web(
+                nombre=nombre,
+                password=password,
+                rol="Usuario"
+            )
+
+            # volver a cargar usuarios para obtener el ID creado
+            users_df = load_users_safe()
+
+            nuevo_usuario = users_df[
+                users_df["Nombre"].str.lower() == nombre.lower()
+            ].iloc[-1]
+
+            user_id = int(nuevo_usuario["ID"])
+
+            return redirect(url_for("registro_exitoso", user_id=user_id))
+
+        except Exception as e:
+
+            print("ERROR REGISTRO:", e)
+            error = "No se pudo crear la cuenta"
+
+    return render_template("registro.html", error=error
+    )
+
+# ==============================
+# REGISTRO EXITOSO
+# ==============================
+
+@app.route("/registro_exitoso/<int:user_id>")
+def registro_exitoso(user_id):
+
+    return render_template(
+        "registro_exitoso.html",
+        user_id=user_id
+    )
+
 #--------------------
 # RESET 
 #--------------------

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Crear cuenta{% endblock %}
 
 {% block extra_css %}
 
@@ -10,32 +10,29 @@
 CONTENEDOR
 ========================= */
 
-.login-container{
+.create-container{
 display:flex;
 justify-content:center;
-align-items:center;
-min-height:70vh;
+margin-top:50px;
 }
 
 /* =========================
 CARD
 ========================= */
 
-.login-card{
+.create-card{
 
-width:380px;
+width:420px;
 
 background:white;
 
 color:#0f172a;
 
-padding:40px;
+padding:36px;
 
 border-radius:18px;
 
 box-shadow:0 20px 45px rgba(0,0,0,0.25);
-
-animation:fadeIn 0.6s ease;
 
 }
 
@@ -43,13 +40,11 @@ animation:fadeIn 0.6s ease;
 TÍTULO
 ========================= */
 
-.login-card h2{
+.create-card h2{
 
-text-align:center;
+margin-bottom:22px;
 
-margin-bottom:25px;
-
-font-size:26px;
+font-size:24px;
 
 background:linear-gradient(
 90deg,
@@ -68,20 +63,16 @@ FORMULARIO
 ========================= */
 
 .form-group{
-
-margin-bottom:20px;
-
 display:flex;
-
 flex-direction:column;
-
+margin-bottom:18px;
 }
 
 .form-group label{
 
-font-size:14px;
-
 margin-bottom:6px;
+
+font-size:14px;
 
 font-weight:500;
 
@@ -116,24 +107,22 @@ box-shadow:0 0 0 3px rgba(0,212,255,0.18);
 }
 
 /* =========================
-BOTÓN
+BOTÓN CREAR
 ========================= */
 
-.btn-primary{
+.submit{
 
-width:100%;
+display:inline-block;
 
-margin-top:10px;
+margin-top:20px;
 
-padding:12px;
-
-border:none;
-
-border-radius:10px;
+padding:12px 26px;
 
 font-weight:600;
 
 color:white;
+
+border:none;
 
 cursor:pointer;
 
@@ -143,17 +132,19 @@ var(--emerald),
 var(--cyan)
 );
 
-box-shadow:0 6px 16px rgba(0,0,0,0.2);
+border-radius:10px;
+
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
 
 transition:all 0.25s ease;
 
 }
 
-.btn-primary:hover{
+.submit:hover{
 
-transform:translateY(-2px);
+transform:translateY(-3px);
 
-box-shadow:0 12px 26px rgba(0,0,0,0.25);
+box-shadow:0 12px 26px rgba(0,0,0,0.28);
 
 }
 
@@ -180,20 +171,26 @@ border-left:4px solid #ef4444;
 }
 
 /* =========================
-ANIMACIÓN
+ACCIONES
 ========================= */
 
-@keyframes fadeIn{
+.actions{
 
-from{
-opacity:0;
-transform:translateY(20px);
+margin-top:20px;
+
+display:flex;
+
+justify-content:center;
+
 }
 
-to{
-opacity:1;
-transform:translateY(0);
-}
+.login-link{
+
+text-decoration:none;
+
+font-weight:600;
+
+color:var(--cyan);
 
 }
 
@@ -203,11 +200,11 @@ transform:translateY(0);
 
 {% block content %}
 
-<div class="login-container">
+<div class="create-container">
 
-<div class="login-card">
+<div class="create-card">
 
-<h2>Iniciar sesión</h2>
+<h2>Crear cuenta</h2>
 
 {% if error %}
 <div class="error-box">
@@ -215,35 +212,34 @@ transform:translateY(0);
 </div>
 {% endif %}
 
-<form method="post">
+<form method="POST">
 
 <div class="form-group">
-<label>ID de usuario</label>
-<input type="number" name="user_id" required>
+<label>Nombre</label>
+<input type="text" name="nombre" required>
 </div>
 
 <div class="form-group">
-<label>Password</label>
+<label>Contraseña</label>
 <input type="password" name="password" required>
 </div>
 
-<button type="submit" class="btn-primary">
-Ingresar
+<button type="submit" class="submit">
+Crear cuenta
 </button>
 
 </form>
 
-</div>
-<div style="margin-top:18px;text-align:center">
+<div class="actions">
 
-<a href="{{ url_for('registro') }}"
-style="font-weight:600;color:var(--cyan);text-decoration:none;">
-
-Crear cuenta
-
+<a class="login-link" href="{{ url_for('login') }}">
+¿Ya tienes cuenta? Inicia sesión
 </a>
 
 </div>
+
+</div>
+
 </div>
 
 {% endblock %}
