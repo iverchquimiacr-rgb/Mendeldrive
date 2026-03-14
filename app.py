@@ -480,15 +480,24 @@ def estado_cuenta():
         )
 
     # Usuario con plan → obtener estado real
-    estado = get_account_status(session["user_id"])
+    raw_estado = get_account_status(session["user_id"])
 
-    if estado is None:
+    if raw_estado is None:
         estado = Estado()
         pagos = []
     else:
-        # Asegurarse de que el objeto tenga SaldoPendiente
-        if not hasattr(estado, "SaldoPendiente"):
-            estado.SaldoPendiente = estado.MontoBase - estado.TotalPagado
+        # Si raw_estado es un dict, convertirlo a Estado
+        if isinstance(raw_estado, dict):
+            monto_base = raw_estado.get("MontoBase", 0)
+            total_pagado = raw_estado.get("TotalPagado", 0)
+            saldo = monto_base - total_pagado
+            estado = Estado(MontoBase=monto_base, TotalPagado=total_pagado, SaldoPendiente=saldo)
+        else:
+            # Si es objeto, asegurarse de que tenga SaldoPendiente
+            estado = raw_estado
+            if not hasattr(estado, "SaldoPendiente"):
+                estado.SaldoPendiente = getattr(estado, "MontoBase", 0) - getattr(estado, "TotalPagado", 0)
+
         pagos = []  # opcional: cargar pagos si el template los necesita
 
     return render_template(
