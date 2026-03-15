@@ -137,6 +137,8 @@ font-size:13px;
 
 opacity:0.8;
 
+text-align: center;
+
 }
 
 /* =========================
@@ -145,23 +147,29 @@ DASHBOARD GUIDE
 
 .dashboard-guide{
 
-background:rgba(255,255,255,0.65);
+background:rgba(255,255,255,0.12);
 
-backdrop-filter:blur(6px);
+backdrop-filter:blur(10px);
 
-padding:22px;
+border:1px solid rgba(255,255,255,0.15);
 
-border-radius:12px;
+padding:26px;
 
-box-shadow:0 6px 18px rgba(0,0,0,0.08);
+border-radius:16px;
 
-margin-bottom:28px;
+box-shadow:0 10px 28px rgba(0,0,0,0.12);
+
+margin-top:40px;
+
+margin-bottom:30px;
 
 font-size:14px;
 
-color:#334155;
+color:white;
 
-text-align:center;
+text-align:left;
+
+transition:all 0.25s ease;
 
 }
 
@@ -171,12 +179,20 @@ list-style:none;
 
 padding:0;
 
-line-height:1.8;
+line-height:1.9;
+
+margin-top:12px;
 
 }
 
 .dashboard-guide h3{
-margin-bottom:10px;
+
+margin-bottom:14px;
+
+font-size:18px;
+
+font-weight:600;
+
 }
 
 .btn-secondary {
@@ -211,6 +227,8 @@ border-radius:14px;
 margin-bottom:30px;
 
 color:white;
+
+text-align: center;
 
 }
 
@@ -339,7 +357,7 @@ Usuario
 <p>
 Puedes explorar el sistema, pero para registrar pagos o subir comprobantes primero debes elegir un plan.
 </p>
-
+<br>
 <a href="/seleccionar_planes" class="btn-secondary">
 Elegir mi plan
 </a>
@@ -406,16 +424,16 @@ Si ya te suscribiste a un plan y este mensaje sigue apareciendo,
 </div>
 
 <div class="dashboard-guide">
-
+<br>
 <h3>Guía rápida del panel</h3>
 
 <ul>
-<li><strong>Mi perfil:</strong> actualizar tu información personal.</li>
-<li><strong>Registrar pago:</strong> reportar un pago realizado.</li>
-<li><strong>Subir comprobante:</strong> adjuntar comprobantes de pago.</li>
-<li><strong>Estado de cuenta:</strong> revisar tu balance actual.</li>
-<li><strong>Mis pagos:</strong> ver el historial de todos tus pagos.</li>
-<li><strong>Catálogo:</strong> explorar los productos disponibles.</li>
+<li><strong>Mi perfil:</strong> Para acceder a información relevante (datos generales, carpetas asignadas, estado financiero y resumen de tus pagos).</li>
+<li><strong>Registrar pago:</strong> Para reportar un pago realizado.</li>
+<li><strong>Subir comprobante:</strong> Para adjuntar comprobantes de pago (Muy importante si utilizaste <strong>yape</strong>).</li>
+<li><strong>Estado de cuenta:</strong> Para revisar tu monto base, total pagado y salgo pendiente.</li>
+<li><strong>Mis pagos:</strong> Para ver el historial de todos tus pagos.</li>
+<li><strong>Catálogo:</strong> Para ver los drives disponibles y decidir comprar alguno. El acceso se consigue brindando tu <strong>correo electrónico</strong>.</li>
 </ul>
 
 </div>
