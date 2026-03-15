@@ -389,7 +389,7 @@ S/ {{ "%.2f"|format(p.monto) }}
 
 {% if p.comprobante %}
 
-<a href="{{ url_for('ver_comprobante_usuario', filename=p.comprobante) }}" target="_blank" class="view-btn">
+<a href="{{ url_for('descargar_comprobante', filename=p.comprobante) }}" target="_blank" class="view-btn">
 Ver
 </a>
 
