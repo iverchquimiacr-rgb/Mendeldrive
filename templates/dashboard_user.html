@@ -125,15 +125,35 @@ border-left:5px solid #f59e0b;
 DASHBOARD GUIDE
 ========================= */
 
+.info-extra{
+
+margin-top:16px;
+
+padding-top:14px;
+
+border-top:1px solid rgba(0,0,0,0.08);
+
+font-size:13px;
+
+opacity:0.8;
+
+}
+
+/* =========================
+DASHBOARD GUIDE
+========================= */
+
 .dashboard-guide{
 
-background:white;
+background:rgba(255,255,255,0.65);
 
-padding:18px;
+backdrop-filter:blur(6px);
+
+padding:22px;
 
 border-radius:12px;
 
-box-shadow:0 6px 18px rgba(0,0,0,0.10);
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
 
 margin-bottom:28px;
 
@@ -141,15 +161,22 @@ font-size:14px;
 
 color:#334155;
 
+text-align:center;
+
+}
+
+.dashboard-guide ul{
+
+list-style:none;
+
+padding:0;
+
+line-height:1.8;
+
 }
 
 .dashboard-guide h3{
 margin-bottom:10px;
-}
-
-.dashboard-guide ul{
-padding-left:18px;
-line-height:1.6;
 }
 
 .btn-secondary {
@@ -167,6 +194,26 @@ line-height:1.6;
     background-color: #d97706; /* naranja oscuro al hover */
     transform: translateY(-2px);
 }
+/* =========================
+INFO BOX
+========================= */
+
+.info-box{
+
+background:rgba(255,255,255,0.08);
+
+border:1px solid rgba(255,255,255,0.08);
+
+padding:22px;
+
+border-radius:14px;
+
+margin-bottom:30px;
+
+color:white;
+
+}
+
 /* =========================
 CARD HOVER EFFECT
 ========================= */
@@ -250,17 +297,61 @@ box-shadow:0 12px 28px rgba(0,0,0,0.25);
 
 </div>
 
+<div class="dashboard-summary dashboard-animate">
+
+<h2>Hola {{ nombre }} 👋</h2>
+
+<p>Gestiona tus pagos y revisa tu cuenta desde este panel.</p>
+
+<div class="summary-grid">
+
+<div class="summary-item">
+<strong>Plan</strong><br>
+{% if sin_plan %}
+Sin plan
+{% else %}
+Activo
+{% endif %}
+</div>
+
+<div class="summary-item">
+<strong>Estado</strong><br>
+{% if sin_plan %}
+<span class="status-pending">Pendiente</span>
+{% else %}
+<span class="status-active">Activo</span>
+{% endif %}
+</div>
+
+<div class="summary-item">
+<strong>Panel</strong><br>
+Usuario
+</div>
+
+</div>
+
+</div>
+
 {% if sin_plan %}
 
 <div class="info-box">
 
-⚠️ Aún no has elegido un plan.
+<h3>⚠️ Aún no tienes un plan activo</h3>
 
-Puedes explorar el sistema, pero para registrar pagos debes elegir uno.
+<p>
+Puedes explorar el sistema, pero para registrar pagos o subir comprobantes primero debes elegir un plan.
+</p>
 
 <a href="/seleccionar_planes" class="btn-secondary">
-    Elegir plan
+Elegir mi plan
 </a>
+
+<div class="info-extra">
+
+Si ya te suscribiste a un plan y este mensaje sigue apareciendo,
+<strong>cierra sesión y vuelve a ingresar</strong> para actualizar tu panel.
+
+</div>
 
 </div>
 
@@ -268,7 +359,7 @@ Puedes explorar el sistema, pero para registrar pagos debes elegir uno.
 
 <div class="dashboard-guide">
 
-<h3>📌 Cómo usar el panel</h3>
+<h3>Guía rápida del panel</h3>
 
 <ul>
 <li><strong>Mi perfil:</strong> actualizar tu información personal.</li>
@@ -281,51 +372,51 @@ Puedes explorar el sistema, pero para registrar pagos debes elegir uno.
 
 </div>
 
-<div class="card-grid">
+<div class="card-grid dashboard-animate">
 
 <a href="/perfil" class="card highlight-blue">
-<h3>👤 Mi perfil</h3>
+<h3><span class="card-icon">👤</span> Mi perfil</h3>
 <p>Actualizar información personal</p>
 </a>
 
 {% if sin_plan %}
 
-<a class="card highlight-purple disabled">
-<h3>💳 Registrar pago</h3>
+<a class="card highlight-purple card-disabled">
+<h3><span class="card-icon">💳</span> Registrar pago</h3>
 <p>Debes elegir un plan primero</p>
 </a>
 
-<a class="card highlight-teal disabled">
-<h3>📤 Subir comprobante</h3>
+<a class="card highlight-teal card-disabled">
+<h3><span class="card-icon">📤</span> Subir comprobante</h3>
 <p>Debes elegir un plan primero</p>
 </a>
 
 {% else %}
 
 <a href="/registrar_pago" class="card highlight-purple">
-<h3>💳 Registrar pago</h3>
+<h3><span class="card-icon">💳</span> Registrar pago</h3>
 <p>Reportar un nuevo pago</p>
 </a>
 
 <a href="/subir_comprobante" class="card highlight-teal">
-<h3>📤 Subir comprobante</h3>
+<h3><span class="card-icon">📤</span> Subir comprobante</h3>
 <p>Adjuntar comprobante</p>
 </a>
 
 {% endif %}
 
 <a href="/estado_cuenta" class="card highlight-purple">
-<h3>📑 Estado de cuenta</h3>
+<h3><span class="card-icon">📑</span> Estado de cuenta</h3>
 <p>Consultar tu balance</p>
 </a>
 
 <a href="/mis_pagos" class="card highlight-red">
-<h3>📋 Mis pagos</h3>
+<h3><span class="card-icon">📋</span> Mis pagos</h3>
 <p>Historial de pagos</p>
 </a>
 
 <a href="/catalogo" class="card highlight-orange">
-<h3>📂 Catálogo</h3>
+<h3><span class="card-icon">📂</span> Catálogo</h3>
 <p>Explorar productos</p>
 </a>
 

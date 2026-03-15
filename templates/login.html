@@ -11,10 +11,16 @@ CONTENEDOR
 ========================= */
 
 .login-container{
+
 display:flex;
 justify-content:center;
 align-items:center;
+gap:30px;
+
+flex-wrap:wrap;
+
 min-height:70vh;
+
 }
 
 /* =========================
@@ -36,6 +42,73 @@ border-radius:18px;
 box-shadow:0 20px 45px rgba(0,0,0,0.25);
 
 animation:fadeIn 0.6s ease;
+
+}
+
+/* =========================
+CREATE CARD
+========================= */
+
+.create-card{
+
+width:300px;
+
+background:linear-gradient(
+135deg,
+var(--cyan),
+var(--purple)
+);
+
+color:white;
+
+padding:35px;
+
+border-radius:18px;
+
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
+
+text-align:center;
+
+animation:fadeIn 0.6s ease;
+
+}
+
+.create-card h3{
+margin-bottom:12px;
+font-size:22px;
+}
+
+.create-card p{
+font-size:14px;
+opacity:0.9;
+margin-bottom:20px;
+}
+
+.btn-create{
+
+display:inline-block;
+
+background:white;
+
+color:#0f172a;
+
+padding:10px 20px;
+
+border-radius:10px;
+
+font-weight:600;
+
+text-decoration:none;
+
+transition:all 0.25s ease;
+
+}
+
+.btn-create:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
 
 }
 
@@ -271,9 +344,15 @@ Ingresar
 
 </form>
 
-<div class="create-account">
+<div class="create-card">
 
-<a href="{{ url_for('registro') }}">
+<h3>¿No tienes cuenta?</h3>
+
+<p>
+Crea una cuenta para acceder al sistema y gestionar tus pagos.
+</p>
+
+<a href="{{ url_for('registro') }}" class="btn-create">
 Crear cuenta
 </a>
 

@@ -117,7 +117,7 @@ def puede_registrar_ip(ip):
 
         conn.close()
 
-        return count < 40
+        return count < 50
 
     except Exception as e:
 
