@@ -1,16 +1,142 @@
 {% extends "base.html" %}
 
+{% block extra_css %}
+
+<style>
+
+/* =========================
+CONTENEDOR
+========================= */
+
+.blocked-container{
+
+display:flex;
+
+justify-content:center;
+
+margin-top:70px;
+
+}
+
+/* =========================
+CARD
+========================= */
+
+.blocked-card{
+
+max-width:420px;
+
+background:white;
+
+color:#0f172a;
+
+padding:35px;
+
+border-radius:18px;
+
+box-shadow:0 20px 50px rgba(0,0,0,0.25);
+
+text-align:center;
+
+}
+
+/* =========================
+TÍTULO
+========================= */
+
+.blocked-card h2{
+
+font-size:24px;
+
+margin-bottom:10px;
+
+background:linear-gradient(
+90deg,
+var(--cyan),
+var(--purple)
+);
+
+background-clip:text;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+/* =========================
+MENSAJE
+========================= */
+
+.blocked-card p{
+
+font-size:14px;
+
+color:#64748b;
+
+margin-bottom:25px;
+
+line-height:1.6;
+
+}
+
+/* =========================
+BOTÓN
+========================= */
+
+.plan-btn{
+
+display:inline-block;
+
+padding:12px 26px;
+
+text-decoration:none;
+
+color:white;
+
+font-weight:600;
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+
+border-radius:10px;
+
+box-shadow:0 6px 14px rgba(0,0,0,0.2);
+
+transition:all 0.25s ease;
+
+}
+
+.plan-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 12px 24px rgba(0,0,0,0.28);
+
+}
+
+</style>
+
+{% endblock %}
+
 {% block content %}
 
-<div class="payment-card">
+<div class="blocked-container">
 
-<h2>Acción no disponible</h2>
+<div class="blocked-card">
 
-<p>{{ mensaje }}</p>
+<h2>⚠ Acción no disponible</h2>
 
-<a href="/seleccionar_planes" class="submit">
+<p>
+{{ mensaje }}
+</p>
+
+<a href="/seleccionar_planes" class="plan-btn">
 Elegir plan
 </a>
+
+</div>
 
 </div>
 

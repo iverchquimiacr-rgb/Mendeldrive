@@ -23,6 +23,18 @@ min-height:70vh;
 
 }
 
+.login-subtitle{
+
+text-align:center;
+
+font-size:14px;
+
+opacity:0.7;
+
+margin-bottom:20px;
+
+}
+
 /* =========================
 CARD
 ========================= */
@@ -268,6 +280,54 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 }
 
+.btn-primary:active{
+
+transform:scale(0.98);
+
+}
+
+/* =========================
+PASSWORD WRAPPER
+========================= */
+
+.password-wrapper{
+
+position:relative;
+
+display:flex;
+
+align-items:center;
+
+}
+
+/* botón ojo */
+
+.toggle-password{
+
+position:absolute;
+
+right:10px;
+
+background:none;
+
+border:none;
+
+cursor:pointer;
+
+font-size:16px;
+
+opacity:0.6;
+
+transition:0.2s;
+
+}
+
+.toggle-password:hover{
+
+opacity:1;
+
+}
+
 /* =========================
 ERROR
 ========================= */
@@ -278,7 +338,7 @@ background:#fee2e2;
 
 color:#991b1b;
 
-padding:12px;
+padding:14px;
 
 border-radius:10px;
 
@@ -286,7 +346,9 @@ margin-bottom:20px;
 
 font-size:14px;
 
-border-left:4px solid #ef4444;
+border-left:5px solid #ef4444;
+
+box-shadow:0 6px 14px rgba(0,0,0,0.1);
 
 }
 
@@ -312,6 +374,22 @@ transform:translateY(0);
 
 {% endblock %}
 
+<script>
+
+function togglePassword(){
+
+const field = document.getElementById("passwordField");
+
+if(field.type === "password"){
+field.type = "text";
+}else{
+field.type = "password";
+}
+
+}
+
+</script>
+
 {% block content %}
 
 <div class="login-container">
@@ -319,6 +397,10 @@ transform:translateY(0);
 <div class="login-card">
 
 <h2>Iniciar sesión</h2>
+
+<p class="login-subtitle">
+Accede con tu ID de usuario y contraseña
+</p>
 
 {% if error %}
 <div class="error-box">
@@ -330,12 +412,34 @@ transform:translateY(0);
 
 <div class="form-group">
 <label>ID de usuario</label>
-<input type="number" name="user_id" required>
+<input type="text" name="user_id" placeholder="Ej: 24" required autofocus>
 </div>
 
 <div class="form-group">
+
 <label>Password</label>
-<input type="password" name="password" required>
+
+<div class="password-wrapper">
+
+<input 
+type="password" 
+name="password" 
+id="passwordField"
+placeholder="Tu contraseña" 
+required
+>
+
+<button 
+type="button" 
+class="toggle-password"
+onclick="togglePassword()"
+id="toggleIcon"
+>
+🙈
+</button>
+
+</div>
+
 </div>
 
 <button type="submit" class="btn-primary">
@@ -343,6 +447,8 @@ Ingresar
 </button>
 
 </form>
+
+</div>
 
 <div class="create-card">
 
@@ -359,6 +465,28 @@ Crear cuenta
 </div>
 
 </div>
-</div>
+
+<script>
+
+function togglePassword(){
+
+const field = document.getElementById("passwordField");
+const icon = document.getElementById("toggleIcon");
+
+if(field.type === "password"){
+
+field.type = "text";
+icon.innerHTML = "🙉";
+
+}else{
+
+field.type = "password";
+icon.innerHTML = "🙈";
+
+}
+
+}
+
+</script>
 
 {% endblock %}

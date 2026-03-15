@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+saldo pen{% extends "base.html" %}
 
 {% block title %}Subir comprobante{% endblock %}
 
@@ -173,6 +173,24 @@ box-shadow:0 12px 24px rgba(0,0,0,0.25);
 }
 
 /* =========================
+HEADER
+========================= */
+
+.upload-header{
+margin-bottom:20px;
+}
+
+.upload-subtitle{
+
+margin-top:4px;
+
+color:#64748b;
+
+font-size:14px;
+
+}
+
+/* =========================
 MENSAJE ÉXITO
 ========================= */
 
@@ -189,6 +207,22 @@ border-radius:10px;
 margin-bottom:20px;
 
 font-weight:500;
+
+}
+
+/* =========================
+FILE HINT
+========================= */
+
+.file-hint{
+
+font-size:12px;
+
+color:#64748b;
+
+margin-top:6px;
+
+display:block;
 
 }
 
@@ -260,17 +294,23 @@ gap:10px;
 
 <div class="upload-container">
 
-<div class="upload-card">
+<div class="card upload-card">
 
-<h2>Subir comprobante de pago</h2>
+<div class="upload-header">
 
-<div class="user-info">
+<h2>📄 Subir comprobante de pago</h2>
+
+<p class="upload-subtitle">
 Usuario: <strong>{{ nombre }}</strong>
+</p>
+
 </div>
 
 {% if mensaje %}
 <div class="success-box">
-{{ mensaje }}
+
+✅ {{ mensaje }}
+
 </div>
 {% endif %}
 
@@ -300,18 +340,30 @@ Pago #{{ p.ID }} — S/ {{ p.Monto }} — {{ p.Fecha }}
 
 <input type="file" name="archivo" required>
 
+<small class="file-hint">
+Formatos permitidos: JPG, PNG o PDF
+</small>
+
 </div>
 
-<button type="submit" class="submit">
-Subir comprobante
+<button type="submit" class="btn-primary">
+
+📤 Subir comprobante
+
 </button>
 
 </form>
 
 <div class="actions">
 
-<a class="back-link" href="/dashboard">
+<a href="/dashboard">
+
+<button class="btn-secondary">
+
 ⬅ Volver al panel
+
+</button>
+
 </a>
 
 </div>

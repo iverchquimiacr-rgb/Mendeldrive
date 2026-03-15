@@ -180,6 +180,20 @@ box-shadow:0 8px 18px rgba(0,0,0,0.28);
 }
 
 /* =========================
+SUBTÍTULO
+========================= */
+
+.catalog-subtitle{
+
+margin-top:4px;
+
+font-size:14px;
+
+color:#64748b;
+
+}
+
+/* =========================
 ACCIONES
 ========================= */
 
@@ -187,6 +201,16 @@ ACCIONES
 margin-top:22px;
 }
 
+
+/* =========================
+TABLE WRAPPER
+========================= */
+
+.table-wrapper{
+
+overflow-x:auto;
+
+}
 /* =========================
 BOTÓN VOLVER
 ========================= */
@@ -233,16 +257,21 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 {% block content %}
 
-<div class="catalog-container">
+<div class="card catalog-container">
 
 <div class="catalog-header">
 
-<h1>Catálogo de Productos</h1>
-<p>Usuario: <strong>{{ nombre }}</strong></p>
+<h1>📚 Catálogo de productos</h1>
+
+<p class="catalog-subtitle">
+Usuario: <strong>{{ nombre }}</strong>
+</p>
 
 </div>
 
-<table class="catalog-table">
+<div class="table-wrapper">
+
+<table class="table-modern catalog-table">
 
 <tr>
 <th>ID</th>
@@ -268,7 +297,9 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 <td>
 
 {% if p.vendible %}
-<span class="badge-paid">De pago</span>
+<span class="badge-paid">
+💳 De pago
+</span>
 {% else %}
 <span class="badge-free">Gratis</span>
 {% endif %}
@@ -277,8 +308,14 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <td>
 
-<a href="{{ p.link }}" target="_blank" class="drive-btn">
-Abrir Drive
+<a href="{{ p.link }}" target="_blank">
+
+<button class="btn-secondary">
+
+📂 Abrir Drive
+
+</button>
+
 </a>
 
 </td>
@@ -289,10 +326,18 @@ Abrir Drive
 
 </table>
 
+</div>
+
 <div class="actions">
 
-<a class="back-link" href="/dashboard">
+<a href="/dashboard">
+
+<button class="btn-secondary">
+
 ⬅ Volver al panel
+
+</button>
+
 </a>
 
 </div>

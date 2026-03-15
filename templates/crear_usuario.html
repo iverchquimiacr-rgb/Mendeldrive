@@ -109,6 +109,24 @@ box-shadow:0 0 0 3px rgba(0,212,255,0.18);
 }
 
 /* =========================
+HEADER
+========================= */
+
+.create-header{
+margin-bottom:20px;
+}
+
+.create-subtitle{
+
+margin-top:4px;
+
+font-size:14px;
+
+color:#64748b;
+
+}
+
+/* =========================
 BOTÓN CREAR
 ========================= */
 
@@ -214,9 +232,17 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <div class="create-container">
 
-<div class="create-card">
+<div class="card create-card">
 
-<h2>Crear nuevo usuario</h2>
+<div class="create-header">
+
+<h2>👤 Crear nuevo usuario</h2>
+
+<p class="create-subtitle">
+Registrar una nueva cuenta en el sistema
+</p>
+
+</div>
 
 <form method="POST">
 
@@ -224,7 +250,12 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <label>Nombre</label>
 
-<input type="text" name="nombre" required>
+<input 
+type="text" 
+name="nombre" 
+placeholder="Nombre del usuario"
+required
+>
 
 </div>
 
@@ -232,7 +263,12 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <label>Contraseña</label>
 
-<input type="password" name="password" required>
+<input 
+type="password" 
+name="password" 
+placeholder="Tu contraseña"
+required
+>
 
 </div>
 
@@ -249,16 +285,24 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 </div>
 
-<button type="submit" class="submit">
-Crear usuario
+<button type="submit" class="btn-primary">
+
+➕ Crear usuario
+
 </button>
 
 </form>
 
 <div class="actions">
 
-<a class="back-link" href="/dashboard">
+<a href="/dashboard">
+
+<button class="btn-secondary">
+
 ⬅ Volver al panel
+
+</button>
+
 </a>
 
 </div>

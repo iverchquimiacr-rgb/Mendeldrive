@@ -201,6 +201,16 @@ box-shadow:0 8px 18px rgba(0,0,0,0.25);
 }
 
 /* =========================
+TABLE WRAPPER
+========================= */
+
+.table-wrapper{
+
+overflow-x:auto;
+
+}
+
+/* =========================
 BUSCADOR
 ========================= */
 
@@ -257,6 +267,50 @@ opacity:0.9;
 }
 
 /* =========================
+HEADER
+========================= */
+
+.users-header{
+
+margin-bottom:20px;
+
+}
+
+/* =========================
+DELETE BUTTON
+========================= */
+
+.delete-btn{
+
+padding:7px 14px;
+
+border-radius:8px;
+
+background:#ef4444;
+
+color:white;
+
+border:none;
+
+font-size:13px;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:all 0.2s ease;
+
+}
+
+.delete-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 6px 14px rgba(0,0,0,0.25);
+
+}
+
+/* =========================
 BOTÓN VOLVER
 ========================= */
 
@@ -304,14 +358,17 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <div class="users-container">
 
-<div class="users-card">
+<div class="card users-card">
 
-<div class="page-title">
-Usuarios registrados
-</div>
+<div class="users-header">
 
-<div class="admin-name">
-Administrador: {{ nombre }}
+<h1 class="page-title">
+👥 Usuarios registrados
+</h1>
+
+<p class="admin-name">
+Administrador: <strong>{{ nombre }}</strong>
+</p>
 <form method="GET" class="search-box">
 
 <input 
@@ -322,13 +379,18 @@ value="{{ request.args.get('buscar','') }}"
 >
 
 <button type="submit">
-Buscar
+
+🔎 Buscar
+
 </button>
 
 </form>
+
 </div>
 
-<table class="users-table">
+<div class="table-wrapper">
+
+<table class="table-modern users-table">
 
 <tr>
 <th>ID</th>
@@ -363,8 +425,16 @@ Buscar
 <td><strong>S/ {{ "%.2f"|format(u.saldo) }}</strong></td>
 
 <td>
-<a class="profile-btn" href="/admin/usuario/{{ u.id }}">
+
+    
+<a href="/admin/usuario/{{ u.id }}">
+
+<button class="btn-secondary">
+
 👤 Ver perfil
+
+</button>
+
 </a>
 </td>
 
@@ -376,18 +446,9 @@ method="POST"
 style="display:inline;"
 onsubmit="return confirm('¿Seguro que quieres eliminar este usuario?')"
 >
-
 <button
 type="submit"
-style="
-padding:6px 12px;
-border-radius:8px;
-background:#ff4d4d;
-color:white;
-border:none;
-font-size:13px;
-cursor:pointer;
-"
+class="delete-btn"
 >
 
 ❌ Eliminar
@@ -403,8 +464,16 @@ cursor:pointer;
 
 </table>
 
-<a class="back-link" href="/dashboard">
+</div>
+
+<a href="/dashboard">
+
+<button class="btn-secondary">
+
 ⬅ Volver al panel
+
+</button>
+
 </a>
 
 </div>

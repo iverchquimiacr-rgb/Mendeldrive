@@ -112,6 +112,94 @@ font-size:14px;
 
 color:#334155;
 
+font-weight:500;
+
+word-break:break-all;
+
+}
+
+/* =========================
+ACCIONES
+========================= */
+
+.file-actions{
+
+display:flex;
+
+gap:8px;
+
+}
+
+/* VER */
+
+.view-btn{
+
+background:linear-gradient(
+135deg,
+var(--purple),
+var(--cyan)
+);
+
+color:white;
+
+padding:6px 12px;
+
+border-radius:8px;
+
+font-size:12px;
+
+text-decoration:none;
+
+font-weight:600;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+
+transition:all 0.2s ease;
+
+}
+
+.view-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 18px rgba(0,0,0,0.25);
+
+}
+
+/* DESCARGAR */
+
+.download-btn{
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+
+color:white;
+
+padding:6px 12px;
+
+border-radius:8px;
+
+font-size:12px;
+
+text-decoration:none;
+
+font-weight:600;
+
+box-shadow:0 4px 10px rgba(0,0,0,0.15);
+
+transition:all 0.2s ease;
+
+}
+
+.download-btn:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 18px rgba(0,0,0,0.25);
+
 }
 
 /* =========================
@@ -231,11 +319,25 @@ Comprobantes del usuario ID {{ user_id }}
 
 <span>{{ archivo }}</span>
 
-<a href="/uploads/comprobantes/{{ archivo }}" target="_blank">
-<button class="open-btn">
-Abrir
-</button>
+<div class="file-actions">
+
+<a 
+href="/uploads/comprobantes/{{ archivo }}" 
+target="_blank"
+class="view-btn"
+>
+Ver
 </a>
+
+<a 
+href="/uploads/comprobantes/{{ archivo }}" 
+download
+class="download-btn"
+>
+Descargar
+</a>
+
+</div>
 
 </li>
 {% endfor %}

@@ -33,6 +33,26 @@ box-shadow:0 20px 50px rgba(0,0,0,0.25);
 
 }
 
+.plan-card{
+
+animation:fadeIn 0.6s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
 /* =========================
 TÍTULO
 ========================= */
@@ -54,6 +74,18 @@ var(--purple)
 background-clip:text;
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
+
+}
+
+.plan-subtitle{
+
+text-align:center;
+
+font-size:14px;
+
+opacity:0.75;
+
+margin-bottom:25px;
 
 }
 
@@ -173,20 +205,21 @@ ERROR
 
 .error-box{
 
-color:#b91c1c;
-
-margin-bottom:10px;
-
-font-weight:600;
-
 background:#fee2e2;
 
-padding:8px 12px;
+color:#991b1b;
 
-border-radius:8px;
+padding:12px;
+
+border-radius:10px;
+
+margin-bottom:14px;
+
+font-size:14px;
+
+border-left:5px solid #ef4444;
 
 }
-
 /* =========================
 BOTÓN
 ========================= */
@@ -227,6 +260,12 @@ box-shadow:0 12px 25px rgba(0,0,0,0.25);
 
 }
 
+.submit-btn:active{
+
+transform:scale(0.97);
+
+}
+
 </style>
 
 {% endblock %}
@@ -241,25 +280,29 @@ box-shadow:0 12px 25px rgba(0,0,0,0.25);
 Selecciona tu tipo de pago
 </h2>
 
+<p class="plan-subtitle">
+Elige un plan y si eliges pago único, selecciona hasta 3 carpetas disponibles.
+</p>
+
 <form method="POST">
 
 <div class="plan-options">
 
 <label class="plan-option">
 <input type="radio" name="tipo_pago" value="Semanal" required>
-Semanal<br>
-<span class="plan-price">S/ 1.30</span>
+<strong>Semanal</strong><br>
+<span class="plan-price">S/ 1.30 / semana</span>
 </label>
 
 <label class="plan-option">
 <input type="radio" name="tipo_pago" value="Mensual">
-Mensual<br>
-<span class="plan-price">S/ 4.00</span>
+<strong>Mensual</strong><br>
+<span class="plan-price">S/ 4.00 / mes</span>
 </label>
 
 <label class="plan-option">
 <input type="radio" name="tipo_pago" value="Unico">
-Pago único<br>
+<strong>Pago único</strong><br>
 <span class="plan-price">según carpetas</span>
 </label>
 
@@ -269,7 +312,7 @@ Pago único<br>
 
 <div class="products-section">
 
-<h3>Selecciona hasta 3 carpetas</h3>
+<h3>Selecciona hasta 3 carpetas disponibles</h3>
 
 {% if error %}
 <div class="error-box">
@@ -284,7 +327,11 @@ Pago único<br>
 
 <label class="product-item">
 <input type="checkbox" name="carpetas" value="{{ key }}">
-{{ producto.nombre }} — S/ {{ "%.2f"|format(producto.precio) }}
+<strong>{{ producto.nombre }}</strong>
+<br>
+<span class="plan-price">
+S/ {{ "%.2f"|format(producto.precio) }}
+</span>
 </label>
 
 {% endif %}

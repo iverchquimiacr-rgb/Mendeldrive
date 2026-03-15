@@ -63,6 +63,54 @@ box-shadow:0 15px 35px rgba(0,0,0,0.2);
 
 }
 
+.profile-card li{
+
+margin-bottom:9px;
+
+font-size:14px;
+
+display:flex;
+
+justify-content:space-between;
+
+gap:10px;
+
+}
+
+.profile-card{
+
+animation:fadeIn 0.5s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(15px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.profile-card{
+
+transition:all 0.25s ease;
+
+}
+
+.profile-card:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 18px 40px rgba(0,0,0,0.25);
+
+}
+
 .profile-card h2{
 
 margin-bottom:15px;
@@ -87,17 +135,29 @@ font-size:14px;
 
 }
 
+
+.profile-subtitle{
+
+font-size:14px;
+
+opacity:0.75;
+
+margin-bottom:25px;
+
+}
 /* =========================
 BALANCE
 ========================= */
 
 .balance{
 
-font-size:18px;
+font-size:19px;
 
-font-weight:600;
+font-weight:700;
 
-margin-top:10px;
+margin-top:12px;
+
+color:var(--emerald);
 
 }
 
@@ -215,11 +275,15 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <h1>Perfil del usuario</h1>
 
+<p class="profile-subtitle">
+Consulta tu información, estado de pagos y carpetas asignadas.
+</p>
+
 <div class="profile-grid">
 
 <div class="profile-card">
 
-<h2>Datos generales</h2>
+<h2>👤 Datos generales</h2>
 
 <ul>
 <li><strong>ID:</strong> {{ perfil.id }}</li>
@@ -234,7 +298,7 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <div class="profile-card">
 
-<h2>Carpetas</h2>
+<h2>📂 Carpetas</h2>
 
 <ul>
 <li><strong>Asignadas:</strong> {{ perfil.carpetas_asignadas }}</li>
@@ -246,7 +310,7 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 <div class="profile-card">
 
-<h2>Estado financiero</h2>
+<h2>💳 Estado financiero</h2>
 
 <ul>
 <li>Monto base: <strong>S/ {{ "%.2f"|format(perfil.monto_base) }}</strong></li>
@@ -262,7 +326,7 @@ Saldo pendiente: S/ {{ "%.2f"|format(perfil.saldo_pendiente) }}
 
 <div class="profile-card">
 
-<h2>Resumen de pagos</h2>
+<h2>📊 Resumen de pagos</h2>
 
 <ul class="summary">
 
@@ -283,8 +347,8 @@ Saldo pendiente: S/ {{ "%.2f"|format(perfil.saldo_pendiente) }}
 
 <div class="actions">
 
-<a href="/catalogo">
-<button class="verpagos">Ver catálogo</button>
+<a href="/catalogo" class="verpagos">
+Ver catálogo
 </a>
 
 <a class="back-link" href="/dashboard">

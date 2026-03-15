@@ -57,15 +57,15 @@ display:flex;
 
 gap:10px;
 
-align-items:center;
-
 }
 
 .search-box input{
 
-padding:10px 14px;
+flex:1;
 
-border-radius:8px;
+padding:11px;
+
+border-radius:10px;
 
 border:1px solid #d1d5db;
 
@@ -85,15 +85,13 @@ box-shadow:0 0 0 3px rgba(0,212,255,0.18);
 
 }
 
-/* BOTÓN BUSCAR */
-
 .search-btn{
 
 padding:10px 18px;
 
 border:none;
 
-border-radius:8px;
+border-radius:10px;
 
 font-weight:600;
 
@@ -171,19 +169,27 @@ font-size:14px;
 
 }
 
+.comprobantes-table tr{
+
+transition:all 0.15s ease;
+
+}
+
 .comprobantes-table tr:hover{
 
-background:#f5f7fb;
+background:#f8fafc;
+
+transform:scale(1.002);
 
 }
 
 /* =========================
-BOTÓN VER
+BOTONES
 ========================= */
 
 .view-btn{
 
-padding:7px 12px;
+padding:7px 13px;
 
 border-radius:8px;
 
@@ -197,7 +203,7 @@ color:white;
 
 text-decoration:none;
 
-font-size:13px;
+font-size:12px;
 
 display:inline-block;
 
@@ -215,13 +221,9 @@ box-shadow:0 8px 18px rgba(0,0,0,0.25);
 
 }
 
-/* =========================
-BOTÓN DESCARGAR
-========================= */
-
 .download-btn{
 
-padding:7px 12px;
+padding:7px 13px;
 
 border-radius:8px;
 
@@ -235,7 +237,7 @@ color:white;
 
 text-decoration:none;
 
-font-size:13px;
+font-size:12px;
 
 display:inline-block;
 
@@ -253,6 +255,34 @@ box-shadow:0 8px 18px rgba(0,0,0,0.25);
 
 }
 
+.delete-btn{
+
+padding:7px 13px;
+
+border-radius:8px;
+
+background:#ef4444;
+
+color:white;
+
+text-decoration:none;
+
+font-size:12px;
+
+display:inline-block;
+
+transition:all 0.2s ease;
+
+}
+
+.delete-btn:hover{
+
+background:#dc2626;
+
+transform:translateY(-2px);
+
+}
+
 /* =========================
 MENSAJE VACÍO
 ========================= */
@@ -267,7 +297,7 @@ padding:25px;
 
 border-radius:14px;
 
-box-shadow:0 10px 25px rgba(0,0,0,0.2);
+box-shadow:0 20px 45px rgba(0,0,0,0.25);
 
 font-size:15px;
 
@@ -385,13 +415,37 @@ Ver
 
 <a
 href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
+target="_blank"
+class="view-btn"
+>
+Ver
+</a>
+
+</td>
+
+<td>
+
+<a
+href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
 download
 class="download-btn"
 >
 Descargar
 </a>
 
+</td>
+
 <td>
+
+<a
+href="/admin/eliminar_comprobante/{{ c.id }}"
+onclick="return confirm('¿Seguro que quieres eliminar este comprobante?')"
+class="delete-btn"
+>
+Eliminar
+</a>
+
+</td>
 
 <a
 href="/admin/eliminar_comprobante/{{ c.id }}"
@@ -429,7 +483,7 @@ No se encontraron comprobantes.
 {% endif %}
 
 <a href="/dashboard" class="back-link">
-Volver al dashboard
+⬅ Volver al panel
 </a>
 
 </div>

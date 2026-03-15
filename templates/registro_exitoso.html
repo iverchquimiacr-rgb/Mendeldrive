@@ -1,21 +1,88 @@
 {% extends "base.html" %}
+
+{% block extra_css %}
+
 <style>
-.btn-primary {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #0ea5e9; /* azul destacado */
-    color: white;
-    font-weight: 600;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background 0.3s, transform 0.2s;
+
+.user-id{
+
+font-size:32px;
+
+font-weight:700;
+
+margin:24px 0;
+
+color:var(--cyan);
+
+text-align:center;
+
+letter-spacing:1px;
+
 }
 
-.btn-primary:hover {
-    background-color: #0284c7; /* azul más oscuro al pasar el mouse */
-    transform: translateY(-2px);
+.btn-primary{
+
+display:inline-block;
+
+padding:12px 24px;
+
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+
+color:white;
+
+font-weight:600;
+
+text-decoration:none;
+
+border-radius:10px;
+
+transition:all 0.25s ease;
+
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+
 }
+
+.btn-primary:active{
+
+transform:scale(0.97);
+
+}
+
+.btn-primary:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 12px 26px rgba(0,0,0,0.25);
+
+}
+
+.create-card{
+
+animation:fadeIn 0.6s ease;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
 </style>
+
+{% endblock %}
 {% block title %}Cuenta creada{% endblock %}
 
 {% block content %}
@@ -24,7 +91,7 @@
 
 <div class="create-card">
 
-<h2>Cuenta creada correctamente</h2>
+<h2>Cuenta creada 🎉</h2>
 
 <p style="margin-top:20px;font-size:16px">
 
@@ -32,20 +99,14 @@ Tu <b>ID de usuario</b> es:
 
 </p>
 
-<div style="
-font-size:28px;
-font-weight:700;
-margin:20px 0;
-color:#0ea5e9;
-text-align:center;
-">
+<div class="user-id">
 {{ user_id }}
 </div>
 
 <p style="text-align:center">
 
-Guarda este ID.  
-Lo necesitarás para iniciar sesión.
+Guarda este ID de usuario.
+Lo necesitarás para iniciar sesión en el sistema.
 
 </p>
 

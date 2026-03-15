@@ -2,20 +2,132 @@
 
 {% block title %}Mis comprobantes{% endblock %}
 
+{% block extra_css %}
+<style>
+
+/* =========================
+HEADER
+========================= */
+
+.page-header{
+
+margin-bottom:25px;
+
+}
+
+.page-title{
+
+font-size:28px;
+font-weight:700;
+
+background:linear-gradient(
+90deg,
+var(--cyan),
+var(--purple)
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+background-clip:text;
+color:transparent;
+
+}
+
+.page-subtitle{
+
+margin-top:6px;
+font-size:14px;
+color:#64748b;
+
+}
+
+/* =========================
+TABLA WRAPPER
+========================= */
+
+.table-wrapper{
+
+overflow-x:auto;
+
+}
+
+/* =========================
+BOTONES DE ACCIÓN
+========================= */
+
+.view-btn{
+
+text-decoration:none;
+
+}
+
+.download-btn{
+
+text-decoration:none;
+
+}
+
+/* =========================
+EMPTY STATE
+========================= */
+
+.empty-box{
+
+background:#f8fafc;
+
+border:1px dashed #cbd5e1;
+
+padding:25px;
+
+border-radius:12px;
+
+text-align:center;
+
+color:#64748b;
+
+margin-top:15px;
+
+}
+
+/* =========================
+ACCIONES
+========================= */
+
+.actions{
+
+margin-top:25px;
+
+}
+
+.back-btn{
+
+text-decoration:none;
+
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
 
-<div class="payments-container">
+<div class="card">
 
-<div class="payments-header">
+<div class="page-header">
 
-<h1>Mis comprobantes</h1>
-<p>Usuario: <strong>{{ nombre }}</strong></p>
+<h1 class="page-title">Mis comprobantes</h1>
+
+<p class="page-subtitle">
+Usuario: <strong>{{ nombre }}</strong>
+</p>
 
 </div>
 
 {% if comprobantes %}
 
-<table class="payments-table">
+<div class="table-wrapper">
+
+<table class="table-modern">
 
 <tr>
 <th>ID Pago</th>
@@ -34,10 +146,13 @@
 
 <td>
 
-<a href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
+<a
+href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
 target="_blank"
-class="view-btn">
+class="btn-secondary view-btn"
+>
 
+<i data-lucide="eye"></i>
 Ver
 
 </a>
@@ -46,10 +161,13 @@ Ver
 
 <td>
 
-<a href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
+<a
+href="{{ url_for('descargar_comprobante', filename=c.archivo) }}"
 download
-class="download-btn">
+class="btn-primary download-btn"
+>
 
+<i data-lucide="download"></i>
 Descargar
 
 </a>
@@ -62,18 +180,33 @@ Descargar
 
 </table>
 
+</div>
+
 {% else %}
 
 <div class="empty-box">
+
+<i data-lucide="file-x"></i>
+
+<p style="margin-top:10px;">
 No has subido comprobantes todavía.
+</p>
+
 </div>
 
 {% endif %}
 
 <div class="actions">
 
-<a href="/dashboard">
-<button class="back-link">Volver al dashboard</button>
+<a href="/dashboard" class="back-btn">
+
+<button class="btn-secondary">
+
+<i data-lucide="arrow-left"></i>
+Volver al panel
+
+</button>
+
 </a>
 
 </div>

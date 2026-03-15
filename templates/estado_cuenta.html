@@ -106,9 +106,37 @@ VALOR
 
 .account-value{
 
-font-size:26px;
+font-size:30px;
 
 font-weight:700;
+
+margin-top:5px;
+
+letter-spacing:0.3px;
+
+}
+
+/* =========================
+SUBTÍTULO
+========================= */
+
+.account-subtitle{
+
+margin-top:4px;
+
+color:#64748b;
+
+font-size:14px;
+
+}
+
+/* =========================
+ACCIONES
+========================= */
+
+.actions{
+
+margin-top:25px;
 
 }
 
@@ -174,17 +202,22 @@ box-shadow:0 12px 26px rgba(0,0,0,0.25);
 
 {% block content %}
 
-<div class="account-container">
+<div class="card account-container">
 
 <h1>Estado de Cuenta</h1>
 
-<p>Usuario: <strong>{{ nombre }}</strong></p>
+<p class="account-subtitle">
+Usuario: <strong>{{ nombre }}</strong>
+</p>
 
 <div class="account-grid">
 
 <div class="account-card base">
 
-<h3>Monto base</h3>
+<h3>
+<i data-lucide="wallet"></i>
+Monto base
+</h3>
 
 <div class="account-value">
 S/ {{ "%.2f"|format(estado.MontoBase) }}
@@ -194,7 +227,10 @@ S/ {{ "%.2f"|format(estado.MontoBase) }}
 
 <div class="account-card paid">
 
-<h3>Total pagado</h3>
+<h3>
+<i data-lucide="badge-check"></i>
+Total pagado
+</h3>
 
 <div class="account-value">
 S/ {{ "%.2f"|format(estado.TotalPagado) }}
@@ -204,7 +240,10 @@ S/ {{ "%.2f"|format(estado.TotalPagado) }}
 
 <div class="account-card pending">
 
-<h3>Saldo pendiente</h3>
+<h3>
+<i data-lucide="alert-circle"></i>
+Saldo pendiente
+</h3>
 
 <div class="account-value">
 S/ {{ "%.2f"|format(estado.SaldoPendiente) }}
@@ -216,9 +255,20 @@ S/ {{ "%.2f"|format(estado.SaldoPendiente) }}
 
 <br>
 
-<a class="back-link" href="/dashboard">
-⬅ Volver al panel
+<div class="actions">
+
+<a href="/dashboard">
+
+<button class="btn-secondary">
+
+<i data-lucide="arrow-left"></i>
+Volver al panel
+
+</button>
+
 </a>
+
+</div>
 
 </div>
 
