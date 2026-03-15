@@ -163,7 +163,7 @@ def test():
 # CONFIGURACIÓN DE SUBIDAS
 # ==============================
 
-UPLOAD_FOLDER = "uploads/comprobantes"
+UPLOAD_FOLDER = os.path.join("static", "comprobantes")
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "pdf"}
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -966,11 +966,13 @@ def registrar_pago():
             payment_id = int(ultimo_pago["ID"])
 
             # generar imagen comprobante
-            archivo_comprobante = generar_comprobante(
-                codigo,
-                session["nombre"],
-                monto,
-                payment_id
+            archivo_comprobante = os.path.basename(
+                generar_comprobante(
+                    codigo,
+                    session["nombre"],
+                    monto,
+                    payment_id
+                )
             )
 
             # asociar comprobante al pago
@@ -1267,18 +1269,24 @@ def ver_comprobantes(user_id):
     )
 
 
-@app.route("/uploads/comprobantes/<path:filename>")
+@app.route("/comprobantes/<path:filename>")
 def descargar_comprobante(filename):
 
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    ruta = os.path.join(UPLOAD_FOLDER, filename)
+    filename = os.path.basename(filename)
+
+    ruta = os.path.join(app.config["UPLOAD_FOLDER"], filename)
 
     if not os.path.exists(ruta):
         return "Comprobante no encontrado", 404
 
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    return send_from_directory(
+        app.config["UPLOAD_FOLDER"],
+        filename,
+        as_attachment=False
+    )
 #=============================
 # ELIMINAR COMPROBANTE
 #=============================
