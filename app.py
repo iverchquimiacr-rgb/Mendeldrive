@@ -110,14 +110,14 @@ def puede_registrar_ip(ip):
         SELECT COUNT(*)
         FROM registro_ips
         WHERE ip = %s
-        AND fecha > NOW() - INTERVAL '7 days'
+        AND fecha > NOW() - INTERVAL '1 day'
         """, (ip,))
 
         count = cur.fetchone()[0]
 
         conn.close()
 
-        return count < 2
+        return count < 10
 
     except Exception as e:
 
@@ -236,7 +236,7 @@ def registro():
 
     if request.method == "POST":
 
-        ip = request.remote_addr
+        ip = get_real_ip()
 
         if not puede_registrar_ip(ip):
 
@@ -329,6 +329,17 @@ def registro():
         error=error,
         turnstile_site_key=os.environ.get("TURNSTILE_SITE_KEY")
     )
+
+# ==============================
+# OBTENER IP REAL
+# ==============================
+
+def get_real_ip():
+
+    if request.headers.get("X-Forwarded-For"):
+        return request.headers.get("X-Forwarded-For").split(",")[0].strip()
+
+    return request.remote_addr
 
 # ==============================
 # REGISTRO EXITOSO
