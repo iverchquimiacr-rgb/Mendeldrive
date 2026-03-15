@@ -266,6 +266,90 @@ transform:scale(0.97);
 
 }
 
+/* =========================
+BOTONES ACCIÓN
+========================= */
+
+.action-buttons{
+
+display:flex;
+
+justify-content:center;
+
+gap:16px;
+
+margin-top:30px;
+
+flex-wrap:wrap;
+
+}
+
+/* botón volver */
+
+.btn-back{
+
+padding:12px 22px;
+
+border-radius:10px;
+
+background:#e2e8f0;
+
+color:#0f172a;
+
+font-weight:600;
+
+text-decoration:none;
+
+transition:all 0.25s ease;
+
+}
+
+.btn-back:hover{
+
+background:#cbd5f5;
+
+transform:translateY(-2px);
+
+box-shadow:0 6px 15px rgba(0,0,0,0.15);
+
+}
+
+/* =========================
+CATÁLOGO LINK
+========================= */
+
+.catalogo-hint{
+
+margin-top:20px;
+
+text-align:center;
+
+font-size:14px;
+
+color:#64748b;
+
+}
+
+.catalogo-hint a{
+
+color:var(--cyan);
+
+font-weight:600;
+
+text-decoration:none;
+
+transition:all 0.2s ease;
+
+}
+
+.catalogo-hint a:hover{
+
+text-decoration:underline;
+
+color:var(--purple);
+
+}
+
 </style>
 
 {% endblock %}
@@ -312,7 +396,10 @@ Elige un plan y si eliges pago único, selecciona hasta 3 carpetas disponibles.
 
 <div class="products-section">
 
-<h3>Selecciona hasta 3 carpetas disponibles</h3>
+<h3>
+Selecciona hasta 3 carpetas disponibles
+<p class="plan-subtitle">Selecciona mínimo 1 incluso si eres <strong>semanal</strong> o <strong>mensual</strong></p>
+</h3>
 
 {% if error %}
 <div class="error-box">
@@ -341,9 +428,24 @@ S/ {{ "%.2f"|format(producto.precio) }}
 
 </div>
 
+<div class="action-buttons">
+
+<a href="/dashboard_user" class="btn-back">
+⬅ Volver al panel
+</a>
+
 <button class="submit-btn" type="submit">
 Confirmar selección
 </button>
+
+</div>
+
+<div class="catalogo-hint">
+
+💡 ¿Aún no decides?
+Explora el <a href="/catalogo">catálogo completo</a> para ver qué incluye cada carpeta.
+
+</div>
 
 </form>
 
