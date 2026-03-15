@@ -978,8 +978,8 @@ def registrar_pago():
 
             # URL para previsualizar
             comprobante_url = url_for(
-                "static",
-                filename=f"comprobantes/{archivo_comprobante}"
+                "descargar_comprobante",
+                filename=archivo_comprobante
             )
 
             mensaje = "Pago registrado correctamente. Comprobante generado."
@@ -1273,15 +1273,12 @@ def descargar_comprobante(filename):
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    # admin puede ver cualquier comprobante
-    if session.get("rol") == "Admin":
-        return send_from_directory(UPLOAD_FOLDER, filename)
+    ruta = os.path.join(UPLOAD_FOLDER, filename)
 
-    # usuario solo puede ver sus archivos
-    if filename.startswith(f"user_{session['user_id']}_"):
-        return send_from_directory(UPLOAD_FOLDER, filename)
+    if not os.path.exists(ruta):
+        return "Comprobante no encontrado", 404
 
-    return redirect(url_for("dashboard"))
+    return send_from_directory(UPLOAD_FOLDER, filename)
 #=============================
 # ELIMINAR COMPROBANTE
 #=============================
