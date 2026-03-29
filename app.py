@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, send_from_directory
 from user_manager import (
     login_web,
     create_user_web,
@@ -390,6 +390,25 @@ def admin_reset_database():
     except Exception as e:
         print("Error en reset_database:", e)
         return f"Error: {e}", 500
+# ==============================
+# SOLICITAR DESCUENTO
+# ==============================
+
+from discount_manager import guardar_solicitud_descuento
+
+@app.route("/solicitar-descuento", methods=["POST"])
+def solicitar_descuento():
+
+    data = request.json
+    user_id = session.get("user_id")
+
+    respuestas = data.get("respuestas")
+    archivos = data.get("archivos", [])
+
+    ok = guardar_solicitud_descuento(user_id, respuestas, archivos)
+
+    return jsonify({"success": ok})
+
 # ==============================
 # DASHBOARD
 # ==============================

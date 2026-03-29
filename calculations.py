@@ -5,6 +5,9 @@ from datetime import datetime
 # OBTENER ESTADO DE CUENTA
 # ==============================
 
+import json
+from datetime import datetime
+
 def get_account_status(user_id):
 
     users_df = load_users()
@@ -25,7 +28,27 @@ def get_account_status(user_id):
     monto_base = float(user.get("Monto_base", 0))
     tipo_pago = str(user.get("Tipo_pago", "Unico"))
 
+    # ==============================
+    # 🔥 APLICAR DESCUENTO (NUEVO)
+    # ==============================
+    descuento = 0
+
+    descuento_info = user.get("Descuento_info", "")
+
+    if descuento_info:
+        try:
+            data = json.loads(descuento_info)
+            if data.get("estado") == "Aprobado":
+                descuento = float(data.get("descuento_sugerido", 0))
+        except:
+            pass
+
+    # aplicar descuento al monto base
+    monto_base = monto_base * (1 - descuento / 100)
+
+    # ==============================
     # 🔹 pagos aprobados
+    # ==============================
     total_pagado = 0.0
 
     if not payments_df.empty:
@@ -68,14 +91,15 @@ def get_account_status(user_id):
         saldo_pendiente = deuda_total - total_pagado
 
     else:
-        # 🔹 pago único (lógica original)
+        # 🔹 pago único
         saldo_pendiente = monto_base - total_pagado
 
-    # 🔹 evitar negativos (muy importante)
+    # 🔹 evitar negativos
     saldo_pendiente = max(0.0, saldo_pendiente)
 
     return {
         "MontoBase": float(monto_base),
+        "DescuentoAplicado": float(descuento),
         "TotalPagado": float(total_pagado),
         "SaldoPendiente": float(saldo_pendiente)
     }

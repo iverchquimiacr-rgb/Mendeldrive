@@ -250,7 +250,8 @@ def load_users():
         "Rol": "Usuario",
         "Debe_cambiar_password": 0,
         "Debe_elegir_plan": 0,
-        "Password": ""
+        "Password": "",
+        "Descuento_info": ""   # ✅ NUEVO CAMPO
     }
 
     for col, default in columnas_necesarias.items():
