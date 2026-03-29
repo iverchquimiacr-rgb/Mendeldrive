@@ -1,5 +1,5 @@
 from database import load_users, load_payments
-
+from datetime import datetime
 
 # ==============================
 # OBTENER ESTADO DE CUENTA
@@ -19,16 +19,17 @@ def get_account_status(user_id):
     if user_id not in users_df["ID"].values:
         return None
 
-    user = users_df[users_df["ID"] == int(user_id)]
+    user = users_df[users_df["ID"] == int(user_id)].iloc[0]
 
-    monto_base = float(user.iloc[0]["Monto_base"])
+    # 🔹 datos base
+    monto_base = float(user.get("Monto_base", 0))
+    tipo_pago = str(user.get("Tipo_pago", "Unico"))
 
-    # 🔧 si no hay pagos aún
-    if payments_df.empty:
-        total_pagado = 0
-    else:
+    # 🔹 pagos aprobados
+    total_pagado = 0.0
 
-        # 🔧 asegurar columnas y tipos
+    if not payments_df.empty:
+
         payments_df["Usuario_ID"] = payments_df["Usuario_ID"].astype(int)
         payments_df["Monto"] = payments_df["Monto"].astype(float)
         payments_df["Estado"] = payments_df["Estado"].astype(str)
@@ -38,9 +39,40 @@ def get_account_status(user_id):
             (payments_df["Estado"] == "Aprobado")
         ]
 
-        total_pagado = pagos_usuario["Monto"].sum() if not pagos_usuario.empty else 0
+        if not pagos_usuario.empty:
+            total_pagado = float(pagos_usuario["Monto"].sum())
 
-    saldo_pendiente = monto_base - total_pagado
+    # ==============================
+    # 🔥 CÁLCULO SEGÚN TIPO DE PAGO
+    # ==============================
+
+    if tipo_pago in ["Semanal", "Mensual"]:
+
+        fecha_registro = user.get("Fecha_registro", "")
+        hoy = datetime.now()
+
+        try:
+            fecha_inicio = datetime.strptime(fecha_registro[:10], "%Y-%m-%d")
+        except:
+            fecha_inicio = hoy
+
+        # 🔹 calcular ciclos transcurridos
+        dias = (hoy - fecha_inicio).days
+
+        if tipo_pago == "Semanal":
+            ciclos = max(1, dias // 7)
+        else:  # Mensual
+            ciclos = max(1, dias // 28)
+
+        deuda_total = ciclos * monto_base
+        saldo_pendiente = deuda_total - total_pagado
+
+    else:
+        # 🔹 pago único (lógica original)
+        saldo_pendiente = monto_base - total_pagado
+
+    # 🔹 evitar negativos (muy importante)
+    saldo_pendiente = max(0.0, saldo_pendiente)
 
     return {
         "MontoBase": float(monto_base),

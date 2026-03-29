@@ -1557,6 +1557,9 @@ def seleccionar_planes():
         users_df.at[idx, "Monto_base"] = total
         users_df.at[idx, "Pago_confirmado"] = "No"
 
+        # 🆕 Guardar fecha de inicio del plan (CLAVE para deuda dinámica)
+        users_df.at[idx, "Fecha_inicio_plan"] = datetime.now().strftime("%Y-%m-%d")
+        
         save_users(users_df)
 
         return redirect(url_for("dashboard"))
