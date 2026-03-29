@@ -110,6 +110,18 @@ def initialize_database():
            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)
+        # ==============================
+        # SOLICITUDES DE DESCUENTO
+        # ==============================
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS solicitudes_descuento (
+            id SERIAL PRIMARY KEY,
+            usuario_id INTEGER,
+            puntaje INTEGER,
+            estado TEXT,
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
     else:
         # ==============================
         # SQLITE
