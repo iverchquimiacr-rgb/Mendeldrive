@@ -453,12 +453,12 @@ def aprobar_solicitud_route(id):
 # ADMIN - RECHAZAR
 # ==============================
 
-from discount_manager import rechazar_descuento
+from discount_manager import rechazar_solicitud
 
 @app.route("/admin/descuentos/rechazar/<int:id>", methods=["POST"])
-def rechazar_descuento_route(id):
+def rechazar_solicitud_route(id):
 
-    rechazar_descuento(id)
+    rechazar_solicitud(id)
     return jsonify({"success": True})
 
 # ==============================
