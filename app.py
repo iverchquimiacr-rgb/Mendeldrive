@@ -440,12 +440,12 @@ def admin_descuentos():
 # ADMIN - APROBAR
 # ==============================
 
-from discount_manager import aprobar_descuento
+from discount_manager import aprobar_solicitud
 
 @app.route("/admin/descuentos/aprobar/<int:id>", methods=["POST"])
-def aprobar_descuento_route(id):
+def aprobar_solicitud_route(id):
 
-    aprobar_descuento(id)
+    aprobar_solicitud(id)
     return jsonify({"success": True})
 
 
