@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitud de descuento{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+<div class="card">
+
+<h2 class="title-gradient" style="text-align:center;">
+Solicitud de descuento socioeconómico
+</h2>
+
+<p style="text-align:center; font-size:14px; opacity:0.7;">
+Completa este formulario. La información será evaluada por el equipo.
+</p>
+
+<hr>
+
+<form id="form-descuento">
+
+<!-- =========================
+BLOQUE 1
+========================= -->
+
+<h3>🏠 Tu hogar</h3>
+
+<div class="form-group">
+<label>¿Cuántas personas viven en tu hogar?</label>
+<select name="p1" class="input">
+<option value="0">2 o menos</option>
+<option value="1">3 a 4</option>
+<option value="2">5 a 6</option>
+<option value="3">7 o más</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Tipo de vivienda</label>
+<select name="p2" class="input">
+<option value="0">Propia pagada</option>
+<option value="1">Propia en cuotas</option>
+<option value="2">Alquilada</option>
+<option value="3">Prestada</option>
+<option value="3">Cuarto alquilado</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Servicios disponibles</label>
+
+<label><input type="checkbox" value="1" name="p3"> Agua</label>
+<label><input type="checkbox" value="1" name="p3"> Desagüe</label>
+<label><input type="checkbox" value="1" name="p3"> Luz</label>
+<label><input type="checkbox" value="1" name="p3"> Internet</label>
+<label><input type="checkbox" value="1" name="p3"> Streaming</label>
+
+</div>
+
+<div class="form-group">
+<label>Distrito</label>
+<input name="p4" class="input">
+</div>
+
+<hr>
+
+<!-- =========================
+BLOQUE 2
+========================= -->
+
+<h3>💰 Situación económica</h3>
+
+<div class="form-group">
+<label>Fuente de ingresos</label>
+<select name="p5" class="input">
+<option value="0">Empresa propia</option>
+<option value="1">Trabajo en planilla</option>
+<option value="2">Independiente</option>
+<option value="3">Agrícola</option>
+<option value="3">Pensión</option>
+<option value="4">Sin ingresos</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Personas que aportan</label>
+<select name="p6" class="input">
+<option value="0">3 o más</option>
+<option value="1">2</option>
+<option value="2">1</option>
+<option value="3">Ninguna</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Ingreso mensual</label>
+<select name="p7" class="input">
+<option value="0">+3500</option>
+<option value="1">1800-3500</option>
+<option value="2">930-1800</option>
+<option value="3">500-930</option>
+<option value="4"><500</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Problemas recientes (máx 4 pts)</label>
+
+<label><input type="checkbox" value="1" name="p8"> Vivienda</label>
+<label><input type="checkbox" value="1" name="p8"> Servicios</label>
+<label><input type="checkbox" value="2" name="p8"> Alimentación</label>
+<label><input type="checkbox" value="1" name="p8"> Estudios</label>
+
+</div>
+
+<hr>
+
+<!-- =========================
+BLOQUE 3
+========================= -->
+
+<h3>🎓 Situación del estudiante</h3>
+
+<div class="form-group">
+<label>Colegio</label>
+<select name="p9" class="input">
+<option value="0">Privado alto</option>
+<option value="1">Privado medio</option>
+<option value="2">Privado bajo</option>
+<option value="3">Público</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Academia</label>
+<select name="p10" class="input">
+<option value="0">Alta</option>
+<option value="1">Media</option>
+<option value="2">Económica</option>
+<option value="3">No puedo pagar</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Trabajo</label>
+<select name="p11" class="input">
+<option value="0">No trabajo</option>
+<option value="1">Ocasional</option>
+<option value="2">Para mí</option>
+<option value="3">Aporto al hogar</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Acceso a computadora</label>
+<select name="p12" class="input">
+<option value="0">Propia</option>
+<option value="1">Compartida</option>
+<option value="2">No tengo</option>
+</select>
+</div>
+
+<hr>
+
+<!-- =========================
+BLOQUE 4
+========================= -->
+
+<h3>📝 Tu solicitud</h3>
+
+<div class="form-group">
+<label>¿Por qué necesitas el descuento?</label>
+<textarea name="p13" class="input" rows="4"></textarea>
+</div>
+
+<div class="form-group">
+<label>¿Cómo conociste NovusPrep?</label>
+<select name="p14" class="input">
+<option value="redes">Redes</option>
+<option value="amigo">Amigo</option>
+<option value="grupo">Grupo</option>
+<option value="google">Google</option>
+<option value="otro">Otro</option>
+</select>
+</div>
+
+<hr>
+
+<!-- =========================
+ENVÍO
+========================= -->
+
+<p style="font-size:13px; opacity:0.7;">
+Al enviar declaras que la información es verídica.
+</p>
+
+<div style="text-align:center; margin-top:20px;">
+<button type="submit" class="btn btn-primary">
+Enviar solicitud
+</button>
+</div>
+
+</form>
+
+</div>
+</div>
+
+<!-- =========================
+JS
+========================= -->
+
+<script>
+document.getElementById("form-descuento").addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    let respuestas = {};
+
+    formData.forEach((value, key) => {
+        if (respuestas[key]) {
+            if (!Array.isArray(respuestas[key])) {
+                respuestas[key] = [respuestas[key]];
+            }
+            respuestas[key].push(value);
+        } else {
+            respuestas[key] = value;
+        }
+    });
+
+    const res = await fetch("/solicitar-descuento", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            respuestas: respuestas,
+            archivos: []
+        })
+    });
+
+    const data = await res.json();
+
+    if(data.success){
+        alert("Solicitud enviada correctamente");
+        window.location.href = "/dashboard";
+    } else {
+        alert("Error al enviar");
+    }
+
+});
+</script>
+
+{% endblock %}

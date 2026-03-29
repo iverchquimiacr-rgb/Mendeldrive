@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitudes de descuento{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+<div class="card">
+
+<h2 class="title-gradient" style="text-align:center;">
+Solicitudes de descuento
+</h2>
+
+<p style="text-align:center; font-size:14px; opacity:0.7;">
+Revisa y aprueba solicitudes socioeconómicas
+</p>
+
+<!-- =========================
+BUSCADOR
+========================= -->
+
+<div class="form-group" style="margin-top:20px;">
+<input 
+    type="text" 
+    id="buscador" 
+    class="input" 
+    placeholder="Buscar por ID o nombre..."
+    onkeyup="filtrarTabla()"
+>
+</div>
+
+<!-- =========================
+TABLA
+========================= -->
+
+<table class="table" id="tabla-descuentos">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Usuario</th>
+<th>Puntaje</th>
+<th>Descuento</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for s in solicitudes %}
+
+<tr>
+
+<td>{{ s.usuario_id }}</td>
+<td>{{ s.nombre }}</td>
+<td>{{ s.puntaje }}</td>
+<td>{{ s.descuento }}%</td>
+
+<td>
+<span class="badge 
+{% if s.estado == 'Pendiente' %}
+badge-warning
+{% elif s.estado == 'Aprobado' %}
+badge-success
+{% else %}
+badge-danger
+{% endif %}
+">
+{{ s.estado }}
+</span>
+</td>
+
+<td>
+
+{% if s.estado == "Pendiente" %}
+
+<button class="btn btn-primary" onclick="aprobar({{ s.id }})">
+Aprobar
+</button>
+
+<button class="btn btn-danger" onclick="rechazar({{ s.id }})">
+Rechazar
+</button>
+
+{% else %}
+—
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+<!-- =========================
+JS
+========================= -->
+
+<script>
+
+function filtrarTabla(){
+
+let input = document.getElementById("buscador").value.toLowerCase();
+let filas = document.querySelectorAll("#tabla-descuentos tbody tr");
+
+filas.forEach(fila => {
+
+let texto = fila.innerText.toLowerCase();
+
+fila.style.display = texto.includes(input) ? "" : "none";
+
+});
+
+}
+
+// =========================
+// APROBAR
+// =========================
+
+async function aprobar(id){
+
+const res = await fetch(`/admin/descuentos/aprobar/${id}`, {
+method: "POST"
+});
+
+location.reload();
+
+}
+
+// =========================
+// RECHAZAR
+// =========================
+
+async function rechazar(id){
+
+const res = await fetch(`/admin/descuentos/rechazar/${id}`, {
+method: "POST"
+});
+
+location.reload();
+
+}
+
+</script>
+
+{% endblock %}

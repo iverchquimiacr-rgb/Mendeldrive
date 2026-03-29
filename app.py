@@ -410,6 +410,58 @@ def solicitar_descuento():
     return jsonify({"success": ok})
 
 # ==============================
+# MOSTRAR ENCUESTA DESCUENTO
+# ==============================
+@app.route("/encuesta-descuento")
+def encuesta_descuento():
+    return render_template("encuesta_descuento.html")
+
+# ==============================
+# ADMIN - VER SOLICITUDES
+# ==============================
+
+from discount_manager import obtener_solicitudes
+
+@app.route("/admin/descuentos")
+def admin_descuentos():
+
+    if session.get("rol") != "Admin":
+        return "No autorizado", 403
+
+    solicitudes = obtener_solicitudes()
+
+    return render_template(
+        "admin_descuentos.html",
+        solicitudes=solicitudes
+    )
+
+
+# ==============================
+# ADMIN - APROBAR
+# ==============================
+
+from discount_manager import aprobar_descuento
+
+@app.route("/admin/descuentos/aprobar/<int:id>", methods=["POST"])
+def aprobar_descuento_route(id):
+
+    aprobar_descuento(id)
+    return jsonify({"success": True})
+
+
+# ==============================
+# ADMIN - RECHAZAR
+# ==============================
+
+from discount_manager import rechazar_descuento
+
+@app.route("/admin/descuentos/rechazar/<int:id>", methods=["POST"])
+def rechazar_descuento_route(id):
+
+    rechazar_descuento(id)
+    return jsonify({"success": True})
+
+# ==============================
 # DASHBOARD
 # ==============================
 

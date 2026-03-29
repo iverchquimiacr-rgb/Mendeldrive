@@ -470,6 +470,65 @@ Explora el <a href="/catalogo">catálogo completo</a> para ver qué incluye cada
 
 </form>
 
+<!-- ==============================
+BOTÓN DESCUENTO
+============================== -->
+<button onclick="abrirModalDescuento()" style="margin-top:20px;">
+    Acceder a descuento socioeconómico
+</button>
+
+<!-- ==============================
+MODAL AVISO
+============================== -->
+<div id="modal-descuento" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);">
+    
+    <div style="background:white; padding:20px; max-width:600px; margin:100px auto; border-radius:10px;">
+        
+        <h2>Solicitud de descuento social</h2>
+
+        <p>
+        Para garantizar que este beneficio llegue a quienes realmente lo necesitan,
+        esta solicitud requiere información personal básica.
+        </p>
+
+        <p>
+        Tus datos serán utilizados únicamente para evaluar tu solicitud y no serán
+        compartidos con terceros ni usados con ningún otro fin.
+        </p>
+
+        <p>
+        Adjuntar documentos de respaldo es opcional, pero aumenta significativamente
+        las probabilidades de que tu solicitud sea aprobada.
+        </p>
+
+        <p>
+        Puedes enviar la encuesta sin documentos, aunque esto puede resultar en una
+        revisión más estricta.
+        </p>
+
+        <button onclick="irAEncuesta()">Continuar</button>
+        <button onclick="cerrarModal()">Cancelar</button>
+
+    </div>
+</div>
+
+<!-- ==============================
+JS
+============================== -->
+<script>
+function abrirModalDescuento() {
+    document.getElementById("modal-descuento").style.display = "block";
+}
+
+function cerrarModal() {
+    document.getElementById("modal-descuento").style.display = "none";
+}
+
+function irAEncuesta() {
+    window.location.href = "/encuesta-descuento";
+}
+</script>
+
 </div>
 
 </div>
