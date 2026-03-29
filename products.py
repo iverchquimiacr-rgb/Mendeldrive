@@ -26,7 +26,7 @@ PRODUCTS = {
     },
     4: {
         "nombre": "Ciclo verano",
-        "precio": 11,
+        "precio": 9,
         "link": "https://drive.google.com/drive/folders/1EEfTK6QUryhapcsQoki1KKRRCgHGDJXp?usp=sharing",
         "descripcion": "Fotos de las 3 áreas del ciclo de verano. Ideal si quieres tener una base de lo importante en todos los cursos, aunque no hay tanta teoría como en el anual.",
         "vendible": True
@@ -58,5 +58,13 @@ PRODUCTS = {
         "link": "https://drive.google.com/drive/folders/15wlr7KL04JqTVvMEF4xCChG7Z6eIfPrH?usp=sharing",
         "descripcion": "Resumen general y GRATIS de todo el contenido disponible en el drive. Ideal para hacerte una idea de qué es lo que estás comprando.",
         "vendible": False
-    }
+    },
+    9: {
+        "nombre": "Ciclo ceprequintos",
+        "precio": 7,
+        "link": "https://drive.google.com/drive/folders/1RcT3AD1x5y-bU5fPvpkOdej5d8-4IX1F?usp=sharing",
+        "descripcion": "Pizarras de clases de todo el ciclo ceprequintos turno tarde que contiene los temas del temario actualizado de los cursos que hay en la carpeta. Ideal para estudiar basándose en los tomos. Se complementa con las prácticas del Ciclo repaso.",
+        "vendible": False
+    },
+
 }

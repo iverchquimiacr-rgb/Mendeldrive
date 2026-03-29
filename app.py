@@ -1523,11 +1523,11 @@ def seleccionar_planes():
                 error="Debes seleccionar un tipo de pago"
             )
 
-        if len(seleccion) == 0 or len(seleccion) > 3:
+        if len(seleccion) == 0 or len(seleccion) > 4:
             return render_template(
                 "seleccionar_planes.html",
                 productos=PRODUCTS,
-                error="Debes seleccionar entre 1 y 3 carpetas"
+                error="Debes seleccionar entre 1 y 4 carpetas"
             )
 
         nombres = []
