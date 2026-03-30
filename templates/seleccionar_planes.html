@@ -54,6 +54,142 @@ transform:translateY(0);
 }
 
 /* =========================
+CTA DESCUENTO
+========================= */
+
+.discount-section{
+margin-top:35px;
+padding:20px;
+border-radius:16px;
+background:linear-gradient(
+135deg,
+rgba(0,212,255,0.08),
+rgba(187,134,252,0.08)
+);
+border:1px solid rgba(255,255,255,0.08);
+text-align:center;
+}
+
+.discount-title{
+font-weight:600;
+margin-bottom:8px;
+}
+
+.discount-btn{
+margin-top:10px;
+padding:12px 22px;
+border:none;
+border-radius:12px;
+background:linear-gradient(
+135deg,
+var(--purple),
+var(--cyan)
+);
+color:white;
+font-weight:600;
+cursor:pointer;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+transition:all 0.25s ease;
+}
+
+.discount-btn:hover{
+transform:translateY(-3px) scale(1.02);
+box-shadow:0 14px 28px rgba(0,0,0,0.3);
+}
+
+.discount-btn:active{
+transform:scale(0.96);
+}
+
+/* =========================
+MODAL MEJORADO
+========================= */
+
+.modal-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(6px);
+z-index:1000;
+animation:fadeIn 0.3s ease;
+}
+
+.modal-box{
+background:white;
+padding:28px;
+max-width:520px;
+margin:100px auto;
+border-radius:16px;
+box-shadow:0 20px 50px rgba(0,0,0,0.35);
+animation:slideUp 0.35s ease;
+}
+
+@keyframes slideUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.modal-box h2{
+margin-bottom:12px;
+}
+
+.modal-box p{
+font-size:14px;
+margin-bottom:10px;
+color:#374151;
+}
+
+.modal-actions{
+display:flex;
+justify-content:flex-end;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.modal-btn-primary{
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+font-weight:600;
+cursor:pointer;
+transition:0.25s;
+}
+
+.modal-btn-primary:hover{
+transform:translateY(-2px);
+}
+
+.modal-btn-secondary{
+background:#e5e7eb;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+font-weight:600;
+cursor:pointer;
+}
+
+.modal-btn-secondary:hover{
+background:#d1d5db;
+}
+
+/* =========================
 TÍTULO
 ========================= */
 
@@ -473,43 +609,59 @@ Explora el <a href="/catalogo">catálogo completo</a> para ver qué incluye cada
 <!-- ==============================
 BOTÓN DESCUENTO
 ============================== -->
-<button onclick="abrirModalDescuento()" style="margin-top:20px;">
-    Acceder a descuento socioeconómico
+<div class="discount-section">
+
+<div class="discount-title">
+🎓 ¿Necesitas ayuda económica?
+</div>
+
+<p style="font-size:14px; opacity:0.8;">
+Solicita un descuento socioeconómico completando una breve encuesta.
+</p>
+
+<button class="discount-btn" onclick="abrirModalDescuento()">
+Acceder a descuento
 </button>
+
+</div>
 
 <!-- ==============================
 MODAL AVISO
 ============================== -->
-<div id="modal-descuento" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);">
-    
-    <div style="background:white; padding:20px; max-width:600px; margin:100px auto; border-radius:10px;">
-        
-        <h2>Solicitud de descuento social</h2>
 
-        <p>
-        Para garantizar que este beneficio llegue a quienes realmente lo necesitan,
-        esta solicitud requiere información personal básica.
-        </p>
+<div id="modal-descuento" class="modal-overlay">
 
-        <p>
-        Tus datos serán utilizados únicamente para evaluar tu solicitud y no serán
-        compartidos con terceros ni usados con ningún otro fin.
-        </p>
+<div class="modal-box">
 
-        <p>
-        Adjuntar documentos de respaldo es opcional, pero aumenta significativamente
-        las probabilidades de que tu solicitud sea aprobada.
-        </p>
+<h2>Solicitud de descuento social</h2>
 
-        <p>
-        Puedes enviar la encuesta sin documentos, aunque esto puede resultar en una
-        revisión más estricta.
-        </p>
+<p>
+Para garantizar que este beneficio llegue a quienes realmente lo necesitan,
+esta solicitud requiere información básica.
+</p>
 
-        <button onclick="irAEncuesta()">Continuar</button>
-        <button onclick="cerrarModal()">Cancelar</button>
+<p>
+Tus datos serán utilizados únicamente para evaluar tu solicitud.
+</p>
 
-    </div>
+<p>
+Adjuntar documentos es opcional, pero aumenta las probabilidades de aprobación.
+</p>
+
+<div class="modal-actions">
+
+<button class="modal-btn-secondary" onclick="cerrarModal()">
+Cancelar
+</button>
+
+<button class="modal-btn-primary" onclick="irAEncuesta()">
+Continuar
+</button>
+
+</div>
+
+</div>
+
 </div>
 
 <!-- ==============================

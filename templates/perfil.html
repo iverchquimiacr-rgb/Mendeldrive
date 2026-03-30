@@ -317,6 +317,31 @@ Consulta tu información, estado de pagos y carpetas asignadas.
 <li>Total pagado: <strong>S/ {{ "%.2f"|format(perfil.total_pagado) }}</strong></li>
 </ul>
 
+<!-- =========================
+DESCUENTO
+========================= -->
+{% if perfil.descuento_porcentaje %}
+<div style="margin-top:12px; padding:10px; border-radius:10px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3);">
+
+<strong style="color:#16a34a;">
+🎉 Descuento activo: {{ perfil.descuento_porcentaje }}%
+</strong>
+
+<br>
+
+<span style="font-size:13px; opacity:0.8;">
+Se aplica automáticamente a tu plan actual
+</span>
+
+</div>
+{% endif %}
+
+<div class="balance">
+Saldo pendiente: S/ {{ "%.2f"|format(perfil.saldo_pendiente) }}
+</div>
+
+</div>
+
 <div class="balance">
 Saldo pendiente: S/ {{ "%.2f"|format(perfil.saldo_pendiente) }}
 </div>

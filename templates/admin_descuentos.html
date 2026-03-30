@@ -2,39 +2,209 @@
 
 {% block title %}Solicitudes de descuento{% endblock %}
 
+{% block extra_css %}
+<style>
+
+/* =========================
+CONTAINER
+========================= */
+
+.admin-container{
+max-width:1100px;
+margin:40px auto;
+animation:fadeIn 0.5s ease;
+}
+
+/* =========================
+HEADER
+========================= */
+
+.admin-header{
+text-align:center;
+margin-bottom:25px;
+}
+
+.admin-header h2{
+font-size:28px;
+background:linear-gradient(
+90deg,
+var(--cyan),
+var(--purple)
+);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.admin-header p{
+font-size:14px;
+opacity:0.7;
+margin-top:5px;
+}
+
+/* =========================
+SEARCH BAR
+========================= */
+
+.search-container{
+margin:25px 0;
+display:flex;
+justify-content:center;
+}
+
+.search-box{
+width:100%;
+max-width:400px;
+position:relative;
+}
+
+.search-box input{
+width:100%;
+padding:12px 14px;
+border-radius:12px;
+border:1px solid #d1d5db;
+font-size:14px;
+transition:all 0.2s ease;
+}
+
+.search-box input:focus{
+outline:none;
+border-color:var(--cyan);
+box-shadow:0 0 0 3px rgba(0,212,255,0.18);
+}
+
+/* =========================
+TABLE CARD
+========================= */
+
+.table-card{
+background:white;
+border-radius:18px;
+padding:20px;
+box-shadow:0 20px 50px rgba(0,0,0,0.25);
+overflow:hidden;
+}
+
+/* =========================
+TABLE
+========================= */
+
+.admin-table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+font-size:14px;
+}
+
+.admin-table th{
+text-align:left;
+padding:14px;
+font-size:13px;
+background:#f1f5f9;
+border-bottom:2px solid #e2e8f0;
+}
+
+.admin-table td{
+padding:14px;
+border-bottom:1px solid #f1f5f9;
+}
+
+.admin-table tr{
+transition:all 0.2s ease;
+}
+
+.admin-table tr:hover{
+background:#f8fafc;
+}
+
+/* =========================
+ACTIONS
+========================= */
+
+.actions-cell{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.btn-small{
+padding:7px 14px;
+font-size:13px;
+border-radius:8px;
+}
+
+/* =========================
+BACK BUTTON
+========================= */
+
+.back-container{
+margin-top:25px;
+text-align:center;
+}
+
+.back-link{
+display:inline-block;
+padding:12px 26px;
+border-radius:10px;
+background:linear-gradient(
+135deg,
+var(--emerald),
+var(--cyan)
+);
+color:white;
+font-weight:600;
+text-decoration:none;
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+transition:all 0.25s ease;
+}
+
+.back-link:hover{
+transform:translateY(-3px);
+box-shadow:0 12px 26px rgba(0,0,0,0.25);
+}
+
+/* =========================
+ANIMATION
+========================= */
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
 
-<div class="container">
+<div class="admin-container">
 
-<div class="card">
+<div class="admin-header">
+<h2>Solicitudes de descuento</h2>
+<p>Revisa, evalúa y toma decisiones sobre solicitudes socioeconómicas</p>
+</div>
 
-<h2 class="title-gradient" style="text-align:center;">
-Solicitudes de descuento
-</h2>
+<div class="table-card">
 
-<p style="text-align:center; font-size:14px; opacity:0.7;">
-Revisa y aprueba solicitudes socioeconómicas
-</p>
-
-<!-- =========================
-BUSCADOR
-========================= -->
-
-<div class="form-group" style="margin-top:20px;">
+<!-- BUSCADOR -->
+<div class="search-container">
+<div class="search-box">
 <input 
     type="text" 
     id="buscador" 
-    class="input" 
     placeholder="Buscar por ID o nombre..."
     onkeyup="filtrarTabla()"
 >
 </div>
+</div>
 
-<!-- =========================
-TABLA
-========================= -->
-
-<table class="table" id="tabla-descuentos">
+<!-- TABLA -->
+<table class="admin-table" id="tabla-descuentos">
 
 <thead>
 <tr>
@@ -53,10 +223,10 @@ TABLA
 
 <tr>
 
-<td>{{ s.usuario_id }}</td>
+<td><strong>#{{ s.usuario_id }}</strong></td>
 <td>{{ s.nombre }}</td>
 <td>{{ s.puntaje }}</td>
-<td>{{ s.descuento }}%</td>
+<td><strong>{{ s.descuento }}%</strong></td>
 
 <td>
 <span class="badge 
@@ -73,21 +243,23 @@ badge-danger
 </td>
 
 <td>
+<div class="actions-cell">
 
 {% if s.estado == "Pendiente" %}
 
-<button class="btn btn-primary" onclick="aprobar({{ s.id }})">
+<button class="btn btn-primary btn-small" onclick="aprobar({{ s.id }})">
 Aprobar
 </button>
 
-<button class="btn btn-danger" onclick="rechazar({{ s.id }})">
+<button class="btn btn-danger btn-small" onclick="rechazar({{ s.id }})">
 Rechazar
 </button>
 
 {% else %}
-—
+<span style="opacity:0.5;">—</span>
 {% endif %}
 
+</div>
 </td>
 
 </tr>
@@ -99,12 +271,16 @@ Rechazar
 </table>
 
 </div>
+
+<div class="back-container">
+<a href="/dashboard" class="back-link">
+⬅ Volver al panel
+</a>
 </div>
 
-<!-- =========================
-JS
-========================= -->
+</div>
 
+<!-- JS (NO TOCADO) -->
 <script>
 
 function filtrarTabla(){
@@ -122,32 +298,18 @@ fila.style.display = texto.includes(input) ? "" : "none";
 
 }
 
-// =========================
-// APROBAR
-// =========================
-
 async function aprobar(id){
-
 const res = await fetch(`/admin/descuentos/aprobar/${id}`, {
 method: "POST"
 });
-
 location.reload();
-
 }
 
-// =========================
-// RECHAZAR
-// =========================
-
 async function rechazar(id){
-
 const res = await fetch(`/admin/descuentos/rechazar/${id}`, {
 method: "POST"
 });
-
 location.reload();
-
 }
 
 </script>
