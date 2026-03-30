@@ -137,6 +137,53 @@ transform:scale(0.96);
 }
 
 /* =========================
+BACK BUTTONS
+========================= */
+
+.back-actions{
+display:flex;
+justify-content:center;
+gap:12px;
+margin-top:25px;
+flex-wrap:wrap;
+}
+
+.btn-back-secondary{
+padding:12px 22px;
+border-radius:10px;
+background:#e5e7eb;
+color:#0f172a;
+font-weight:600;
+text-decoration:none;
+transition:all 0.25s ease;
+}
+
+.btn-back-secondary:hover{
+background:#d1d5db;
+transform:translateY(-2px);
+}
+
+.btn-back-primary{
+padding:12px 22px;
+border-radius:10px;
+background:linear-gradient(
+135deg,
+var(--cyan),
+var(--purple)
+);
+color:white;
+font-weight:600;
+text-decoration:none;
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+transition:all 0.25s ease;
+}
+
+.btn-back-primary:hover{
+transform:translateY(-2px);
+box-shadow:0 12px 25px rgba(0,0,0,0.25);
+}
+
+/* =========================
 ANIMATION
 ========================= */
 
@@ -339,6 +386,18 @@ Al enviar declaras que la información es verídica.
 <button type="submit" class="submit-btn">
 Enviar solicitud
 </button>
+</div>
+
+<div class="back-actions">
+
+<a href="/seleccionar_plan" class="btn-back-primary">
+⬅ Volver a planes
+</a>
+
+<a href="/dashboard" class="btn-back-secondary">
+🏠 Volver al panel
+</a>
+
 </div>
 
 </form>
