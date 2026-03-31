@@ -122,6 +122,21 @@ def initialize_database():
             fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)
+        # ==============================
+        # MIGRACIÓN AUTOMÁTICA (CLAVE)
+        # ==============================
+
+        # Agregar columna respuestas si no existe
+        cursor.execute("""
+        ALTER TABLE solicitudes_descuento
+        ADD COLUMN IF NOT EXISTS respuestas JSONB;
+        """)
+
+        # Agregar columna archivos si no existe
+        cursor.execute("""
+        ALTER TABLE solicitudes_descuento
+        ADD COLUMN IF NOT EXISTS archivos JSONB;
+        """)
     else:
         # ==============================
         # SQLITE

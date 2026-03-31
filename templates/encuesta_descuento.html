@@ -204,7 +204,6 @@ transform:translateY(0);
 {% block content %}
 
 <div class="form-container">
-
 <div class="form-card">
 
 <h2 class="title-gradient" style="text-align:center;">
@@ -236,22 +235,22 @@ Completa este formulario. La información será evaluada por el equipo.
 <div class="form-group">
 <label>Tipo de vivienda</label>
 <select name="p2" class="input">
-<option value="0">Propia pagada</option>
-<option value="1">Propia en cuotas</option>
-<option value="2">Alquilada</option>
-<option value="3">Prestada</option>
-<option value="3">Cuarto alquilado</option>
+<option value="propio_pagado">Propia pagada</option>
+<option value="propio_cuotas">Propia en cuotas</option>
+<option value="alquilada">Alquilada</option>
+<option value="prestada">Prestada</option>
+<option value="cuarto">Cuarto alquilado</option>
 </select>
 </div>
 
 <div class="form-group">
 <label>Servicios disponibles</label>
 <div class="check-group">
-<label class="check-item"><input type="checkbox" value="1" name="p3"> Agua</label>
-<label class="check-item"><input type="checkbox" value="1" name="p3"> Desagüe</label>
-<label class="check-item"><input type="checkbox" value="1" name="p3"> Luz</label>
-<label class="check-item"><input type="checkbox" value="1" name="p3"> Internet</label>
-<label class="check-item"><input type="checkbox" value="1" name="p3"> Streaming</label>
+<label class="check-item"><input type="checkbox" value="agua" name="p3"> Agua</label>
+<label class="check-item"><input type="checkbox" value="desague" name="p3"> Desagüe</label>
+<label class="check-item"><input type="checkbox" value="luz" name="p3"> Luz</label>
+<label class="check-item"><input type="checkbox" value="internet" name="p3"> Internet</label>
+<label class="check-item"><input type="checkbox" value="streaming" name="p3"> Streaming</label>
 </div>
 </div>
 
@@ -269,43 +268,43 @@ Completa este formulario. La información será evaluada por el equipo.
 <div class="form-group">
 <label>Fuente de ingresos</label>
 <select name="p5" class="input">
-<option value="0">Empresa propia</option>
-<option value="1">Trabajo en planilla</option>
-<option value="2">Independiente</option>
-<option value="3">Agrícola</option>
-<option value="3">Pensión</option>
-<option value="4">Sin ingresos</option>
+<option value="empresa">Empresa propia</option>
+<option value="planilla">Trabajo en planilla</option>
+<option value="independiente">Independiente</option>
+<option value="agricola">Agrícola</option>
+<option value="pension">Pensión</option>
+<option value="sin_ingresos">Sin ingresos</option>
 </select>
 </div>
 
 <div class="form-group">
 <label>Personas que aportan</label>
 <select name="p6" class="input">
-<option value="0">3 o más</option>
-<option value="1">2</option>
-<option value="2">1</option>
-<option value="3">Ninguna</option>
+<option value="3+">3 o más</option>
+<option value="2">2</option>
+<option value="1">1</option>
+<option value="0">Ninguna</option>
 </select>
 </div>
 
 <div class="form-group">
 <label>Ingreso mensual</label>
 <select name="p7" class="input">
-<option value="0">+3500</option>
-<option value="1">1800-3500</option>
-<option value="2">930-1800</option>
-<option value="3">500-930</option>
-<option value="4"><500</option>
+<option value="3500+">+3500</option>
+<option value="1800-3500">1800-3500</option>
+<option value="930-1800">930-1800</option>
+<option value="500-930">500-930</option>
+<option value="0-500"><500</option>
 </select>
 </div>
 
 <div class="form-group">
 <label>Problemas recientes</label>
 <div class="check-group">
-<label class="check-item"><input type="checkbox" value="1" name="p8"> Vivienda</label>
-<label class="check-item"><input type="checkbox" value="1" name="p8"> Servicios</label>
-<label class="check-item"><input type="checkbox" value="2" name="p8"> Alimentación</label>
-<label class="check-item"><input type="checkbox" value="1" name="p8"> Estudios</label>
+<label class="check-item"><input type="checkbox" value="vivienda" name="p8"> Vivienda</label>
+<label class="check-item"><input type="checkbox" value="servicios" name="p8"> Servicios</label>
+<label class="check-item"><input type="checkbox" value="alimentacion" name="p8"> Alimentación</label>
+<label class="check-item"><input type="checkbox" value="estudios" name="p8"> Estudios</label>
 </div>
 </div>
 
@@ -318,39 +317,39 @@ Completa este formulario. La información será evaluada por el equipo.
 <div class="form-group">
 <label>Colegio</label>
 <select name="p9" class="input">
-<option value="0">Privado alto (más de S/.900)</option>
-<option value="1">Privado medio (S/.450 - S/.850)</option>
-<option value="2">Privado bajo (S/.100 - S/.450)</option>
-<option value="3">Público</option>
+<option value="privado_alto">Privado alto</option>
+<option value="privado_medio">Privado medio</option>
+<option value="privado_bajo">Privado bajo</option>
+<option value="publico">Público</option>
 </select>
 </div>
 
 <div class="form-group">
-<label>Academia - mensualidad</label>
+<label>Academia</label>
 <select name="p10" class="input">
-<option value="0">Alta (Más de S/250)</option>
-<option value="1">Media (S/.100 - S/.250)</option>
-<option value="2">Económica (Menos de S/.100)</option>
-<option value="3">No puedo pagar</option>
+<option value="alto">Alta</option>
+<option value="medio">Media</option>
+<option value="bajo">Económica</option>
+<option value="no">No puedo pagar</option>
 </select>
 </div>
 
 <div class="form-group">
 <label>Trabajo</label>
 <select name="p11" class="input">
-<option value="0">No trabajo</option>
-<option value="1">Ocasional</option>
-<option value="2">Para mí</option>
-<option value="3">Aporto al hogar</option>
+<option value="no">No trabajo</option>
+<option value="ocasional">Ocasional</option>
+<option value="propios">Para mí</option>
+<option value="hogar">Aporto al hogar</option>
 </select>
 </div>
 
 <div class="form-group">
 <label>Acceso a computadora</label>
 <select name="p12" class="input">
-<option value="0">Propia</option>
-<option value="1">Compartida</option>
-<option value="2">No tengo</option>
+<option value="propia">Propia</option>
+<option value="compartida">Compartida</option>
+<option value="no">No tengo</option>
 </select>
 </div>
 
@@ -389,15 +388,9 @@ Enviar solicitud
 </div>
 
 <div class="back-actions">
-
-<a href="/seleccionar_plan" class="btn-back-primary">
-⬅ Volver a planes
-</a>
-
 <a href="/dashboard" class="btn-back-secondary">
 🏠 Volver al panel
 </a>
-
 </div>
 
 </form>
