@@ -216,20 +216,6 @@ transform:translateY(0);
 
 <thead>
 <tr>
-<th>ID</th>
-<th>Usuario</th>
-<th>Puntaje</th>
-<th>Descuento</th>
-<th>Estado</th>
-<th>Acciones</th>
-</tr>
-</thead>
-
-<tbody>
-
-{% for s in solicitudes %}
-
-<tr>
 
 <td><strong>#{{ s.id }}</strong></td>
 <td>{{ s.nombre }}</td>
@@ -237,7 +223,6 @@ transform:translateY(0);
 <td><strong>{{ s.descuento }}%</strong></td>
 
 <td>
-
 {% if s.estado == "Aprobado" %}
 <span class="badge-aprobado">Aprobado</span>
 
@@ -250,13 +235,13 @@ transform:translateY(0);
 {% else %}
 <span>{{ s.estado }}</span>
 {% endif %}
-
 </td>
 
+<!-- ACCIONES -->
 <td>
 <div class="actions-cell">
 
-{% if s.estado == "Pendiente" %}
+{% if s.estado|lower|trim == "pendiente" %}
 
 <button class="btn btn-primary btn-small" onclick="aprobar({{ s.id }})">
 Aprobar
@@ -266,15 +251,18 @@ Aprobar
 Rechazar
 </button>
 
-<button class="btn btn-danger btn-small" onclick="eliminar({{ s.id }})">
-Eliminar
-</button>
-
 {% else %}
 <span style="opacity:0.5;">—</span>
 {% endif %}
 
 </div>
+</td>
+
+<!-- 🔴 NUEVA COLUMNA ELIMINAR -->
+<td>
+<button class="btn btn-danger btn-small" onclick="eliminar({{ s.id }})">
+Eliminar
+</button>
 </td>
 
 </tr>
