@@ -19,7 +19,7 @@ from products import PRODUCTS
 from folder_manager import assign_folder
 from receipt_manager import create_receipt, get_all_receipts
 from receipt_generator import generar_comprobante
-from discount_manager import guardar_solicitud_descuento
+from discount_manager import guardar_solicitud_descuento, eliminar_solicitud
 import os
 from werkzeug.utils import secure_filename
 from utils import generar_password_temporal
@@ -413,6 +413,17 @@ def solicitar_descuento():
     ok = guardar_solicitud_descuento(user_id, respuestas, archivos)
 
     return jsonify({"success": ok})
+
+# ==============================
+# BORRAR DESCUENTO
+# ==============================
+
+@app.route("/admin/descuentos/eliminar/<int:id>", methods=["POST"])
+@admin_required
+def eliminar_solicitud_route(id):
+
+    eliminar_solicitud(id)
+    return jsonify({"success": True})
 
 # ==============================
 # MOSTRAR ENCUESTA DESCUENTO

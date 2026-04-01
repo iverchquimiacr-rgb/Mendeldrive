@@ -213,3 +213,22 @@ def rechazar_solicitud(solicitud_id):
     conn.close()
 
     return True
+
+# ==============================
+# ELIMINAR SOLICITUD
+# ==============================
+
+def eliminar_solicitud(solicitud_id):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM solicitudes_descuento
+        WHERE id = %s
+    """, (solicitud_id,))
+
+    conn.commit()
+    conn.close()
+
+    return True

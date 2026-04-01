@@ -266,6 +266,10 @@ Aprobar
 Rechazar
 </button>
 
+<button class="btn btn-danger btn-small" onclick="eliminar({{ s.id }})">
+Eliminar
+</button>
+
 {% else %}
 <span style="opacity:0.5;">—</span>
 {% endif %}
@@ -320,6 +324,19 @@ async function rechazar(id){
 const res = await fetch(`/admin/descuentos/rechazar/${id}`, {
 method: "POST"
 });
+location.reload();
+}
+
+async function eliminar(id){
+
+if(!confirm("¿Seguro que deseas eliminar esta solicitud?")){
+return;
+}
+
+const res = await fetch(`/admin/descuentos/eliminar/${id}`, {
+method: "POST"
+});
+
 location.reload();
 }
 
