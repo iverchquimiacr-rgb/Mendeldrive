@@ -422,8 +422,17 @@ def solicitar_descuento():
 @admin_required
 def eliminar_solicitud_route(id):
 
-    eliminar_solicitud(id)
-    return jsonify({"success": True})
+    try:
+        resultado = eliminar_solicitud(id)
+
+        if not resultado:
+            return jsonify({"success": False, "error": "No se pudo eliminar"}), 400
+
+        return jsonify({"success": True})
+
+    except Exception as e:
+        print("ERROR eliminar:", e)
+        return jsonify({"success": False, "error": "Error interno"}), 500
 
 # ==============================
 # MOSTRAR ENCUESTA DESCUENTO
