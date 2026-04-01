@@ -231,12 +231,13 @@ transform:translateY(0);
 
 <tr>
 
-<td><strong>#{{ s.usuario_id }}</strong></td>
+<td><strong>#{{ s.id }}</strong></td>
 <td>{{ s.nombre }}</td>
 <td>{{ s.puntaje }}</td>
 <td><strong>{{ s.descuento }}%</strong></td>
 
 <td>
+
 {% if s.estado == "Aprobado" %}
 <span class="badge-aprobado">Aprobado</span>
 
@@ -249,8 +250,7 @@ transform:translateY(0);
 {% else %}
 <span>{{ s.estado }}</span>
 {% endif %}
-{{ s.estado }}
-</span>
+
 </td>
 
 <td>

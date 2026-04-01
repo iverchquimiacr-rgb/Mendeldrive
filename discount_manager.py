@@ -142,20 +142,32 @@ def obtener_solicitudes():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id, usuario_id, puntaje, estado
-        FROM solicitudes_descuento
-        ORDER BY id DESC
+        SELECT s.id, s.usuario_id, u.nombre, s.puntaje, s.estado
+        FROM solicitudes_descuento s
+        JOIN usuarios u ON u.id = s.usuario_id
+        ORDER BY s.id DESC
     """)
 
     rows = cursor.fetchall()
     conn.close()
 
+    def calcular_descuento(puntaje):
+        if puntaje >= 15:
+            return 50
+        elif puntaje >= 10:
+            return 30
+        elif puntaje >= 5:
+            return 15
+        return 0
+
     return [
         {
             "id": r[0],
             "usuario_id": r[1],
-            "puntaje": r[2],
-            "estado": r[3]
+            "nombre": r[2],
+            "puntaje": r[3],
+            "estado": r[4],
+            "descuento": calcular_descuento(r[3])
         }
         for r in rows
     ]
