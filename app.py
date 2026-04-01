@@ -19,6 +19,7 @@ from products import PRODUCTS
 from folder_manager import assign_folder
 from receipt_manager import create_receipt, get_all_receipts
 from receipt_generator import generar_comprobante
+from discount_manager import guardar_solicitud_descuento
 import os
 from werkzeug.utils import secure_filename
 from utils import generar_password_temporal
@@ -357,6 +358,7 @@ def registro_exitoso(user_id):
 # RESET 
 #--------------------
 @app.route("/admin/system/reset_database")
+@admin_required
 def admin_reset_database():
 
     # Verificar sesión
@@ -394,13 +396,16 @@ def admin_reset_database():
 # SOLICITAR DESCUENTO
 # ==============================
 
-from discount_manager import guardar_solicitud_descuento
 
 @app.route("/solicitar-descuento", methods=["POST"])
+@login_required
 def solicitar_descuento():
 
     data = request.json
     user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({"success": False}), 403
 
     respuestas = data.get("respuestas")
     archivos = data.get("archivos", [])
